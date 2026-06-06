@@ -1,0 +1,38 @@
+{
+  "model_id": "pepper-central-ethiopia-v1",
+  "model_version": "offline-tflite-v1",
+  "model_asset": "assets/inference/models/pepper_v1/model.tflite",
+  "model_sha256": "fc03ecab5f4ab3e0591370160933da5cd6f7b83e5446f59806d1919d21d6bfbd",
+  "labels_asset": "assets/inference/models/pepper_v1/labels.json",
+  "labels_sha256": "2090c7e91f3480407a047fb8d63a9a94a99e33e1c8a254b81a7e6fec7c03381c",
+  "guidance_asset": "assets/inference/models/pepper_v1/guidance.json",
+  "guidance_sha256": "f5ec41022397d28e2d05c709c977655fff436a9768fd00f9107321101fba21f1",
+  "class_count": 2,
+  "input_width": 224,
+  "input_height": 224,
+  "input_scale": 1.0,
+  "input_mean": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "input_std": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "color_order": "rgb",
+  "output_type": "probabilities",
+  "min_leaf_like_ratio": 0.05,
+  "min_luminance_stddev": 12.0,
+  "min_edge_ratio": 0.015,
+  "confidence_threshold": 0.75,
+  "margin_threshold": 0.2,
+  "supported_crop_families": [
+    "pepper"
+  ],
+  "severity_by_label": {
+    "Pepper__bell___Bacterial_spot": "medium",
+    "Pepper__bell___healthy": "low"
+  }
+}

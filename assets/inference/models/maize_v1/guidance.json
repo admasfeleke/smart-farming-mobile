@@ -1,0 +1,197 @@
+{
+    "version": "maize-guide-v1",
+    "by_label": {
+        "__fallback__": {
+            "mode": "crop_specific_offline",
+            "treatment_ready": false,
+            "reliability": "plantvillage_baseline",
+            "risk_level": "unknown",
+            "confidence_score": null,
+            "crop_family": "maize",
+            "headline": "Offline maize guidance",
+            "next_step": "Retake a clear maize leaf photo and confirm in the field before applying chemical treatment.",
+            "active_ingredient": null,
+            "dosage": null,
+            "ppe": "Gloves, mask or respirator as per label, eye protection, long sleeves",
+            "pre_harvest_interval": null,
+            "re_entry_interval": null,
+            "actions": [
+                "Retake a close maize leaf photo in even light if symptoms are unclear.",
+                "Mark affected rows and avoid unnecessary movement through wet foliage.",
+                "Avoid broad spraying based only on the offline result."
+            ],
+            "monitoring": [
+                "Check the same rows again within 24 to 48 hours.",
+                "Inspect neighboring maize plants for similar lesions."
+            ],
+            "prevention": [
+                "Clean tools before moving between blocks.",
+                "Reduce prolonged leaf wetness where possible."
+            ],
+            "escalate_if": [
+                "Symptoms spread quickly across multiple rows.",
+                "Defoliation or severe canopy damage increases rapidly."
+            ],
+            "notes": [
+                "This is crop-specific offline guidance and still needs field confirmation."
+            ],
+            "review_status": "draft",
+            "expert_verified": false,
+            "verification_note": "Draft treatment guidance. Expert agronomy review is required before pesticide use."
+        },
+        "Corn_(maize)___healthy": {
+            "mode": "crop_specific_offline",
+            "treatment_ready": true,
+            "reliability": "plantvillage_baseline",
+            "risk_level": "low",
+            "confidence_score": null,
+            "crop_family": "maize",
+            "headline": "Leaf appears healthy",
+            "next_step": "No disease class was flagged. Continue routine scouting and rescan only if symptoms appear.",
+            "active_ingredient": null,
+            "dosage": null,
+            "ppe": null,
+            "pre_harvest_interval": null,
+            "re_entry_interval": null,
+            "actions": [
+                "Continue normal crop management.",
+                "Rescan only if new spots, streaks, or yellowing begin to spread."
+            ],
+            "monitoring": [
+                "Inspect upper and middle leaves during the next field round.",
+                "Watch after humid or rainy weather for fresh lesions."
+            ],
+            "prevention": [
+                "Keep tools clean and remove severely damaged leaves only where practical.",
+                "Maintain balanced fertility to reduce crop stress."
+            ],
+            "escalate_if": [
+                "New lesions spread across several plants.",
+                "Nearby plants begin to show the same pattern."
+            ],
+            "notes": [
+                "Healthy predictions can still miss early field symptoms. Keep scouting."
+            ],
+            "review_status": "advisory",
+            "expert_verified": false,
+            "verification_note": "No pesticide treatment is recommended for a healthy result."
+        },
+        "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+            "mode": "crop_specific_offline",
+            "treatment_ready": false,
+            "reliability": "plantvillage_baseline",
+            "risk_level": "medium",
+            "confidence_score": null,
+            "crop_family": "maize",
+            "headline": "Likely gray leaf spot",
+            "next_step": "Verify soon and track whether narrow rectangular lesions are spreading up the canopy.",
+            "active_ingredient": "Foliar fungicide such as propiconazole, azoxystrobin, pyraclostrobin, or a locally registered premix for gray leaf spot.",
+            "dosage": "Use the locally registered label rate for the selected maize foliar fungicide.",
+            "ppe": "Gloves, mask or respirator as per label, eye protection, long sleeves",
+            "pre_harvest_interval": "Follow the locally registered fungicide label PHI for maize.",
+            "re_entry_interval": "Follow the locally registered fungicide label REI.",
+            "actions": [
+                "Mark affected rows so spread can be checked again quickly.",
+                "Keep records of which growth stage is being affected.",
+                "Avoid rushing into chemical treatment before field confirmation."
+            ],
+            "monitoring": [
+                "Check whether lesions are moving from lower to upper leaves.",
+                "Watch whether humid weather is followed by rapid lesion expansion."
+            ],
+            "prevention": [
+                "Reduce carryover of infected residue where possible.",
+                "Keep field movement clean to avoid spreading spores between blocks."
+            ],
+            "escalate_if": [
+                "Lesions begin covering large leaf areas across several rows.",
+                "Upper canopy damage increases close to tasseling or grain fill."
+            ],
+            "notes": [
+                "Gray leaf spot often becomes more damaging when canopy humidity stays high.",
+                "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+            ],
+            "review_status": "advisory",
+            "expert_verified": false,
+            "verification_note": "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+        },
+        "Corn_(maize)___Common_rust_": {
+            "mode": "crop_specific_offline",
+            "treatment_ready": false,
+            "reliability": "plantvillage_baseline",
+            "risk_level": "medium",
+            "confidence_score": null,
+            "crop_family": "maize",
+            "headline": "Likely common rust",
+            "next_step": "Verify in the field and track whether rust pustules are increasing on younger leaves.",
+            "active_ingredient": "Foliar fungicide such as propiconazole, tebuconazole, azoxystrobin, or a locally registered premix for common rust.",
+            "dosage": "Use the locally registered label rate for the selected maize rust fungicide.",
+            "ppe": "Gloves, mask or respirator as per label, eye protection, long sleeves",
+            "pre_harvest_interval": "Follow the locally registered fungicide label PHI for maize.",
+            "re_entry_interval": "Follow the locally registered fungicide label REI.",
+            "actions": [
+                "Inspect both sides of affected leaves for raised rust pustules.",
+                "Mark affected rows so disease spread can be checked again.",
+                "Avoid unnecessary treatment until symptoms and severity are confirmed."
+            ],
+            "monitoring": [
+                "Watch younger leaves for increasing pustule numbers.",
+                "Check neighboring rows within 2 days."
+            ],
+            "prevention": [
+                "Reduce field-to-field spread through tool hygiene where practical.",
+                "Keep crop nutrition balanced to avoid extra stress."
+            ],
+            "escalate_if": [
+                "Rust pustules increase quickly across many plants.",
+                "Upper canopy infection becomes widespread."
+            ],
+            "notes": [
+                "Severity matters more than single-leaf presence. Confirm field pressure before treatment.",
+                "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+            ],
+            "review_status": "advisory",
+            "expert_verified": false,
+            "verification_note": "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+        },
+        "Corn_(maize)___Northern_Leaf_Blight": {
+            "mode": "crop_specific_offline",
+            "treatment_ready": false,
+            "reliability": "plantvillage_baseline",
+            "risk_level": "high",
+            "confidence_score": null,
+            "crop_family": "maize",
+            "headline": "Possible northern leaf blight",
+            "next_step": "Treat as urgent. Verify quickly and monitor whether large cigar-shaped lesions are increasing.",
+            "active_ingredient": "Foliar fungicide such as propiconazole, azoxystrobin, pyraclostrobin, or a locally registered premix for northern leaf blight.",
+            "dosage": "Use the locally registered label rate for the selected maize foliar fungicide.",
+            "ppe": "Gloves, mask or respirator as per label, eye protection, long sleeves",
+            "pre_harvest_interval": "Follow the locally registered fungicide label PHI for maize.",
+            "re_entry_interval": "Follow the locally registered fungicide label REI.",
+            "actions": [
+                "Mark affected rows and prioritize same-day field review.",
+                "Track whether lesions are moving into the upper canopy.",
+                "Avoid delay if severe spread is occurring during favorable weather."
+            ],
+            "monitoring": [
+                "Inspect daily when weather is cool and humid.",
+                "Watch lesion growth on upper leaves near tasseling or grain fill."
+            ],
+            "prevention": [
+                "Reduce residue carryover where practical.",
+                "Keep tools and movement between blocks as clean as possible."
+            ],
+            "escalate_if": [
+                "Upper canopy lesions increase rapidly across several rows.",
+                "Defoliation risk rises during critical yield stages."
+            ],
+            "notes": [
+                "Northern leaf blight can become high impact when upper leaves are affected.",
+                "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+            ],
+            "review_status": "advisory",
+            "expert_verified": false,
+            "verification_note": "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+        }
+    }
+}

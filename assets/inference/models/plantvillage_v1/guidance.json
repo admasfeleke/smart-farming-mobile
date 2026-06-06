@@ -1,0 +1,619 @@
+﻿{
+    "version":  "offline-guide-v1",
+    "by_label":  {
+                     "__fallback__":  {
+                                          "mode":  "pending_review",
+                                          "treatment_ready":  false,
+                                          "reliability":  "offline_fallback",
+                                          "risk_level":  "unknown",
+                                          "confidence_score":  null,
+                                          "crop_family":  null,
+                                          "headline":  "Offline provisional guidance",
+                                          "next_step":  "Connect to the internet to get supporter-verified pesticide guidance. If disease looks severe, isolate affected plants and avoid spraying without dosage/PPE/PHI confirmation.",
+                                          "active_ingredient":  null,
+                                          "dosage":  null,
+                                          "ppe":  "Gloves, mask/respirator (as per label), eye protection, long sleeves",
+                                          "pre_harvest_interval":  null,
+                                          "re_entry_interval":  null,
+                                          "actions":  [
+                                                          "Retake a clear leaf photo in good light",
+                                                          "Remove heavily infected leaves if safe for the crop",
+                                                          "Avoid overhead irrigation if it increases leaf wetness"
+                                                      ],
+                                          "monitoring":  [
+                                                             "Check the same plants again in 48 hours",
+                                                             "Watch for spread to nearby plants"
+                                                         ],
+                                          "prevention":  [
+                                                             "Use clean tools and avoid moving from infected to healthy plots without cleaning",
+                                                             "Improve airflow (spacing/pruning) where applicable"
+                                                         ],
+                                          "escalate_if":  [
+                                                              "Rapid spread across multiple plants",
+                                                              "Severe wilting, stem lesions, or fruit rot"
+                                                          ],
+                                          "notes":  [
+                                                        "This is an offline provisional guide. Always follow local regulations and product labels."
+                                                    ]
+                                      },
+                     "Pepper__bell___Bacterial_spot":  {
+                                                           "mode":  "crop_specific_offline",
+                                                           "treatment_ready":  false,
+                                                           "reliability":  "plantvillage_baseline",
+                                                           "risk_level":  "medium",
+                                                           "confidence_score":  null,
+                                                           "crop_family":  "pepper",
+                                                           "headline":  "Likely bacterial spot",
+                                                           "next_step":  "Confirm in the field quickly. Prioritize sanitation and avoid overhead irrigation while you verify treatment options.",
+                                                           "active_ingredient":  "Fixed copper bactericide; copper plus mancozeb where locally registered for pepper bacterial spot.",
+                                                           "dosage":  "Use the locally registered label rate for the selected pepper bacterial spot product.",
+                                                           "ppe":  "Gloves and protective clothing; eye protection if spraying.",
+                                                           "pre_harvest_interval":  "Follow the locally registered product label PHI for pepper.",
+                                                           "re_entry_interval":  "Follow the locally registered product label REI.",
+                                                           "actions":  [
+                                                                           "Remove badly infected leaves where practical.",
+                                                                           "Avoid working wet plants to reduce spread.",
+                                                                           "Keep tools clean between rows."
+                                                                       ],
+                                                           "monitoring":  [
+                                                                              "Track whether new spots are appearing on young leaves.",
+                                                                              "Watch fruit surfaces for expanding lesions."
+                                                                          ],
+                                                           "prevention":  [
+                                                                              "Reduce splash spread from irrigation or runoff.",
+                                                                              "Avoid moving from infected rows to clean rows without sanitation."
+                                                                          ],
+                                                           "escalate_if":  [
+                                                                               "Fruit lesions become common.",
+                                                                               "Symptoms spread quickly after rainfall or irrigation."
+                                                                           ],
+                                                           "notes":  [
+                                                                         "Confirm in the field before choosing bactericide options.",
+                                                                         "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                                     ],
+                                                           "review_status":  "advisory",
+                                                           "expert_verified":  false,
+                                                           "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                       },
+                     "Pepper__bell___healthy":  {
+                                                    "mode":  "crop_specific_offline",
+                                                    "treatment_ready":  true,
+                                                    "reliability":  "plantvillage_baseline",
+                                                    "risk_level":  "low",
+                                                    "confidence_score":  null,
+                                                    "crop_family":  "pepper",
+                                                    "headline":  "Leaf appears healthy",
+                                                    "next_step":  "No disease class was flagged. Continue routine scouting and rescan only if symptoms appear.",
+                                                    "active_ingredient":  null,
+                                                    "dosage":  null,
+                                                    "ppe":  null,
+                                                    "pre_harvest_interval":  null,
+                                                    "re_entry_interval":  null,
+                                                    "actions":  [
+                                                                    "Continue normal crop management.",
+                                                                    "Rescan only if new spots or yellowing begin to spread."
+                                                                ],
+                                                    "monitoring":  [
+                                                                       "Inspect young and middle leaves during the next field round.",
+                                                                       "Watch after rain or overhead irrigation for new lesions."
+                                                                   ],
+                                                    "prevention":  [
+                                                                       "Keep tools clean and remove badly damaged leaves promptly.",
+                                                                       "Maintain balanced irrigation and nutrition to reduce plant stress."
+                                                                   ],
+                                                    "escalate_if":  [
+                                                                        "New spots spread across several leaves.",
+                                                                        "Nearby plants begin to show similar symptoms."
+                                                                    ],
+                                                    "notes":  [
+                                                                  "Healthy predictions can still miss early field symptoms. Keep scouting."
+                                                              ],
+                                                    "review_status":  "advisory",
+                                                    "expert_verified":  false,
+                                                    "verification_note":  "No pesticide treatment is recommended for a healthy result."
+                                                },
+                     "Potato___Early_blight":  {
+                                                   "mode":  "crop_specific_offline",
+                                                   "treatment_ready":  false,
+                                                   "reliability":  "plantvillage_baseline",
+                                                   "risk_level":  "medium",
+                                                   "confidence_score":  null,
+                                                   "crop_family":  "potato",
+                                                   "headline":  "Likely early blight",
+                                                   "next_step":  "Verify soon and reduce leaf wetness. Remove the most affected lower leaves first if safe.",
+                                                   "active_ingredient":  "Protectant fungicide such as mancozeb or chlorothalonil; rotate with locally registered systemic fungicides when disease pressure is high.",
+                                                   "dosage":  "Use the locally registered label rate for potato early blight control.",
+                                                   "ppe":  "Gloves, mask or respirator as per label, eye protection, long sleeves",
+                                                   "pre_harvest_interval":  "Follow the locally registered fungicide label PHI for potato.",
+                                                   "re_entry_interval":  "Follow the locally registered fungicide label REI.",
+                                                   "actions":  [
+                                                                   "Remove heavily damaged lower leaves where practical.",
+                                                                   "Keep foliage from touching wet soil if possible.",
+                                                                   "Improve airflow through the canopy."
+                                                               ],
+                                                   "monitoring":  [
+                                                                      "Check lower leaves and neighboring plants within 2 days.",
+                                                                      "Watch lesion expansion after humid nights or rainfall."
+                                                                  ],
+                                                   "prevention":  [
+                                                                      "Avoid prolonged overhead irrigation.",
+                                                                      "Remove old infected crop debris after harvest where practical."
+                                                                  ],
+                                                   "escalate_if":  [
+                                                                       "Defoliation starts moving up the canopy quickly.",
+                                                                       "New lesions appear across multiple rows."
+                                                                   ],
+                                                   "notes":  [
+                                                                 "Confirm in the field before choosing fungicide chemistry.",
+                                                                 "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                             ],
+                                                   "review_status":  "advisory",
+                                                   "expert_verified":  false,
+                                                   "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                               },
+                     "Potato___Late_blight":  {
+                                                  "mode":  "crop_specific_offline",
+                                                  "treatment_ready":  false,
+                                                  "reliability":  "plantvillage_baseline",
+                                                  "risk_level":  "high",
+                                                  "confidence_score":  null,
+                                                  "crop_family":  "potato",
+                                                  "headline":  "Possible late blight",
+                                                  "next_step":  "Treat as urgent. Isolate and verify immediately because spread can be rapid in cool, wet conditions.",
+                                                  "active_ingredient":  "Late blight fungicide program using locally registered products such as azoxystrobin, cymoxanil mixtures, dimethomorph, propamocarb, or mefenoxam-based options, rotated with protectants.",
+                                                  "dosage":  "Use the locally registered label rate for the chosen potato late blight product and program.",
+                                                  "ppe":  "Gloves, mask or respirator as per label, eye protection, long sleeves",
+                                                  "pre_harvest_interval":  "Follow the locally registered late blight product PHI for potato.",
+                                                  "re_entry_interval":  "Follow the locally registered late blight product REI.",
+                                                  "actions":  [
+                                                                  "Separate severely affected plants or rows if feasible.",
+                                                                  "Avoid moving wet infected foliage through the field.",
+                                                                  "Seek same-day confirmation if symptoms are spreading."
+                                                              ],
+                                                  "monitoring":  [
+                                                                     "Inspect twice daily in cool, wet weather.",
+                                                                     "Watch stems and nearby plants for rapid new lesions."
+                                                                 ],
+                                                  "prevention":  [
+                                                                     "Reduce prolonged leaf wetness and improve airflow immediately.",
+                                                                     "Clean tools and footwear before moving to unaffected blocks."
+                                                                 ],
+                                                  "escalate_if":  [
+                                                                      "New infections appear across many plants within 24 to 48 hours.",
+                                                                      "Stem collapse or tuber symptoms become visible."
+                                                                  ],
+                                                  "notes":  [
+                                                                "Late blight can move very quickly. Do not delay field verification.",
+                                                                "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                            ],
+                                                  "review_status":  "advisory",
+                                                  "expert_verified":  false,
+                                                  "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                              },
+                     "Potato___healthy":  {
+                                              "mode":  "crop_specific_offline",
+                                              "treatment_ready":  true,
+                                              "reliability":  "plantvillage_baseline",
+                                              "risk_level":  "low",
+                                              "confidence_score":  null,
+                                              "crop_family":  "potato",
+                                              "headline":  "Leaf appears healthy",
+                                              "next_step":  "No disease class was flagged. Continue routine scouting and rescan only if symptoms appear.",
+                                              "active_ingredient":  null,
+                                              "dosage":  null,
+                                              "ppe":  null,
+                                              "pre_harvest_interval":  null,
+                                              "re_entry_interval":  null,
+                                              "actions":  [
+                                                              "Continue normal crop management.",
+                                                              "Rescan only if new spots, blight, or yellowing begin to spread."
+                                                          ],
+                                              "monitoring":  [
+                                                                 "Inspect lower leaves during the next field round.",
+                                                                 "Watch after wet or cool weather for fresh lesions."
+                                                             ],
+                                              "prevention":  [
+                                                                 "Keep tools clean and remove badly damaged foliage promptly.",
+                                                                 "Maintain balanced irrigation and nutrition to reduce plant stress."
+                                                             ],
+                                              "escalate_if":  [
+                                                                  "New lesions spread across several leaves.",
+                                                                  "Nearby plants begin to show the same pattern."
+                                                              ],
+                                              "notes":  [
+                                                            "Healthy predictions can still miss early field symptoms. Keep scouting."
+                                                        ],
+                                              "review_status":  "advisory",
+                                              "expert_verified":  false,
+                                              "verification_note":  "No pesticide treatment is recommended for a healthy result."
+                                          },
+                     "Tomato_Bacterial_spot":  {
+                                                   "mode":  "crop_specific_offline",
+                                                   "treatment_ready":  false,
+                                                   "reliability":  "plantvillage_baseline",
+                                                   "risk_level":  "medium",
+                                                   "confidence_score":  null,
+                                                   "crop_family":  "tomato",
+                                                   "headline":  "Likely bacterial spot",
+                                                   "next_step":  "Confirm in the field quickly. Prioritize sanitation and avoid overhead irrigation while you verify treatment options.",
+                                                   "active_ingredient":  "Fixed copper bactericide; copper plus mancozeb where locally registered.",
+                                                   "dosage":  "Use the registered label rate for the selected tomato bacterial spot product.",
+                                                   "ppe":  "Gloves and protective clothing; eye protection if spraying.",
+                                                   "pre_harvest_interval":  "Follow the locally registered product label PHI for tomato.",
+                                                   "re_entry_interval":  "Follow the locally registered product label REI.",
+                                                   "actions":  [
+                                                                   "Remove badly infected leaves where practical.",
+                                                                   "Avoid working wet plants to reduce spread.",
+                                                                   "Keep tools clean between rows."
+                                                               ],
+                                                   "monitoring":  [
+                                                                      "Track whether new spots are appearing on young leaves.",
+                                                                      "Watch fruit and stem surfaces for expanding lesions."
+                                                                  ],
+                                                   "prevention":  [
+                                                                      "Reduce splash spread from irrigation or heavy runoff.",
+                                                                      "Avoid moving from infected rows to clean rows without sanitation."
+                                                                  ],
+                                                   "escalate_if":  [
+                                                                       "Fruit lesions become common.",
+                                                                       "Symptoms spread quickly after rainfall or irrigation."
+                                                                   ],
+                                                   "notes":  [
+                                                                 "Copper-based programs may be used in some systems, but verify local suitability and label guidance first.",
+                                                                 "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                             ],
+                                                   "review_status":  "advisory",
+                                                   "expert_verified":  false,
+                                                   "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                               },
+                     "Tomato_Early_blight":  {
+                                                 "mode":  "crop_specific_offline",
+                                                 "treatment_ready":  false,
+                                                 "reliability":  "plantvillage_baseline",
+                                                 "risk_level":  "medium",
+                                                 "confidence_score":  null,
+                                                 "crop_family":  "tomato",
+                                                 "headline":  "Likely early blight",
+                                                 "next_step":  "Verify soon and reduce leaf wetness. Remove heavily damaged lower leaves first.",
+                                                 "active_ingredient":  "Protectant fungicide such as mancozeb or chlorothalonil; rotate with locally registered systemic fungicides when pressure is high.",
+                                                 "dosage":  "Use the locally registered label rate for tomato early blight control.",
+                                                 "ppe":  "Gloves, mask or respirator as per label, eye protection, long sleeves",
+                                                 "pre_harvest_interval":  "Follow the locally registered fungicide label PHI for tomato.",
+                                                 "re_entry_interval":  "Follow the locally registered fungicide label REI.",
+                                                 "actions":  [
+                                                                 "Prune or remove the most infected lower leaves if safe.",
+                                                                 "Keep foliage off wet soil where possible.",
+                                                                 "Improve airflow around the canopy."
+                                                             ],
+                                                 "monitoring":  [
+                                                                    "Check lower leaves and neighboring plants within 2 days.",
+                                                                    "Watch lesion expansion after humid nights or rain."
+                                                                ],
+                                                 "prevention":  [
+                                                                    "Avoid prolonged overhead irrigation.",
+                                                                    "Remove crop debris after harvest where practical."
+                                                                ],
+                                                 "escalate_if":  [
+                                                                     "Defoliation accelerates up the canopy.",
+                                                                     "Fruit lesions begin to appear."
+                                                                 ],
+                                                 "notes":  [
+                                                               "Field confirmation is still needed before choosing fungicide chemistry.",
+                                                               "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                           ],
+                                                 "review_status":  "advisory",
+                                                 "expert_verified":  false,
+                                                 "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                             },
+                     "Tomato_Late_blight":  {
+                                                "mode":  "crop_specific_offline",
+                                                "treatment_ready":  false,
+                                                "reliability":  "plantvillage_baseline",
+                                                "risk_level":  "high",
+                                                "confidence_score":  null,
+                                                "crop_family":  "tomato",
+                                                "headline":  "Possible late blight",
+                                                "next_step":  "Treat as urgent. Isolate and verify immediately because spread can be rapid in cool, wet conditions.",
+                                                "active_ingredient":  "Late blight fungicide program using locally registered oomycete-active products such as mandipropamid, dimethomorph, cymoxanil mixtures, or mefenoxam-based products, rotated with protectants.",
+                                                "dosage":  "Use the locally registered label rate for the chosen late blight product and rotation program.",
+                                                "ppe":  "Gloves, mask or respirator as per label, eye protection, long sleeves",
+                                                "pre_harvest_interval":  "Follow the locally registered late blight product PHI for tomato.",
+                                                "re_entry_interval":  "Follow the locally registered late blight product REI.",
+                                                "actions":  [
+                                                                "Separate severely affected plants or rows if feasible.",
+                                                                "Avoid moving wet infected foliage through the field.",
+                                                                "Prioritize expert confirmation the same day if symptoms are spreading."
+                                                            ],
+                                                "monitoring":  [
+                                                                   "Inspect twice daily in cool, wet conditions.",
+                                                                   "Watch stems and fruit for dark water-soaked lesions."
+                                                               ],
+                                                "prevention":  [
+                                                                   "Reduce prolonged leaf wetness and improve airflow immediately.",
+                                                                   "Clean tools and footwear before moving to unaffected blocks."
+                                                               ],
+                                                "escalate_if":  [
+                                                                    "New infections appear across many plants within 24 to 48 hours.",
+                                                                    "Stem infections or fruit rot become visible."
+                                                                ],
+                                                "notes":  [
+                                                              "Late blight can move very quickly. Do not delay field verification.",
+                                                              "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                          ],
+                                                "review_status":  "advisory",
+                                                "expert_verified":  false,
+                                                "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                            },
+                     "Tomato_Leaf_Mold":  {
+                                              "mode":  "crop_specific_offline",
+                                              "treatment_ready":  false,
+                                              "reliability":  "plantvillage_baseline",
+                                              "risk_level":  "medium",
+                                              "confidence_score":  null,
+                                              "crop_family":  "tomato",
+                                              "headline":  "Likely leaf mold",
+                                              "next_step":  "Reduce humidity around the crop and confirm the diagnosis before treating.",
+                                              "active_ingredient":  "Protectant fungicide such as chlorothalonil or mancozeb where registered; rotate with labeled systemic fungicides if disease pressure remains high.",
+                                              "dosage":  "Use the locally registered label rate for tomato leaf mold control.",
+                                              "ppe":  "Gloves, mask or respirator as per label, eye protection, long sleeves",
+                                              "pre_harvest_interval":  "Follow the locally registered fungicide label PHI for tomato.",
+                                              "re_entry_interval":  "Follow the locally registered fungicide label REI.",
+                                              "actions":  [
+                                                              "Remove badly affected leaves if this can be done safely.",
+                                                              "Increase spacing or airflow where possible.",
+                                                              "Avoid watering practices that keep leaves wet."
+                                                          ],
+                                              "monitoring":  [
+                                                                 "Check undersides of leaves for mold growth.",
+                                                                 "Track spread through dense or shaded canopy areas."
+                                                             ],
+                                              "prevention":  [
+                                                                 "Ventilate protected structures where applicable.",
+                                                                 "Avoid overcrowded canopy growth."
+                                                             ],
+                                              "escalate_if":  [
+                                                                  "Defoliation increases quickly.",
+                                                                  "Large sections of the canopy show mold growth."
+                                                              ],
+                                              "notes":  [
+                                                            "Leaf mold risk rises in humid, poorly ventilated tomato canopies.",
+                                                            "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                        ],
+                                              "review_status":  "advisory",
+                                              "expert_verified":  false,
+                                              "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                          },
+                     "Tomato_Septoria_leaf_spot":  {
+                                                       "mode":  "crop_specific_offline",
+                                                       "treatment_ready":  false,
+                                                       "reliability":  "plantvillage_baseline",
+                                                       "risk_level":  "medium",
+                                                       "confidence_score":  null,
+                                                       "crop_family":  "tomato",
+                                                       "headline":  "Likely Septoria leaf spot",
+                                                       "next_step":  "Verify soon and remove the most affected lower leaves to slow spread.",
+                                                       "active_ingredient":  "Protectant fungicide such as chlorothalonil or mancozeb; rotate fungicide groups under sustained pressure where locally registered.",
+                                                       "dosage":  "Use the locally registered label rate for tomato Septoria leaf spot control.",
+                                                       "ppe":  "Gloves, mask or respirator as per label, eye protection, long sleeves",
+                                                       "pre_harvest_interval":  "Follow the locally registered fungicide label PHI for tomato.",
+                                                       "re_entry_interval":  "Follow the locally registered fungicide label REI.",
+                                                       "actions":  [
+                                                                       "Prune badly affected lower leaves where practical.",
+                                                                       "Avoid splashing soil and debris onto foliage.",
+                                                                       "Keep field sanitation high."
+                                                                   ],
+                                                       "monitoring":  [
+                                                                          "Check for fast spread from lower to upper canopy.",
+                                                                          "Inspect after wet weather events."
+                                                                      ],
+                                                       "prevention":  [
+                                                                          "Reduce splash dispersal from irrigation and rain.",
+                                                                          "Remove infected debris after the crop cycle."
+                                                                      ],
+                                                       "escalate_if":  [
+                                                                           "Defoliation becomes significant.",
+                                                                           "Symptoms move quickly through many plants."
+                                                                       ],
+                                                       "notes":  [
+                                                                     "Septoria often starts low in the canopy and progresses upward.",
+                                                                     "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                                 ],
+                                                       "review_status":  "advisory",
+                                                       "expert_verified":  false,
+                                                       "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                   },
+                     "Tomato_Spider_mites_Two_spotted_spider_mite":  {
+                                                                         "mode":  "crop_specific_offline",
+                                                                         "treatment_ready":  false,
+                                                                         "reliability":  "plantvillage_baseline",
+                                                                         "risk_level":  "medium",
+                                                                         "confidence_score":  null,
+                                                                         "crop_family":  "tomato",
+                                                                         "headline":  "Likely spider mite damage",
+                                                                         "next_step":  "Inspect leaf undersides and confirm mite presence before any treatment decision.",
+                                                                         "active_ingredient":  "Miticide such as abamectin, bifenazate, spiromesifen, or another locally registered acaricide.",
+                                                                         "dosage":  "Use the locally registered label rate for the selected miticide on tomato.",
+                                                                         "ppe":  "Gloves, mask or respirator as per label, eye protection, long sleeves",
+                                                                         "pre_harvest_interval":  "Follow the locally registered miticide label PHI for tomato.",
+                                                                         "re_entry_interval":  "Follow the locally registered miticide label REI.",
+                                                                         "actions":  [
+                                                                                         "Check the underside of leaves for mites or fine webbing.",
+                                                                                         "Remove the most heavily infested leaves if safe.",
+                                                                                         "Reduce dusty conditions where possible."
+                                                                                     ],
+                                                                         "monitoring":  [
+                                                                                            "Inspect hot, dry field edges closely.",
+                                                                                            "Track whether stippling spreads to new leaves."
+                                                                                        ],
+                                                                         "prevention":  [
+                                                                                            "Avoid plant stress from drought where possible.",
+                                                                                            "Preserve beneficial insects when choosing interventions."
+                                                                                        ],
+                                                                         "escalate_if":  [
+                                                                                             "Webbing becomes visible across many leaves.",
+                                                                                             "Mite pressure expands quickly during hot, dry weather."
+                                                                                         ],
+                                                                         "notes":  [
+                                                                                       "Confirm actual mite presence before treatment because nutrient stress can sometimes look similar.",
+                                                                                       "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                                                   ],
+                                                                         "review_status":  "advisory",
+                                                                         "expert_verified":  false,
+                                                                         "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                                     },
+                     "Tomato__Target_Spot":  {
+                                                 "mode":  "crop_specific_offline",
+                                                 "treatment_ready":  false,
+                                                 "reliability":  "plantvillage_baseline",
+                                                 "risk_level":  "medium",
+                                                 "confidence_score":  null,
+                                                 "crop_family":  "tomato",
+                                                 "headline":  "Likely target spot",
+                                                 "next_step":  "Verify the lesions in the field and lower humidity or leaf wetness pressure while you assess severity.",
+                                                 "active_ingredient":  "Protectant fungicide such as chlorothalonil or mancozeb, with locally registered systemic fungicides rotated where disease pressure is high.",
+                                                 "dosage":  "Use the locally registered label rate for tomato target spot control.",
+                                                 "ppe":  "Gloves, mask or respirator as per label, eye protection, long sleeves",
+                                                 "pre_harvest_interval":  "Follow the locally registered fungicide label PHI for tomato.",
+                                                 "re_entry_interval":  "Follow the locally registered fungicide label REI.",
+                                                 "actions":  [
+                                                                 "Remove the worst infected foliage where feasible.",
+                                                                 "Improve air movement through the canopy.",
+                                                                 "Avoid practices that keep foliage wet for long periods."
+                                                             ],
+                                                 "monitoring":  [
+                                                                    "Watch lesion growth on older leaves and fruit shoulders.",
+                                                                    "Check neighboring rows within 48 hours."
+                                                                ],
+                                                 "prevention":  [
+                                                                    "Keep the canopy open and sanitation consistent.",
+                                                                    "Remove plant debris after the season where practical."
+                                                                ],
+                                                 "escalate_if":  [
+                                                                     "Fruit lesions become common.",
+                                                                     "Leaf loss accelerates quickly."
+                                                                 ],
+                                                 "notes":  [
+                                                               "Target spot can resemble other foliar diseases. Field confirmation still matters.",
+                                                               "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                           ],
+                                                 "review_status":  "advisory",
+                                                 "expert_verified":  false,
+                                                 "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                             },
+                     "Tomato__Tomato_YellowLeaf__Curl_Virus":  {
+                                                                   "mode":  "crop_specific_offline",
+                                                                   "treatment_ready":  false,
+                                                                   "reliability":  "plantvillage_baseline",
+                                                                   "risk_level":  "high",
+                                                                   "confidence_score":  null,
+                                                                   "crop_family":  "tomato",
+                                                                   "headline":  "Possible Tomato Yellow Leaf Curl Virus",
+                                                                   "next_step":  "Verify quickly and focus on roguing infected plants and vector pressure management rather than curative treatment.",
+                                                                   "active_ingredient":  "No curative pesticide. Focus on whitefly vector management using a locally registered insecticide where appropriate.",
+                                                                   "dosage":  "Use the locally registered label rate for the selected whitefly-control product.",
+                                                                   "ppe":  "Gloves, mask or respirator as per label, eye protection, long sleeves",
+                                                                   "pre_harvest_interval":  "Follow the locally registered product label PHI if a vector-control spray is used.",
+                                                                   "re_entry_interval":  "Follow the locally registered product label REI if a vector-control spray is used.",
+                                                                   "actions":  [
+                                                                                   "Mark or remove heavily affected plants if local practice supports it.",
+                                                                                   "Inspect for whitefly pressure on nearby plants.",
+                                                                                   "Avoid moving infested material into clean areas."
+                                                                               ],
+                                                                   "monitoring":  [
+                                                                                      "Check new growth for curling and yellowing.",
+                                                                                      "Track spread row by row, especially near field edges."
+                                                                                  ],
+                                                                   "prevention":  [
+                                                                                      "Manage whitefly vectors using integrated methods.",
+                                                                                      "Keep weeds and alternate hosts under control where practical."
+                                                                                  ],
+                                                                   "escalate_if":  [
+                                                                                       "New plants show symptoms rapidly.",
+                                                                                       "Whitefly pressure is visibly high."
+                                                                                   ],
+                                                                   "notes":  [
+                                                                                 "Virus problems are managed mainly through sanitation and vector control, not curative spray.",
+                                                                                 "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                                             ],
+                                                                   "review_status":  "advisory",
+                                                                   "expert_verified":  false,
+                                                                   "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                               },
+                     "Tomato__Tomato_mosaic_virus":  {
+                                                         "mode":  "crop_specific_offline",
+                                                         "treatment_ready":  false,
+                                                         "reliability":  "plantvillage_baseline",
+                                                         "risk_level":  "high",
+                                                         "confidence_score":  null,
+                                                         "crop_family":  "tomato",
+                                                         "headline":  "Possible Tomato mosaic virus",
+                                                         "next_step":  "Confirm early and focus on sanitation because infected plants usually do not recover.",
+                                                         "active_ingredient":  "No curative pesticide. Remove infected plants where feasible and rely on sanitation instead of spray treatment.",
+                                                         "dosage":  "No curative spray dose applies. If insect control is used for other pests, follow the locally registered label.",
+                                                         "ppe":  "Gloves, mask or respirator as per label, eye protection, long sleeves",
+                                                         "pre_harvest_interval":  "Follow the locally registered product label PHI for any separate pest-control spray used.",
+                                                         "re_entry_interval":  "Follow the locally registered product label REI for any separate pest-control spray used.",
+                                                         "actions":  [
+                                                                         "Avoid handling healthy plants after touching symptomatic plants without cleaning hands and tools.",
+                                                                         "Isolate or remove strongly affected plants where practical.",
+                                                                         "Do not use infected plant material for propagation."
+                                                                     ],
+                                                         "monitoring":  [
+                                                                            "Check neighboring plants for mosaic, distortion, and stunting.",
+                                                                            "Monitor spread after handling or pruning operations."
+                                                                        ],
+                                                         "prevention":  [
+                                                                            "Sanitize tools regularly.",
+                                                                            "Use clean seed or transplants where possible."
+                                                                        ],
+                                                         "escalate_if":  [
+                                                                             "Symptoms spread after routine field work.",
+                                                                             "Large portions of the block show mosaic and stunting."
+                                                                         ],
+                                                         "notes":  [
+                                                                       "Virus management depends heavily on hygiene and removing sources of infection.",
+                                                                       "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                                   ],
+                                                         "review_status":  "advisory",
+                                                         "expert_verified":  false,
+                                                         "verification_note":  "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+                                                     },
+                     "Tomato_healthy":  {
+                                            "mode":  "crop_specific_offline",
+                                            "treatment_ready":  true,
+                                            "reliability":  "plantvillage_baseline",
+                                            "risk_level":  "low",
+                                            "confidence_score":  null,
+                                            "crop_family":  "tomato",
+                                            "headline":  "Leaf appears healthy",
+                                            "next_step":  "No disease class was flagged. Continue routine scouting and only rescan if symptoms appear.",
+                                            "active_ingredient":  null,
+                                            "dosage":  null,
+                                            "ppe":  null,
+                                            "pre_harvest_interval":  null,
+                                            "re_entry_interval":  null,
+                                            "actions":  [
+                                                            "Keep the plant under normal field management.",
+                                                            "Scan again only if new lesions, spots, curling, or mites appear."
+                                                        ],
+                                            "monitoring":  [
+                                                               "Inspect lower and middle canopy during the next field round.",
+                                                               "Watch for early lesions after humid or rainy periods."
+                                                           ],
+                                            "prevention":  [
+                                                               "Maintain clean tools and remove severely damaged leaves promptly.",
+                                                               "Keep irrigation and nutrition balanced to reduce plant stress."
+                                                           ],
+                                            "escalate_if":  [
+                                                                "New spots or yellowing spread over several leaves.",
+                                                                "Neighboring plants begin to show similar symptoms."
+                                                            ],
+                                            "notes":  [
+                                                          "Healthy predictions can still miss early field symptoms. Use routine scouting."
+                                                      ],
+                                            "review_status":  "advisory",
+                                            "expert_verified":  false,
+                                            "verification_note":  "No pesticide treatment is recommended for a healthy result."
+                                        }
+                 }
+}

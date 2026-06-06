@@ -1,0 +1,45 @@
+{
+  "package": "maize_v1",
+  "crop_family": "maize",
+  "dataset_root": "assets\\inference\\models\\maize_v1\\_dataset_subset",
+  "class_names": [
+    "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+    "Corn_(maize)___Common_rust_",
+    "Corn_(maize)___Northern_Leaf_Blight",
+    "Corn_(maize)___healthy"
+  ],
+  "image_size": 224,
+  "batch_size": 32,
+  "backbone": "efficientnetb0",
+  "epochs_head": 8,
+  "epochs_finetune": 4,
+  "epochs_field_finetune": 4,
+  "validation_split": 0.2,
+  "fine_tune_root": null,
+  "val_loss": 0.1128552258014679,
+  "val_accuracy": 0.9612794518470764,
+  "history_head": {},
+  "history_finetune": {
+    "loss": [
+      0.10168353468179703,
+      0.10035532712936401,
+      0.09225242584943771
+    ],
+    "accuracy": [
+      0.9710084199905396,
+      0.970588207244873,
+      0.971848726272583
+    ],
+    "val_loss": [
+      0.12280179560184479,
+      0.11606525629758835,
+      0.1128552258014679
+    ],
+    "val_accuracy": [
+      0.9545454382896423,
+      0.9579124450683594,
+      0.9612794518470764
+    ]
+  },
+  "history_field_finetune": {}
+}

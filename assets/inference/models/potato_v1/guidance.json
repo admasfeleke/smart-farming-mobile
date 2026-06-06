@@ -1,0 +1,158 @@
+{
+    "version": "potato-guide-v1",
+    "by_label": {
+        "__fallback__": {
+            "mode": "crop_specific_offline",
+            "treatment_ready": false,
+            "reliability": "plantvillage_baseline",
+            "risk_level": "unknown",
+            "confidence_score": null,
+            "crop_family": "potato",
+            "headline": "Offline potato guidance",
+            "next_step": "Retake a clear potato leaf photo and confirm in the field before applying chemical treatment.",
+            "active_ingredient": null,
+            "dosage": null,
+            "ppe": "Gloves, mask or respirator as per label, eye protection, long sleeves",
+            "pre_harvest_interval": null,
+            "re_entry_interval": null,
+            "actions": [
+                "Retake a close photo of one potato leaf in even light if symptoms are unclear.",
+                "Separate heavily affected foliage if it can be done safely.",
+                "Avoid broad spraying based only on the offline result."
+            ],
+            "monitoring": [
+                "Check the same plants again within 24 to 48 hours.",
+                "Inspect nearby potato rows for similar lesions."
+            ],
+            "prevention": [
+                "Clean tools before moving between rows.",
+                "Reduce long periods of leaf wetness where possible."
+            ],
+            "escalate_if": [
+                "Symptoms spread quickly across several plants.",
+                "Stem collapse or tuber rot becomes visible."
+            ],
+            "notes": [
+                "This is crop-specific offline guidance and still needs field confirmation."
+            ],
+            "review_status": "draft",
+            "expert_verified": false,
+            "verification_note": "Draft treatment guidance. Expert agronomy review is required before pesticide use."
+        },
+        "Potato___healthy": {
+            "mode": "crop_specific_offline",
+            "treatment_ready": true,
+            "reliability": "plantvillage_baseline",
+            "risk_level": "low",
+            "confidence_score": null,
+            "crop_family": "potato",
+            "headline": "Leaf appears healthy",
+            "next_step": "No disease class was flagged. Continue routine scouting and rescan only if symptoms appear.",
+            "active_ingredient": null,
+            "dosage": null,
+            "ppe": null,
+            "pre_harvest_interval": null,
+            "re_entry_interval": null,
+            "actions": [
+                "Continue normal crop management.",
+                "Rescan only if new spots, blight, or yellowing begin to spread."
+            ],
+            "monitoring": [
+                "Inspect lower leaves during the next field round.",
+                "Watch after wet or cool weather for fresh lesions."
+            ],
+            "prevention": [
+                "Keep tools clean and remove badly damaged foliage promptly.",
+                "Maintain balanced irrigation and nutrition to reduce plant stress."
+            ],
+            "escalate_if": [
+                "New lesions spread across several leaves.",
+                "Nearby plants begin to show the same pattern."
+            ],
+            "notes": [
+                "Healthy predictions can still miss early field symptoms. Keep scouting."
+            ],
+            "review_status": "advisory",
+            "expert_verified": false,
+            "verification_note": "No pesticide treatment is recommended for a healthy result."
+        },
+        "Potato___Early_blight": {
+            "mode": "crop_specific_offline",
+            "treatment_ready": false,
+            "reliability": "plantvillage_baseline",
+            "risk_level": "medium",
+            "confidence_score": null,
+            "crop_family": "potato",
+            "headline": "Likely early blight",
+            "next_step": "Verify soon and reduce leaf wetness. Remove the most affected lower leaves first if safe.",
+            "active_ingredient": "Protectant fungicide such as mancozeb or chlorothalonil; rotate with locally registered systemic fungicides when disease pressure is high.",
+            "dosage": "Use the locally registered label rate for potato early blight control.",
+            "ppe": "Gloves, mask or respirator as per label, eye protection, long sleeves",
+            "pre_harvest_interval": "Follow the locally registered fungicide label PHI for potato.",
+            "re_entry_interval": "Follow the locally registered fungicide label REI.",
+            "actions": [
+                "Remove heavily damaged lower leaves where practical.",
+                "Keep foliage from touching wet soil if possible.",
+                "Improve airflow through the canopy."
+            ],
+            "monitoring": [
+                "Check lower leaves and neighboring plants within 2 days.",
+                "Watch lesion expansion after humid nights or rainfall."
+            ],
+            "prevention": [
+                "Avoid prolonged overhead irrigation.",
+                "Remove old infected crop debris after harvest where practical."
+            ],
+            "escalate_if": [
+                "Defoliation starts moving up the canopy quickly.",
+                "New lesions appear across multiple rows."
+            ],
+            "notes": [
+                "Confirm in the field before choosing fungicide chemistry.",
+                "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+            ],
+            "review_status": "advisory",
+            "expert_verified": false,
+            "verification_note": "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+        },
+        "Potato___Late_blight": {
+            "mode": "crop_specific_offline",
+            "treatment_ready": false,
+            "reliability": "plantvillage_baseline",
+            "risk_level": "high",
+            "confidence_score": null,
+            "crop_family": "potato",
+            "headline": "Possible late blight",
+            "next_step": "Treat as urgent. Isolate and verify immediately because spread can be rapid in cool, wet conditions.",
+            "active_ingredient": "Late blight fungicide program using locally registered products such as azoxystrobin, cymoxanil mixtures, dimethomorph, propamocarb, or mefenoxam-based options, rotated with protectants.",
+            "dosage": "Use the locally registered label rate for the chosen potato late blight product and program.",
+            "ppe": "Gloves, mask or respirator as per label, eye protection, long sleeves",
+            "pre_harvest_interval": "Follow the locally registered late blight product PHI for potato.",
+            "re_entry_interval": "Follow the locally registered late blight product REI.",
+            "actions": [
+                "Separate severely affected plants or rows if feasible.",
+                "Avoid moving wet infected foliage through the field.",
+                "Seek same-day confirmation if symptoms are spreading."
+            ],
+            "monitoring": [
+                "Inspect twice daily in cool, wet weather.",
+                "Watch stems and nearby plants for rapid new lesions."
+            ],
+            "prevention": [
+                "Reduce prolonged leaf wetness and improve airflow immediately.",
+                "Clean tools and footwear before moving to unaffected blocks."
+            ],
+            "escalate_if": [
+                "New infections appear across many plants within 24 to 48 hours.",
+                "Stem collapse or tuber symptoms become visible."
+            ],
+            "notes": [
+                "Late blight can move very quickly. Do not delay field verification.",
+                "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+            ],
+            "review_status": "advisory",
+            "expert_verified": false,
+            "verification_note": "Advisory treatment options only. Confirm the locally registered product label for dosage, PHI, and REI before spraying."
+        }
+    }
+}

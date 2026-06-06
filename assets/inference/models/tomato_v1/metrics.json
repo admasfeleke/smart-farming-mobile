@@ -1,0 +1,51 @@
+{
+  "package": "tomato_v1",
+  "crop_family": "tomato",
+  "dataset_root": "C:\\Users\\Admas\\AppData\\Local\\Temp\\smart_farm_dataset_nriletgj",
+  "class_names": [
+    "Tomato_Bacterial_spot",
+    "Tomato_Early_blight",
+    "Tomato_Late_blight",
+    "Tomato_Leaf_Mold",
+    "Tomato_Septoria_leaf_spot",
+    "Tomato_Spider_mites_Two_spotted_spider_mite",
+    "Tomato__Target_Spot",
+    "Tomato__Tomato_YellowLeaf__Curl_Virus",
+    "Tomato__Tomato_mosaic_virus",
+    "Tomato_healthy"
+  ],
+  "image_size": 160,
+  "batch_size": 32,
+  "backbone": "efficientnetb0",
+  "epochs_head": 8,
+  "epochs_finetune": 4,
+  "epochs_field_finetune": 4,
+  "validation_split": 0.2,
+  "fine_tune_root": null,
+  "val_loss": 0.2346031218767166,
+  "val_accuracy": 0.9256714582443237,
+  "history_head": {},
+  "history_finetune": {
+    "loss": [
+      0.18937037885189056,
+      0.17267760634422302,
+      0.15612168610095978
+    ],
+    "accuracy": [
+      0.9369193315505981,
+      0.94339919090271,
+      0.9460535645484924
+    ],
+    "val_loss": [
+      0.26284366846084595,
+      0.2483832985162735,
+      0.23460304737091064
+    ],
+    "val_accuracy": [
+      0.9138038754463196,
+      0.9188007712364197,
+      0.9256714582443237
+    ]
+  },
+  "history_field_finetune": {}
+}

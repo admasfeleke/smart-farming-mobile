@@ -1,0 +1,64 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+*.tmp
+*.temp
+*.bak
+*.apk
+*.aab
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Local editor settings should not be required to build or run the app.
+.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+.venv/
+venv/
+__pycache__/
+**/__pycache__/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Keep mobile-ready TFLite assets, labels, manifests, and guidance in Git.
+# Exclude training checkpoints and experiment logs that make the repository heavy.
+assets/inference/models/**/best_checkpoint.keras
+assets/inference/models/**/*checkpoint*.keras
+assets/inference/models/**/*training_log.csv
+assets/inference/models/**/*progress.json
+assets/inference/models/**/*.h5
+assets/inference/models/**/*.ckpt
+assets/inference/models/**/*.onnx
+assets/inference/models/**/*.pt
+assets/inference/models/**/*.pth

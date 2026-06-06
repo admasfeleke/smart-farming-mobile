@@ -1,0 +1,53 @@
+﻿{
+    "model_id":  "plantvillage-central-ethiopia-v1",
+    "model_version":  "offline-tflite-v1",
+    "model_asset":  "assets/inference/models/plantvillage_v1/model.tflite",
+    "model_sha256":  "b3b2fc36d634edaea8a855e6476e20b488e5e922cb6cac2b8bf7782723162cb0",
+    "labels_asset":  "assets/inference/models/plantvillage_v1/labels.json",
+    "labels_sha256":  "3ad3dce81c816040ad08165aafb2262e3ec5f57c4669ef8ee92debfa39128fb1",
+    "guidance_asset":  "assets/inference/models/plantvillage_v1/guidance.json",
+    "guidance_sha256":  "7ec335e17579512e58b0f960b71169b74b393a1666e9507270a164afc84e9c96",
+    "class_count":  15,
+    "input_width":  224,
+    "input_height":  224,
+    "input_scale":  0.00392156862745098,
+    "input_mean":  [
+                       0.0,
+                       0.0,
+                       0.0
+                   ],
+    "input_std":  [
+                      1.0,
+                      1.0,
+                      1.0
+                  ],
+    "color_order":  "rgb",
+    "output_type":  "probabilities",
+    "min_leaf_like_ratio":  0.05,
+    "min_luminance_stddev":  12.0,
+    "min_edge_ratio":  0.015,
+    "confidence_threshold":  0.72,
+    "margin_threshold":  0.18,
+    "supported_crop_families":  [
+                                    "pepper",
+                                    "potato",
+                                    "tomato"
+                                ],
+    "severity_by_label":  {
+                              "Pepper__bell___Bacterial_spot":  "medium",
+                              "Pepper__bell___healthy":  "low",
+                              "Potato___Early_blight":  "high",
+                              "Potato___Late_blight":  "high",
+                              "Potato___healthy":  "low",
+                              "Tomato_Bacterial_spot":  "medium",
+                              "Tomato_Early_blight":  "medium",
+                              "Tomato_Late_blight":  "high",
+                              "Tomato_Leaf_Mold":  "medium",
+                              "Tomato_Septoria_leaf_spot":  "medium",
+                              "Tomato_Spider_mites_Two_spotted_spider_mite":  "medium",
+                              "Tomato__Target_Spot":  "medium",
+                              "Tomato__Tomato_YellowLeaf__Curl_Virus":  "high",
+                              "Tomato__Tomato_mosaic_virus":  "high",
+                              "Tomato_healthy":  "low"
+                          }
+}

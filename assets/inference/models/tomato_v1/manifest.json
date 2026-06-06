@@ -1,0 +1,46 @@
+{
+  "model_id": "tomato-central-ethiopia-v1",
+  "model_version": "offline-tflite-v1",
+  "model_asset": "assets/inference/models/tomato_v1/model.tflite",
+  "model_sha256": "4893a611ed52533933f2cb080f37e76e107fb103889e202eaca019f59f643021",
+  "labels_asset": "assets/inference/models/tomato_v1/labels.json",
+  "labels_sha256": "2eb9bed36ee594f025ae7901f8c29e793acf91ac26a23e46e5c552612077614c",
+  "guidance_asset": "assets/inference/models/tomato_v1/guidance.json",
+  "guidance_sha256": "4e2193cc11ebce3f922233866041f4e82ce7f55cb290906947a6e57295ed92d8",
+  "class_count": 10,
+  "input_width": 160,
+  "input_height": 160,
+  "input_scale": 1.0,
+  "input_mean": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "input_std": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "color_order": "rgb",
+  "output_type": "probabilities",
+  "min_leaf_like_ratio": 0.05,
+  "min_luminance_stddev": 12.0,
+  "min_edge_ratio": 0.015,
+  "confidence_threshold": 0.75,
+  "margin_threshold": 0.2,
+  "supported_crop_families": [
+    "tomato"
+  ],
+  "severity_by_label": {
+    "Tomato_Bacterial_spot": "medium",
+    "Tomato_Early_blight": "medium",
+    "Tomato_Late_blight": "high",
+    "Tomato_Leaf_Mold": "medium",
+    "Tomato_Septoria_leaf_spot": "medium",
+    "Tomato_Spider_mites_Two_spotted_spider_mite": "medium",
+    "Tomato__Target_Spot": "medium",
+    "Tomato__Tomato_YellowLeaf__Curl_Virus": "high",
+    "Tomato__Tomato_mosaic_virus": "high",
+    "Tomato_healthy": "low"
+  }
+}

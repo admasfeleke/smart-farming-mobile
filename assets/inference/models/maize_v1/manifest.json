@@ -1,0 +1,41 @@
+{
+  "model_id": "maize-central-ethiopia-v1",
+  "model_version": "offline-tflite-v1",
+  "model_asset": "assets/inference/models/maize_v1/model.tflite",
+  "model_sha256": "46a518a783d130ee004a6ebf07879b3ac9d6db4c7000251c9cfef58dfee053ee",
+  "labels_asset": "assets/inference/models/maize_v1/labels.json",
+  "labels_sha256": "d4dce5e932c4ea197b85941e54734b108239e24c97969d333896af132a99a456",
+  "guidance_asset": "assets/inference/models/maize_v1/guidance.json",
+  "guidance_sha256": "b1c85193273f62585d1ce79c3e8fca256fbbedd15db2f70194ab460a94b372cd",
+  "class_count": 4,
+  "input_width": 224,
+  "input_height": 224,
+  "input_scale": 1.0,
+  "input_mean": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "input_std": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "color_order": "rgb",
+  "output_type": "probabilities",
+  "min_leaf_like_ratio": 0.05,
+  "min_luminance_stddev": 12.0,
+  "min_edge_ratio": 0.015,
+  "confidence_threshold": 0.75,
+  "margin_threshold": 0.2,
+  "supported_crop_families": [
+    "maize",
+    "corn"
+  ],
+  "severity_by_label": {
+    "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": "medium",
+    "Corn_(maize)___Common_rust_": "medium",
+    "Corn_(maize)___healthy": "low",
+    "Corn_(maize)___Northern_Leaf_Blight": "high"
+  }
+}

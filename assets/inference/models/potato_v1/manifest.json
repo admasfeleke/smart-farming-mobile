@@ -1,0 +1,39 @@
+{
+  "model_id": "potato-central-ethiopia-v1",
+  "model_version": "offline-tflite-v1",
+  "model_asset": "assets/inference/models/potato_v1/model.tflite",
+  "model_sha256": "a631a76fadb4cba8f2ea21ca55ceac709fec17c98241663ab214d5cdaa726bd6",
+  "labels_asset": "assets/inference/models/potato_v1/labels.json",
+  "labels_sha256": "6da426bfad9531c7934449b762fb291a24202c0f4ad18dd92113802ee14b044c",
+  "guidance_asset": "assets/inference/models/potato_v1/guidance.json",
+  "guidance_sha256": "e7a89c401f01dc65af6e7ae74efb035a87ce59d45ee00b2669ae000178e2f8f0",
+  "class_count": 3,
+  "input_width": 224,
+  "input_height": 224,
+  "input_scale": 1.0,
+  "input_mean": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "input_std": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "color_order": "rgb",
+  "output_type": "probabilities",
+  "min_leaf_like_ratio": 0.05,
+  "min_luminance_stddev": 12.0,
+  "min_edge_ratio": 0.015,
+  "confidence_threshold": 0.75,
+  "margin_threshold": 0.2,
+  "supported_crop_families": [
+    "potato"
+  ],
+  "severity_by_label": {
+    "Potato___Early_blight": "medium",
+    "Potato___Late_blight": "high",
+    "Potato___healthy": "low"
+  }
+}
