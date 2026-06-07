@@ -1,3 +1,5 @@
+import 'language_config.dart';
+
 class L {
   static const Map<String, Map<String, String>> _strings = {
     'am': {
@@ -1715,8 +1717,7 @@ class L {
       'crop_id': 'መለያ ሰብሳብ',
       'status_label': 'ኩነታት',
 
-      'my_farm_context_hint':
-          'Select a farm site to manage field blocks and plantings.',
+      'my_farm_context_hint': 'ንቦታታት መሮርን ተኽልን ንምምሕዳር ሕርሻ ምረጽ።',
       'my_farm_add_farm': 'Add Farm',
       'my_farm_empty_farms_help':
           'Start by adding your first farm site with region and coordinates.',
@@ -1819,9 +1820,9 @@ class L {
       'scan_reload_camera': 'Reload camera',
       'scan_open_app_settings': 'Open app settings',
       'scan_no_crop_selected': 'No crop selected.',
-      'scan_selected_context': 'Selected: {crop} - {farm} / {plot}',
-      'scan_change_crop': 'Change crop',
-      'scan_confirm_selected_crop': 'I confirm this leaf is from {crop}',
+      'scan_selected_context': 'ዝተመርጸ፡ {crop} - {farm} / {plot}',
+      'scan_change_crop': 'ሰብሊ ቀይር',
+      'scan_confirm_selected_crop': 'እዚ ቆጽሊ ናይ {crop} ምዃኑ የረጋግጽ',
       'scan_confirm_before_scanning': 'Confirm selected crop before scanning.',
       'scan_manual_capture_mode': 'Manual capture mode',
       'scan_guidance_title': 'Before scan',
@@ -1831,9 +1832,8 @@ class L {
       'scan_guidance_step3':
           '3. Wait for verification before applying treatment.',
       'scan_retry': 'Retry',
-      'scan_no_trained_crops':
-          'No trained crops found in your registered farm plantings.',
-      'scan_choose_crop': 'Midhaan fi lafa sakattaʼu filadhu',
+      'scan_no_trained_crops': 'ኣብ ዝተመዝገቡ ተኽልታት ሕርሻኻ ዝሰልጠኑ ሰብልታት ኣይተረኽቡን።',
+      'scan_choose_crop': 'ንምስካን ሰብሊ፣ ሕርሻን ቦታን ምረጽ',
       'disease_review_summary': 'Review summary',
       'disease_original_photo': 'Original report photo',
       'disease_expert_evidence': 'Expert evidence',
@@ -1864,11 +1864,11 @@ class L {
       'disease_review_filter_empty': 'No reports match this review filter.',
       'disease_name': 'Disease name',
       'description': 'Description',
-      'scan_choose_context_for_crop': 'Qonnaa fi lafa {crop} filadhu',
+      'scan_choose_context_for_crop': 'ን{crop} ሕርሻን ቦታን ምረጽ',
       'scan_context_picker_hint':
-          'Osoo hin sakattaʼin qonnaa fi lafa sirrii midhaan kanaa filadhu.',
-      'scan_contexts_count': '{count} filannoo qonnaa/lafaa',
-      'scan_planting_number': 'Dhaabbii #{id}',
+          'ቅድሚ ምስካን ናይዚ ሰብሊ ትኽክለኛ ሕርሻን ቦታን ምረጽ።',
+      'scan_contexts_count': '{count} ምርጫ ሕርሻ/ቦታ',
+      'scan_planting_number': 'ተኽሊ #{id}',
       'scan_continue_last_crop': 'Continue last crop',
       'scan_recommended_crop': 'Recommended crop',
       'scan_last_used_badge': 'Last used',
@@ -1878,7 +1878,7 @@ class L {
           'Choose another crop only if you need to switch farm or plot context.',
       'scan_group_active_crop_count': '{count} active crops',
       'scan_crop_scope_hint':
-          'Midhaan qonnaa kee keessatti galmaaʼee fi moodelli AI deeggaru qofa agarsiifama. Sana booda qonnaa fi lafa sirrii filadhu.',
+          'ኣብ ሕርሻኻ ዝተመዝገቡን AI ዝድግፎምን ሰብልታት ጥራይ ይረኣዩ። ድሕሪኡ ትኽክለኛ ሕርሻን ቦታን ምረጽ።',
       'scan_exec_title': 'Scan mode',
       'scan_exec_auto': 'Auto',
       'scan_exec_prefer_offline': 'Prefer offline',
@@ -3200,7 +3200,7 @@ class L {
     String key, {
     Map<String, String> params = const {},
   }) {
-    final normalizedLang = lang.trim().toLowerCase();
+    final normalizedLang = LanguageConfig.normalize(lang);
     final localized = _strings[normalizedLang]?[key];
     final amharic = _strings['am']?[key];
     final english = _strings['en']?[key];
