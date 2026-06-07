@@ -30,6 +30,17 @@ Smart Farming Ethiopia was developed as an applied technology-transfer project f
 - Alerts and sync diagnostics
 - Localization for Amharic, Afaan Oromo, Tigrinya, and English
 
+## App Screenshots
+
+These screenshots show the farmer-facing Android app, including the redesigned dashboard, farm management, scan flow, disease prevention, soil guidance, weather, and localized field screens.
+
+| Home and farm | Scan and crop context | Pest/disease prevention |
+| --- | --- | --- |
+| ![Home and farm screen](docs/screenshots/mobile-screen-01.jpg) | ![Scan crop chooser](docs/screenshots/mobile-screen-02.jpg) | ![Pest detection placeholder](docs/screenshots/mobile-screen-03.jpg) |
+| ![Dashboard view](docs/screenshots/mobile-screen-04.jpg) | ![Farm records](docs/screenshots/mobile-screen-05.jpg) | ![Field guidance](docs/screenshots/mobile-screen-06.jpg) |
+| ![Weather monitoring](docs/screenshots/mobile-screen-07.jpg) | ![Disease history](docs/screenshots/mobile-screen-08.jpg) | ![Soil guidance](docs/screenshots/mobile-screen-09.jpg) |
+| ![Yield outlook](docs/screenshots/mobile-screen-10.jpg) | ![Localized scan screen](docs/screenshots/mobile-screen-11.jpg) | ![Alerts and sync](docs/screenshots/mobile-screen-12.jpg) |
+
 ## Supported Crop Disease Scan Models
 
 The mobile app includes local TensorFlow Lite model bundles under `assets/inference/models/`.
@@ -240,4 +251,3 @@ Remaining recommended work:
 - Schema-backed localization for backend treatment registry content
 - Final end-to-end QA on real Android devices
 - Release signing and deployment configuration
-
