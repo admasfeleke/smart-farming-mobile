@@ -6,6 +6,7 @@ import '../features/disease/disease_history_cache_store.dart';
 import '../features/my_farm/models/farm_model.dart';
 import '../features/my_farm/models/plot_model.dart';
 import '../features/my_farm/models/planting_model.dart';
+import 'offline_models.dart';
 import 'offline_repository.dart';
 import 'sync_state.dart';
 import '../sync_refresh_notifier.dart';
@@ -140,6 +141,72 @@ class OfflineSyncService {
     return baseServer != null && remoteServer == null;
   }
 
+  bool _isTransientSyncError(ApiException error) {
+    if (error is ApiForbidden || error is ApiUnauthorized) return false;
+    final message = error.message.toLowerCase();
+    return message.contains('timeout') ||
+        message.contains('timed out') ||
+        message.contains('no internet') ||
+        message.contains('network') ||
+        message.contains('failed host lookup') ||
+        message.contains('socket') ||
+        message.contains('connection') ||
+        message.contains('could not connect') ||
+        message.contains('api probe failed');
+  }
+
+  Future<void> _markFarmSyncException(
+    OfflineRepository repo,
+    FarmRecord farm,
+    ApiException error,
+  ) async {
+    final attempts = farm.syncAttempts + 1;
+    if (_isTransientSyncError(error)) {
+      await repo.markFarmPendingRetry(farm.localId, error.message, attempts);
+      return;
+    }
+    await repo.markFarmFailed(farm.localId, error.message, attempts);
+  }
+
+  Future<void> _markPlotSyncException(
+    OfflineRepository repo,
+    PlotRecord plot,
+    ApiException error,
+  ) async {
+    final attempts = plot.syncAttempts + 1;
+    if (_isTransientSyncError(error)) {
+      await repo.markPlotPendingRetry(plot.localId, error.message, attempts);
+      return;
+    }
+    await repo.markPlotFailed(plot.localId, error.message, attempts);
+  }
+
+  Future<void> _markPlantingSyncException(
+    OfflineRepository repo,
+    PlantingRecord planting,
+    ApiException error,
+  ) async {
+    final attempts = planting.syncAttempts + 1;
+    if (_isTransientSyncError(error)) {
+      await repo.markPlantingPendingRetry(planting.localId, error.message, attempts);
+      return;
+    }
+    await repo.markPlantingFailed(planting.localId, error.message, attempts);
+  }
+
+  Future<void> _markSoilHealthSyncException(
+    OfflineRepository repo,
+    SoilHealthRecord soil,
+    ApiException error,
+  ) async {
+    final attempts = soil.syncAttempts + 1;
+    if (_isTransientSyncError(error)) {
+      await repo.markSoilHealthPendingRetry(soil.localId, error.message, attempts);
+      return;
+    }
+    await repo.markSoilHealthFailed(soil.localId, error.message, attempts);
+  }
+
   Future<void> _pushFarms(OfflineRepository repo) async {
     final pending = await repo.listFarmsNeedingSync();
     for (final farm in pending) {
@@ -157,7 +224,7 @@ class OfflineSyncService {
         } on ApiUnauthorized {
           rethrow;
         } on ApiException catch (e) {
-          await repo.markFarmFailed(farm.localId, e.message, farm.syncAttempts + 1);
+          await _markFarmSyncException(repo, farm, e);
         }
         continue;
       }
@@ -177,7 +244,7 @@ class OfflineSyncService {
         } on ApiUnauthorized {
           rethrow;
         } on ApiException catch (e) {
-          await repo.markFarmFailed(farm.localId, e.message, farm.syncAttempts + 1);
+          await _markFarmSyncException(repo, farm, e);
         }
         continue;
       }
@@ -213,7 +280,7 @@ class OfflineSyncService {
       } on ApiUnauthorized {
         rethrow;
       } on ApiException catch (e) {
-        await repo.markFarmFailed(farm.localId, e.message, farm.syncAttempts + 1);
+        await _markFarmSyncException(repo, farm, e);
       }
     }
   }
@@ -235,7 +302,7 @@ class OfflineSyncService {
         } on ApiUnauthorized {
           rethrow;
         } on ApiException catch (e) {
-          await repo.markPlotFailed(plot.localId, e.message, plot.syncAttempts + 1);
+          await _markPlotSyncException(repo, plot, e);
         }
         continue;
       }
@@ -262,7 +329,7 @@ class OfflineSyncService {
         } on ApiUnauthorized {
           rethrow;
         } on ApiException catch (e) {
-          await repo.markPlotFailed(plot.localId, e.message, plot.syncAttempts + 1);
+          await _markPlotSyncException(repo, plot, e);
         }
         continue;
       }
@@ -295,7 +362,7 @@ class OfflineSyncService {
       } on ApiUnauthorized {
         rethrow;
       } on ApiException catch (e) {
-        await repo.markPlotFailed(plot.localId, e.message, plot.syncAttempts + 1);
+        await _markPlotSyncException(repo, plot, e);
       }
     }
   }
@@ -317,7 +384,7 @@ class OfflineSyncService {
         } on ApiUnauthorized {
           rethrow;
         } on ApiException catch (e) {
-          await repo.markPlantingFailed(planting.localId, e.message, planting.syncAttempts + 1);
+          await _markPlantingSyncException(repo, planting, e);
         }
         continue;
       }
@@ -349,7 +416,7 @@ class OfflineSyncService {
         } on ApiUnauthorized {
           rethrow;
         } on ApiException catch (e) {
-          await repo.markPlantingFailed(planting.localId, e.message, planting.syncAttempts + 1);
+          await _markPlantingSyncException(repo, planting, e);
         }
         continue;
       }
@@ -383,7 +450,7 @@ class OfflineSyncService {
       } on ApiUnauthorized {
         rethrow;
       } on ApiException catch (e) {
-        await repo.markPlantingFailed(planting.localId, e.message, planting.syncAttempts + 1);
+        await _markPlantingSyncException(repo, planting, e);
       }
     }
   }
@@ -405,7 +472,7 @@ class OfflineSyncService {
         } on ApiUnauthorized {
           rethrow;
         } on ApiException catch (e) {
-          await repo.markSoilHealthFailed(soil.localId, e.message, soil.syncAttempts + 1);
+          await _markSoilHealthSyncException(repo, soil, e);
         }
         continue;
       }
@@ -438,7 +505,7 @@ class OfflineSyncService {
         } on ApiUnauthorized {
           rethrow;
         } on ApiException catch (e) {
-          await repo.markSoilHealthFailed(soil.localId, e.message, soil.syncAttempts + 1);
+          await _markSoilHealthSyncException(repo, soil, e);
         }
         continue;
       }
@@ -478,7 +545,7 @@ class OfflineSyncService {
       } on ApiUnauthorized {
         rethrow;
       } on ApiException catch (e) {
-        await repo.markSoilHealthFailed(soil.localId, e.message, soil.syncAttempts + 1);
+        await _markSoilHealthSyncException(repo, soil, e);
       }
     }
   }

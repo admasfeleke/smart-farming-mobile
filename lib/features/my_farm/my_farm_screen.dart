@@ -307,6 +307,67 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
     return int.tryParse(value?.toString() ?? '');
   }
 
+  Set<int> _descendantRegionIds(Iterable<int> seedIds) {
+    final seeds = seedIds.where((id) => id > 0).toSet();
+    if (seeds.isEmpty) return <int>{};
+
+    final childrenByParent = <int, List<int>>{};
+    for (final region in _regions) {
+      final id = _intValue(region['id']);
+      final parentId = _intValue(region['parent_id']);
+      if (id == null || parentId == null) continue;
+      childrenByParent.putIfAbsent(parentId, () => <int>[]).add(id);
+    }
+
+    final scoped = <int>{...seeds};
+    final queue = <int>[...seeds];
+    while (queue.isNotEmpty) {
+      final parentId = queue.removeAt(0);
+      for (final childId in childrenByParent[parentId] ?? const <int>[]) {
+        if (scoped.add(childId)) {
+          queue.add(childId);
+        }
+      }
+    }
+    return scoped;
+  }
+
+  List<Map<String, dynamic>> _availableFarmRegions({FarmRecord? editingFarm}) {
+    final scopedRegionIds = _descendantRegionIds(
+      _farms
+          .map((farm) => farm.regionId)
+          .followedBy(editingFarm == null ? const <int>[] : <int>[editingFarm.regionId]),
+    );
+
+    return _regions
+        .where((r) => r['is_active'] == null || r['is_active'] == 1)
+        .where((r) {
+          if (scopedRegionIds.isEmpty) return true;
+          final id = _intValue(r['id']);
+          return id != null && scopedRegionIds.contains(id);
+        })
+        .map((r) => <String, dynamic>{
+              ...r,
+              'display_name': _regionDisplayName(r),
+            })
+        .toList();
+  }
+
+  int? _defaultFarmRegionId(FarmRecord? farm, List<Map<String, dynamic>> availableRegions) {
+    if (farm != null) return farm.regionId;
+    if (availableRegions.length == 1) {
+      return _intValue(availableRegions.first['id']);
+    }
+    final existingRegionIds = _farms.map((item) => item.regionId).where((id) => id > 0).toSet();
+    if (existingRegionIds.length == 1) {
+      final onlyRegionId = existingRegionIds.first;
+      if (availableRegions.any((item) => _intValue(item['id']) == onlyRegionId)) {
+        return onlyRegionId;
+      }
+    }
+    return null;
+  }
+
   void _showSuccessMessage(
     String message, {
     String? nextStep,
@@ -817,20 +878,13 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
         TextEditingController(text: farm?.areaHectares?.toString() ?? '');
     String? selectedFarmType = farm?.farmType;
     bool isActive = farm?.isActive ?? true;
-    int? selectedRegionId = farm?.regionId;
+    final availableRegions = _availableFarmRegions(editingFarm: farm);
+    int? selectedRegionId = _defaultFarmRegionId(farm, availableRegions);
     String? farmNameError;
     String? regionError;
     String? formError;
     bool saving = false;
     bool fetchingLocation = false;
-
-    final availableRegions = _regions
-        .where((r) => r['is_active'] == null || r['is_active'] == 1)
-        .map((r) => <String, dynamic>{
-              ...r,
-              'display_name': _regionDisplayName(r),
-            })
-        .toList();
 
     await showDialog<void>(
       context: context,

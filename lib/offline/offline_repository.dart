@@ -136,6 +136,7 @@ class OfflineRepository {
 
   Future<OfflineSyncSummary> getSyncSummary() async {
     final db = await _db();
+    await _normalizeTransientFailures(db);
     final summaries = await Future.wait<OfflineSyncSummary>(<Future<OfflineSyncSummary>>[
       _syncSummaryForTable(db, 'farms'),
       _syncSummaryForTable(db, 'plots'),
@@ -153,6 +154,7 @@ class OfflineRepository {
 
   Future<List<OfflineSyncEntitySummary>> getSyncSummaryByEntity() async {
     final db = await _db();
+    await _normalizeTransientFailures(db);
     final config = <Map<String, String>>[
       <String, String>{'table': 'farms', 'key': 'farms'},
       <String, String>{'table': 'plots', 'key': 'plots'},
@@ -219,6 +221,33 @@ class OfflineRepository {
       conflictCount: _toInt(row['conflict_count']),
       deletedCount: _toInt(row['deleted_count']),
     );
+  }
+
+  Future<void> _normalizeTransientFailures(Database db) async {
+    for (final table in const ['farms', 'plots', 'plantings', 'soil_health']) {
+      await db.update(
+        table,
+        <String, Object?>{
+          'sync_state': syncStateToString(SyncState.pending),
+        },
+        where: '''
+          sync_state = 'failed'
+          AND deleted = 0
+          AND sync_error IS NOT NULL
+          AND (
+            lower(sync_error) LIKE '%timeout%'
+            OR lower(sync_error) LIKE '%timed out%'
+            OR lower(sync_error) LIKE '%no internet%'
+            OR lower(sync_error) LIKE '%network%'
+            OR lower(sync_error) LIKE '%failed host lookup%'
+            OR lower(sync_error) LIKE '%socket%'
+            OR lower(sync_error) LIKE '%connection%'
+            OR lower(sync_error) LIKE '%could not connect%'
+            OR lower(sync_error) LIKE '%api probe failed%'
+          )
+        ''',
+      );
+    }
   }
 
   Future<List<OfflineConflictItem>> _conflictItemsForNamedTable(
@@ -1256,6 +1285,21 @@ class OfflineRepository {
     );
   }
 
+  Future<void> markFarmPendingRetry(int localId, String error, int attempts) async {
+    final db = await _db();
+    await db.update(
+      'farms',
+      <String, Object?>{
+        'sync_state': syncStateToString(SyncState.pending),
+        'sync_attempts': attempts,
+        'sync_next_retry_at': _dateOrNull(_nextRetryAt(attempts)),
+        'sync_error': error,
+      },
+      where: 'local_id = ?',
+      whereArgs: <Object?>[localId],
+    );
+  }
+
   Future<void> markPlotFailed(int localId, String error, int attempts) async {
     final db = await _db();
     await db.update(
@@ -1271,12 +1315,42 @@ class OfflineRepository {
     );
   }
 
+  Future<void> markPlotPendingRetry(int localId, String error, int attempts) async {
+    final db = await _db();
+    await db.update(
+      'plots',
+      <String, Object?>{
+        'sync_state': syncStateToString(SyncState.pending),
+        'sync_attempts': attempts,
+        'sync_next_retry_at': _dateOrNull(_nextRetryAt(attempts)),
+        'sync_error': error,
+      },
+      where: 'local_id = ?',
+      whereArgs: <Object?>[localId],
+    );
+  }
+
   Future<void> markPlantingFailed(int localId, String error, int attempts) async {
     final db = await _db();
     await db.update(
       'plantings',
       <String, Object?>{
         'sync_state': syncStateToString(SyncState.failed),
+        'sync_attempts': attempts,
+        'sync_next_retry_at': _dateOrNull(_nextRetryAt(attempts)),
+        'sync_error': error,
+      },
+      where: 'local_id = ?',
+      whereArgs: <Object?>[localId],
+    );
+  }
+
+  Future<void> markPlantingPendingRetry(int localId, String error, int attempts) async {
+    final db = await _db();
+    await db.update(
+      'plantings',
+      <String, Object?>{
+        'sync_state': syncStateToString(SyncState.pending),
         'sync_attempts': attempts,
         'sync_next_retry_at': _dateOrNull(_nextRetryAt(attempts)),
         'sync_error': error,
@@ -1306,6 +1380,21 @@ class OfflineRepository {
       'soil_health',
       <String, Object?>{
         'sync_state': syncStateToString(SyncState.failed),
+        'sync_attempts': attempts,
+        'sync_next_retry_at': _dateOrNull(_nextRetryAt(attempts)),
+        'sync_error': error,
+      },
+      where: 'local_id = ?',
+      whereArgs: <Object?>[localId],
+    );
+  }
+
+  Future<void> markSoilHealthPendingRetry(int localId, String error, int attempts) async {
+    final db = await _db();
+    await db.update(
+      'soil_health',
+      <String, Object?>{
+        'sync_state': syncStateToString(SyncState.pending),
         'sync_attempts': attempts,
         'sync_next_retry_at': _dateOrNull(_nextRetryAt(attempts)),
         'sync_error': error,
