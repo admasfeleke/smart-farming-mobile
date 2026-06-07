@@ -403,8 +403,8 @@ class Phrase {
         localized == english;
 
     final template = looksLikeEnglishPlaceholder
-        ? (amharic ?? localized)
-        : (localized ?? amharic ?? english ?? key);
+        ? english
+        : (localized ?? english ?? amharic ?? key);
     if (params.isEmpty) return template;
     var result = template;
     params.forEach((k, v) {

@@ -2647,7 +2647,13 @@ class _ScanScreenState extends State<ScanScreen>
                                         if (item.plantingId != null)
                                           _CropCardPill(
                                             icon: Icons.spa_outlined,
-                                            label: 'Planting #${item.plantingId}',
+                                            label: L.t(
+                                              lang,
+                                              'scan_planting_number',
+                                              params: {
+                                                'id': '${item.plantingId}',
+                                              },
+                                            ),
                                             color: const Color(0xFF4F7D12),
                                           ),
                                       ],
