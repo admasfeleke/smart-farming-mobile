@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'features/home/home_screen.dart';
 import 'features/onboarding/language_selection.dart';
@@ -13,6 +15,7 @@ import 'features/profile/profile_screen.dart';
 import 'features/scan/scan_screen.dart';
 import 'features/scan/pending_scan_replay_service.dart';
 import 'features/alerts/alerts_screen.dart';
+import 'features/sync/sync_diagnostics_screen.dart';
 import 'offline/offline_sync_service.dart';
 import 'offline/account_data_reset_service.dart';
 import 'auth_session.dart';
@@ -302,11 +305,13 @@ class _AppShellState extends State<AppShell> {
   bool _startupHealthChecked = false;
   bool _syncInProgress = false;
   bool _manualRefreshInProgress = false;
+  bool _permissionPromptRunning = false;
   bool _offlinePopupVisible = false;
   String _offlinePopupMessage = 'Offline mode active. Using saved data.';
   Timer? _offlinePopupTimer;
   Timer? _sessionRevalidateTimer;
   static const Duration _sessionRevalidateInterval = Duration(minutes: 1);
+  static const String _firstUsePermissionsKey = 'first_use_permissions_prompted_v1';
 
   static const List<String> _titles = [
     'home',
@@ -352,6 +357,12 @@ class _AppShellState extends State<AppShell> {
           _runStartupHealthCheck,
         ),
       );
+      unawaited(
+        Future<void>.delayed(
+          const Duration(milliseconds: 800),
+          _runFirstUsePermissionPrompt,
+        ),
+      );
     });
     _startSessionRevalidateLoop();
   }
@@ -370,6 +381,99 @@ class _AppShellState extends State<AppShell> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void _openDrawer() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    final scaffold = _scaffoldKey.currentState;
+    if (scaffold == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scaffoldKey.currentState?.openDrawer();
+      });
+      return;
+    }
+    scaffold.openDrawer();
+  }
+
+  Future<void> _runFirstUsePermissionPrompt() async {
+    if (_permissionPromptRunning || !mounted) return;
+    _permissionPromptRunning = true;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (prefs.getBool(_firstUsePermissionsKey) ?? false) return;
+
+      final cameraStatus = await Permission.camera.status;
+      final locationStatus = await Geolocator.checkPermission();
+      final needsCamera = cameraStatus.isDenied || cameraStatus.isRestricted;
+      final needsLocation =
+          locationStatus == LocationPermission.denied ||
+          locationStatus == LocationPermission.unableToDetermine;
+      if (!needsCamera && !needsLocation) {
+        await prefs.setBool(_firstUsePermissionsKey, true);
+        return;
+      }
+
+      final lang = LanguageStore.notifier.value;
+      if (!mounted) return;
+      final shouldRequest = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) {
+          final theme = Theme.of(dialogContext);
+          return AlertDialog(
+            title: Text(L.t(lang, 'permissions_first_use_title')),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(L.t(lang, 'permissions_first_use_body')),
+                const SizedBox(height: 12),
+                _PermissionRow(
+                  icon: Icons.camera_alt_outlined,
+                  title: L.t(lang, 'permissions_camera_title'),
+                  body: L.t(lang, 'permissions_camera_body'),
+                ),
+                const SizedBox(height: 10),
+                _PermissionRow(
+                  icon: Icons.my_location_outlined,
+                  title: L.t(lang, 'permissions_location_title'),
+                  body: L.t(lang, 'permissions_location_body'),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  L.t(lang, 'permissions_first_use_note'),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: Colors.grey.shade700,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(false),
+                child: Text(L.t(lang, 'later')),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(dialogContext).pop(true),
+                child: Text(L.t(lang, 'continue_label')),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (shouldRequest == true) {
+        if (needsCamera) {
+          await Permission.camera.request();
+        }
+        if (needsLocation) {
+          await Geolocator.requestPermission();
+        }
+      }
+      await prefs.setBool(_firstUsePermissionsKey, true);
+    } finally {
+      _permissionPromptRunning = false;
+    }
   }
 
   void _showOfflinePopup(String message) {
@@ -533,7 +637,7 @@ class _AppShellState extends State<AppShell> {
                   builder: (context, _, _) {
                     return AppHeader(
                       titleKey: _titles[_selectedIndex],
-                      onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
+                      onMenuTap: _openDrawer,
                       onSearchTap: () {
                         setState(() {
                           _selectedIndex = 1;
@@ -852,6 +956,58 @@ class _AppShellState extends State<AppShell> {
   }
 }
 
+class _PermissionRow extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String body;
+
+  const _PermissionRow({
+    required this.icon,
+    required this.title,
+    required this.body,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 38,
+          height: 38,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primary.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Icon(icon, color: theme.colorScheme.primary, size: 20),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                body,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: Colors.grey.shade700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _AppDrawer extends StatelessWidget {
   final VoidCallback onLogout;
   const _AppDrawer({required this.onLogout});
@@ -892,6 +1048,14 @@ class _AppDrawer extends StatelessWidget {
                   icon: Icons.sync,
                   title: L.t(lang, 'offline_sync'),
                   subtitle: L.t(lang, 'offline_sync_sub'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const SyncDiagnosticsScreen(),
+                      ),
+                    );
+                  },
                 ),
                 _DrawerTile(
                   icon: Icons.rule,
@@ -908,6 +1072,7 @@ class _AppDrawer extends StatelessWidget {
                   icon: Icons.support_agent,
                   title: L.t(lang, 'admin_contact'),
                   subtitle: L.t(lang, 'admin_contact_sub'),
+                  onTap: () => _showAdminContactDialog(context, lang),
                 ),
                 _DrawerTile(
                   icon: Icons.language,
@@ -978,6 +1143,47 @@ class _AppDrawer extends StatelessWidget {
               );
             },
           ),
+        );
+      },
+    );
+  }
+
+  void _showAdminContactDialog(BuildContext context, String lang) {
+    Navigator.of(context).pop();
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(L.t(lang, 'admin_contact')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(L.t(lang, 'admin_contact_body')),
+              const SizedBox(height: 12),
+              _AboutContactTile(
+                icon: Icons.person_outline,
+                label: L.t(lang, 'name'),
+                value: 'Admasu Feleke Mulatu',
+              ),
+              _AboutContactTile(
+                icon: Icons.email_outlined,
+                label: L.t(lang, 'email'),
+                value: 'admasu.feleke21@gmail.com',
+              ),
+              _AboutContactTile(
+                icon: Icons.phone_outlined,
+                label: L.t(lang, 'phone'),
+                value: '0900824328',
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(L.t(lang, 'close')),
+            ),
+          ],
         );
       },
     );

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../../../offline/offline_models.dart';
 import '../../../offline/sync_state.dart';
 import '../providers/farm_context_provider.dart';
@@ -32,11 +32,19 @@ class PlantingListWidget extends StatelessWidget {
   Widget? _syncIndicator(PlantingRecord planting) {
     switch (planting.syncState) {
       case SyncState.pending:
-        return const Icon(Icons.cloud_upload_outlined, size: 18, color: Colors.orange);
+        return const Icon(
+          Icons.cloud_upload_outlined,
+          size: 18,
+          color: Colors.orange,
+        );
       case SyncState.failed:
         return const Icon(Icons.sync_problem, size: 18, color: Colors.orange);
       case SyncState.conflict:
-        return const Icon(Icons.error_outline, size: 18, color: Colors.redAccent);
+        return const Icon(
+          Icons.error_outline,
+          size: 18,
+          color: Colors.redAccent,
+        );
       case SyncState.synced:
         return null;
     }
@@ -76,8 +84,10 @@ class PlantingListWidget extends StatelessWidget {
               leading: const Icon(Icons.arrow_back),
               title: Text(plot.plotName),
               subtitle: Text(L.t(lang, 'my_farm_planting_header_sub')),
-              onTap: () =>
-                  Provider.of<FarmContextProvider>(context, listen: false).clearPlotSelection(),
+              onTap: () => Provider.of<FarmContextProvider>(
+                context,
+                listen: false,
+              ).clearPlotSelection(),
               trailing: onAdd == null
                   ? null
                   : IconButton(
@@ -111,7 +121,11 @@ class PlantingListWidget extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.spa_outlined, size: 42, color: Colors.grey.shade600),
+                            Icon(
+                              Icons.spa_outlined,
+                              size: 42,
+                              color: Colors.grey.shade600,
+                            ),
                             const SizedBox(height: 10),
                             Text(
                               L.t(lang, 'no_plantings'),
@@ -136,7 +150,10 @@ class PlantingListWidget extends StatelessWidget {
                         final cropLabel =
                             cropNameForId?.call(planting.cropId) ??
                             '${L.t(lang, 'crop_id')}: ${planting.cropId}';
-                        final statusColor = _statusColor(planting.status, colorScheme);
+                        final statusColor = _statusColor(
+                          planting.status,
+                          colorScheme,
+                        );
                         final hasAlerts = planting.serverId == null
                             ? false
                             : hasAlertsForScope(plantingId: planting.serverId!);
@@ -144,14 +161,25 @@ class PlantingListWidget extends StatelessWidget {
                         return Card(
                           margin: const EdgeInsets.only(bottom: 10),
                           child: ListTile(
-                            title: Text(cropLabel),
+                            title: Text(
+                              cropLabel,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('${L.t(lang, 'planting_date')}: ${_dateLabel(planting.plantingDate)}'),
+                                Text(
+                                  '${L.t(lang, 'planting_date')}: ${_dateLabel(planting.plantingDate)}',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                                 const SizedBox(height: 4),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 3,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: statusColor.withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(999),
@@ -163,6 +191,8 @@ class PlantingListWidget extends StatelessWidget {
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
                                     ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],
@@ -172,7 +202,7 @@ class PlantingListWidget extends StatelessWidget {
                               children: [
                                 if (syncIndicator != null) ...[
                                   syncIndicator,
-                                  const SizedBox(width: 6),
+                                  const SizedBox(width: 4),
                                 ],
                                 if (hasAlerts)
                                   const Icon(
@@ -180,32 +210,54 @@ class PlantingListWidget extends StatelessWidget {
                                     color: Colors.orange,
                                     size: 20,
                                   ),
-                                if (onPredictYield != null)
-                                  IconButton(
-                                    icon: const Icon(Icons.auto_graph_outlined, size: 20),
-                                    tooltip: LocalizedValue.fixed(
-                                      lang,
-                                      'yield_prediction_short',
-                                    ),
-                                    onPressed: () => onPredictYield?.call(planting),
-                                  ),
-                                if (onEdit != null)
-                                  IconButton(
-                                    icon: const Icon(Icons.edit, size: 20),
-                                    onPressed: () => onEdit?.call(planting),
-                                  ),
-                                if (onDelete != null)
-                                  IconButton(
-                                    icon: const Icon(Icons.delete_outline, size: 20),
-                                    onPressed: () => onDelete?.call(planting),
+                                if (onPredictYield != null ||
+                                    onEdit != null ||
+                                    onDelete != null)
+                                  PopupMenuButton<String>(
+                                    icon: const Icon(Icons.more_vert_rounded),
+                                    onSelected: (value) {
+                                      if (value == 'yield') {
+                                        onPredictYield?.call(planting);
+                                      } else if (value == 'edit') {
+                                        onEdit?.call(planting);
+                                      } else if (value == 'delete') {
+                                        onDelete?.call(planting);
+                                      }
+                                    },
+                                    itemBuilder: (context) => [
+                                      if (onPredictYield != null)
+                                        PopupMenuItem(
+                                          value: 'yield',
+                                          child: Text(
+                                            LocalizedValue.fixed(
+                                              lang,
+                                              'yield_prediction_short',
+                                            ),
+                                          ),
+                                        ),
+                                      if (onEdit != null)
+                                        PopupMenuItem(
+                                          value: 'edit',
+                                          child: Text(L.t(lang, 'edit')),
+                                        ),
+                                      if (onDelete != null)
+                                        PopupMenuItem(
+                                          value: 'delete',
+                                          child: Text(L.t(lang, 'delete')),
+                                        ),
+                                    ],
                                   ),
                                 const Icon(Icons.chevron_right),
                               ],
                             ),
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                            onTap: () => Provider.of<FarmContextProvider>(context, listen: false)
-                                .setPlanting(planting),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 6,
+                            ),
+                            onTap: () => Provider.of<FarmContextProvider>(
+                              context,
+                              listen: false,
+                            ).setPlanting(planting),
                           ),
                         );
                       },
@@ -217,6 +269,3 @@ class PlantingListWidget extends StatelessWidget {
     );
   }
 }
-
-
-

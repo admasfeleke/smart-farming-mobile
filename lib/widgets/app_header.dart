@@ -34,20 +34,21 @@ class AppHeader extends StatelessWidget {
         final hasSubtitle = subtitleText.isNotEmpty;
 
         return Container(
-          margin: const EdgeInsets.fromLTRB(14, 12, 14, 8),
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 14),
+          margin: const EdgeInsets.fromLTRB(14, 8, 14, 8),
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(24),
             gradient: const LinearGradient(
-              colors: [Color(0xFF2F5E12), Color(0xFF6B8E16)],
+              colors: [Color(0xFF18370D), Color(0xFF4F7D12)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF2F5E12).withValues(alpha: 0.22),
-                blurRadius: 22,
-                offset: const Offset(0, 12),
+                color: const Color(0xFF17380D).withValues(alpha: 0.18),
+                blurRadius: 16,
+                offset: const Offset(0, 7),
               ),
             ],
           ),
@@ -58,14 +59,15 @@ class AppHeader extends StatelessWidget {
                 icon: Icons.menu_rounded,
                 tooltip: L.t(lang, 'menu'),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Container(
                 width: 42,
                 height: 42,
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.92),
+                  color: const Color(0xFFFFFCF0),
                   borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.7)),
                 ),
                 child: Image.asset(
                   'assets/images/logo/smart.png',
@@ -76,7 +78,7 @@ class AppHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 9),
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -87,7 +89,7 @@ class AppHeader extends StatelessWidget {
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
-                        letterSpacing: -0.2,
+                        letterSpacing: -0.35,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -96,8 +98,8 @@ class AppHeader extends StatelessWidget {
                     Text(
                       hasSubtitle ? subtitleText : L.t(lang, 'app_name'),
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.white.withValues(alpha: 0.82),
-                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFFE7F6C0),
+                        fontWeight: FontWeight.w800,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -106,13 +108,13 @@ class AppHeader extends StatelessWidget {
                 ),
               ),
               _HeaderIconButton(
-                onPressed: onSearchTap ?? () {},
+                onPressed: onSearchTap,
                 icon: Icons.search_rounded,
                 tooltip: L.t(lang, 'search'),
               ),
               const SizedBox(width: 6),
               _HeaderIconButton(
-                onPressed: onRefreshTap ?? () {},
+                onPressed: onRefreshTap,
                 icon: Icons.sync_rounded,
                 tooltip: L.t(lang, 'refresh'),
               ),
@@ -137,18 +139,23 @@ class _HeaderIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final enabled = onPressed != null;
     return Tooltip(
       message: tooltip,
       child: Material(
-        color: Colors.white.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.white.withValues(alpha: enabled ? 0.14 : 0.06),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: InkWell(
           onTap: onPressed,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(15),
           child: SizedBox(
-            width: 42,
-            height: 42,
-            child: Icon(icon, color: Colors.white, size: 23),
+            width: 40,
+            height: 40,
+            child: Icon(
+              icon,
+              color: Colors.white.withValues(alpha: enabled ? 1 : 0.42),
+              size: 22,
+            ),
           ),
         ),
       ),

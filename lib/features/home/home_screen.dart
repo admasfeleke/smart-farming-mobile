@@ -616,9 +616,7 @@ class _FarmContextCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        data == null || data.farmCount == 0
-                            ? L.t(LanguageStore.notifier.value, 'dashboard_add_first_farm')
-                            : '${data.farmCount} ${L.t(LanguageStore.notifier.value, 'my_farm')} • ${data.plotCount} ${L.t(LanguageStore.notifier.value, 'plots')}',
+                        _fieldContextSummary(data),
                         style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey.shade700),
                       ),
                     ],
@@ -678,12 +676,18 @@ class _FarmContextCard extends StatelessWidget {
                   ),
                 ],
               ),
-            const SizedBox(height: 14),
-            _SyncStatusLine(languageCode: LanguageStore.notifier.value),
           ],
         ),
       ),
     );
+  }
+
+  String _fieldContextSummary(_DashboardSnapshot? data) {
+    final lang = LanguageStore.notifier.value;
+    if (data == null || data.farmCount == 0) {
+      return L.t(lang, 'dashboard_add_first_farm');
+    }
+    return '${data.farmCount} ${L.t(lang, 'my_farm')} | ${data.plotCount} ${L.t(lang, 'plots')}';
   }
 }
 
@@ -764,14 +768,6 @@ class _SyncHealthCard extends StatelessWidget {
                       ),
                   ],
                 ),
-                if (onOpenDiagnostics != null) ...[
-                  const SizedBox(height: 8),
-                  TextButton.icon(
-                    onPressed: onOpenDiagnostics,
-                    icon: const Icon(Icons.insights_outlined),
-                    label: Text(L.t(languageCode, 'sync_action_view_diagnostics')),
-                  ),
-                ],
                 const SizedBox(height: 12),
                 if (loading)
                   const LinearProgressIndicator(minHeight: 3)
@@ -821,6 +817,17 @@ class _SyncHealthCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if (onOpenDiagnostics != null) ...[
+                    const SizedBox(height: 14),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: onOpenDiagnostics,
+                        icon: const Icon(Icons.insights_outlined),
+                        label: Text(L.t(languageCode, 'sync_action_view_diagnostics')),
+                      ),
+                    ),
+                  ],
                 ],
               ],
             ),
@@ -1288,33 +1295,6 @@ class _SummaryChip extends StatelessWidget {
           Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
         ],
       ),
-    );
-  }
-}
-
-class _SyncStatusLine extends StatelessWidget {
-  final String languageCode;
-
-  const _SyncStatusLine({required this.languageCode});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ValueListenableBuilder(
-      valueListenable: ConnectivityStatusService.instance.notifier,
-      builder: (context, ApiConnectivityStatus status, _) {
-        final isOnline = status.state == ApiConnectivityState.apiOnline;
-        final color = isOnline ? Colors.green.shade700 : Colors.orange.shade700;
-        final icon = isOnline ? Icons.cloud_done : Icons.cloud_off;
-        final text = isOnline ? L.t(languageCode, 'last_synced_today') : L.t(languageCode, 'offline_sync_sub');
-        return Row(
-          children: [
-            Icon(icon, size: 16, color: color),
-            const SizedBox(width: 6),
-            Expanded(child: Text(text, style: theme.textTheme.bodySmall?.copyWith(color: color))),
-          ],
-        );
-      },
     );
   }
 }

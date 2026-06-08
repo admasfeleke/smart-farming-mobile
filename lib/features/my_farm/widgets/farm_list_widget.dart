@@ -26,11 +26,19 @@ class FarmListWidget extends StatelessWidget {
   Widget? _syncIndicator(FarmRecord farm) {
     switch (farm.syncState) {
       case SyncState.pending:
-        return const Icon(Icons.cloud_upload_outlined, size: 18, color: Colors.orange);
+        return const Icon(
+          Icons.cloud_upload_outlined,
+          size: 18,
+          color: Colors.orange,
+        );
       case SyncState.failed:
         return const Icon(Icons.sync_problem, size: 18, color: Colors.orange);
       case SyncState.conflict:
-        return const Icon(Icons.error_outline, size: 18, color: Colors.redAccent);
+        return const Icon(
+          Icons.error_outline,
+          size: 18,
+          color: Colors.redAccent,
+        );
       case SyncState.synced:
         return null;
     }
@@ -59,8 +67,8 @@ class FarmListWidget extends StatelessWidget {
                     Text(
                       L.t(lang, 'my_farm'),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -90,7 +98,11 @@ class FarmListWidget extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.agriculture, size: 42, color: Colors.grey.shade600),
+                            Icon(
+                              Icons.agriculture,
+                              size: 42,
+                              color: Colors.grey.shade600,
+                            ),
                             const SizedBox(height: 10),
                             Text(
                               L.t(lang, 'no_farms'),
@@ -120,17 +132,23 @@ class FarmListWidget extends StatelessWidget {
                         return Card(
                           margin: const EdgeInsets.only(bottom: 10),
                           child: ListTile(
-                            title: Text(farm.farmName),
+                            title: Text(
+                              farm.farmName,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                             subtitle: Text(
                               '$plotCount ${L.t(lang, 'plots')} | '
                               '${farm.areaHectares?.toStringAsFixed(2) ?? '--'} ha',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 if (syncIndicator != null) ...[
                                   syncIndicator,
-                                  const SizedBox(width: 6),
+                                  const SizedBox(width: 4),
                                 ],
                                 if (hasAlerts)
                                   const Icon(
@@ -138,23 +156,40 @@ class FarmListWidget extends StatelessWidget {
                                     color: Colors.orange,
                                     size: 20,
                                   ),
-                                if (onEdit != null)
-                                  IconButton(
-                                    icon: const Icon(Icons.edit, size: 20),
-                                    onPressed: () => onEdit?.call(farm),
-                                  ),
-                                if (onDelete != null)
-                                  IconButton(
-                                    icon: const Icon(Icons.delete_outline, size: 20),
-                                    onPressed: () => onDelete?.call(farm),
+                                if (onEdit != null || onDelete != null)
+                                  PopupMenuButton<String>(
+                                    icon: const Icon(Icons.more_vert_rounded),
+                                    onSelected: (value) {
+                                      if (value == 'edit') {
+                                        onEdit?.call(farm);
+                                      } else if (value == 'delete') {
+                                        onDelete?.call(farm);
+                                      }
+                                    },
+                                    itemBuilder: (context) => [
+                                      if (onEdit != null)
+                                        PopupMenuItem(
+                                          value: 'edit',
+                                          child: Text(L.t(lang, 'edit')),
+                                        ),
+                                      if (onDelete != null)
+                                        PopupMenuItem(
+                                          value: 'delete',
+                                          child: Text(L.t(lang, 'delete')),
+                                        ),
+                                    ],
                                   ),
                                 const Icon(Icons.chevron_right),
                               ],
                             ),
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                            onTap: () => Provider.of<FarmContextProvider>(context, listen: false)
-                                .setFarm(farm),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 6,
+                            ),
+                            onTap: () => Provider.of<FarmContextProvider>(
+                              context,
+                              listen: false,
+                            ).setFarm(farm),
                           ),
                         );
                       },
