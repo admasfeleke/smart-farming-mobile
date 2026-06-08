@@ -1,12 +1,16 @@
 const Set<String> kDefaultSupportedCropFamilies = <String>{
+  'corn',
   'pepper',
   'potato',
   'tomato',
 };
 
-Set<String> _supportedCropFamilies = Set<String>.from(kDefaultSupportedCropFamilies);
+Set<String> _supportedCropFamilies = Set<String>.from(
+  kDefaultSupportedCropFamilies,
+);
 
-Set<String> get kSupportedCropFamilies => Set<String>.unmodifiable(_supportedCropFamilies);
+Set<String> get kSupportedCropFamilies =>
+    Set<String>.unmodifiable(_supportedCropFamilies);
 
 void updateSupportedCropFamilies(Iterable<String> families) {
   final normalized = families
@@ -23,7 +27,9 @@ String? cropFamilyFromName(String? cropName) {
   final trimmed = cropName.trim().toLowerCase();
   if (trimmed.isEmpty) return null;
   final slug = trimmed.replaceAll(RegExp(r'[^a-z0-9]+'), '_');
-  final normalized = slug.replaceAll(RegExp(r'_+'), '_').replaceAll(RegExp(r'^_|_$'), '');
+  final normalized = slug
+      .replaceAll(RegExp(r'_+'), '_')
+      .replaceAll(RegExp(r'^_|_$'), '');
   if (normalized.isEmpty) return null;
   final family = normalized.split('_').first;
   if (family == 'maize') return 'corn';
@@ -36,8 +42,12 @@ bool isSupportedCropName(String? cropName) {
   return kSupportedCropFamilies.contains(family);
 }
 
-List<Map<String, dynamic>> filterSupportedCropEntries(List<Map<String, dynamic>> crops) {
-  return crops.where((c) => isSupportedCropName(c['name']?.toString())).toList();
+List<Map<String, dynamic>> filterSupportedCropEntries(
+  List<Map<String, dynamic>> crops,
+) {
+  return crops
+      .where((c) => isSupportedCropName(c['name']?.toString()))
+      .toList();
 }
 
 Set<int> supportedCropIds(List<Map<String, dynamic>> crops) {

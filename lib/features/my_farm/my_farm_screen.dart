@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -64,8 +64,21 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
   final List<Map<String, dynamic>> _crops = [];
   final List<Map<String, dynamic>> _regions = [];
   static const List<String> _farmTypes = ['crop', 'mixed', 'livestock'];
-  static const List<String> _soilTypes = ['clay', 'sandy', 'loam', 'silty', 'peaty', 'chalky', 'unknown'];
-  static const List<String> _plantingStatuses = ['planned', 'active', 'harvested', 'failed'];
+  static const List<String> _soilTypes = [
+    'clay',
+    'sandy',
+    'loam',
+    'silty',
+    'peaty',
+    'chalky',
+    'unknown',
+  ];
+  static const List<String> _plantingStatuses = [
+    'planned',
+    'active',
+    'harvested',
+    'failed',
+  ];
 
   InputDecoration _compactFieldDecoration(
     String label, {
@@ -80,6 +93,13 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
       border: const OutlineInputBorder(),
       isDense: true,
     );
+  }
+
+  int? _toInt(Object? value) {
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value == null) return null;
+    return int.tryParse(value.toString());
   }
 
   @override
@@ -228,7 +248,9 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
       }
       _crops
         ..clear()
-        ..addAll(ReferenceData.mergeByIdThenName(serverCrops, ReferenceData.crops));
+        ..addAll(
+          ReferenceData.mergeByIdThenName(serverCrops, ReferenceData.crops),
+        );
       await LocalCacheStore.instance.write(_cropsCacheKey, _crops);
       if (mounted) setState(() {});
     } on ApiUnauthorized {
@@ -267,7 +289,9 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
       }
       _regions
         ..clear()
-        ..addAll(ReferenceData.mergeByIdThenName(serverRegions, ReferenceData.regions));
+        ..addAll(
+          ReferenceData.mergeByIdThenName(serverRegions, ReferenceData.regions),
+        );
       await LocalCacheStore.instance.write(_regionsCacheKey, _regions);
       if (mounted) setState(() {});
     } on ApiUnauthorized {
@@ -336,7 +360,9 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
     final scopedRegionIds = _descendantRegionIds(
       _farms
           .map((farm) => farm.regionId)
-          .followedBy(editingFarm == null ? const <int>[] : <int>[editingFarm.regionId]),
+          .followedBy(
+            editingFarm == null ? const <int>[] : <int>[editingFarm.regionId],
+          ),
     );
 
     return _regions
@@ -346,22 +372,29 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
           final id = _intValue(r['id']);
           return id != null && scopedRegionIds.contains(id);
         })
-        .map((r) => <String, dynamic>{
-              ...r,
-              'display_name': _regionDisplayName(r),
-            })
+        .map(
+          (r) => <String, dynamic>{...r, 'display_name': _regionDisplayName(r)},
+        )
         .toList();
   }
 
-  int? _defaultFarmRegionId(FarmRecord? farm, List<Map<String, dynamic>> availableRegions) {
+  int? _defaultFarmRegionId(
+    FarmRecord? farm,
+    List<Map<String, dynamic>> availableRegions,
+  ) {
     if (farm != null) return farm.regionId;
     if (availableRegions.length == 1) {
       return _intValue(availableRegions.first['id']);
     }
-    final existingRegionIds = _farms.map((item) => item.regionId).where((id) => id > 0).toSet();
+    final existingRegionIds = _farms
+        .map((item) => item.regionId)
+        .where((id) => id > 0)
+        .toSet();
     if (existingRegionIds.length == 1) {
       final onlyRegionId = existingRegionIds.first;
-      if (availableRegions.any((item) => _intValue(item['id']) == onlyRegionId)) {
+      if (availableRegions.any(
+        (item) => _intValue(item['id']) == onlyRegionId,
+      )) {
         return onlyRegionId;
       }
     }
@@ -380,14 +413,13 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
     messenger.showSnackBar(
       SnackBar(
         content: Text(
-          nextStep == null || nextStep.trim().isEmpty ? message : '$message\n$nextStep',
+          nextStep == null || nextStep.trim().isEmpty
+              ? message
+              : '$message\n$nextStep',
         ),
         action: actionLabel == null || onAction == null
             ? null
-            : SnackBarAction(
-                label: actionLabel,
-                onPressed: onAction,
-              ),
+            : SnackBarAction(label: actionLabel, onPressed: onAction),
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 5),
       ),
@@ -395,15 +427,21 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
   }
 
   Future<void> _loadCachedAlertsAndReports() async {
-    final cachedAlerts = await LocalCacheStore.instance.readList(_alertsCacheKey);
-    final cachedReports = await LocalCacheStore.instance.readList(_reportsCacheKey);
+    final cachedAlerts = await LocalCacheStore.instance.readList(
+      _alertsCacheKey,
+    );
+    final cachedReports = await LocalCacheStore.instance.readList(
+      _reportsCacheKey,
+    );
     final alerts = (cachedAlerts ?? const <dynamic>[])
         .whereType<Map>()
         .map((item) => AlertModel.fromJson(item.cast<String, dynamic>()))
         .toList();
     final reports = (cachedReports ?? const <dynamic>[])
         .whereType<Map>()
-        .map((item) => DiseaseReportModel.fromJson(item.cast<String, dynamic>()))
+        .map(
+          (item) => DiseaseReportModel.fromJson(item.cast<String, dynamic>()),
+        )
         .toList();
     if (alerts.isNotEmpty) {
       setAlerts(alerts);
@@ -458,7 +496,8 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
               'active_ingredient': report.treatmentGuidance!.activeIngredient,
               'dosage': report.treatmentGuidance!.dosage,
               'ppe': report.treatmentGuidance!.ppe,
-              'pre_harvest_interval': report.treatmentGuidance!.preHarvestInterval,
+              'pre_harvest_interval':
+                  report.treatmentGuidance!.preHarvestInterval,
               're_entry_interval': report.treatmentGuidance!.reEntryInterval,
               'actions': report.treatmentGuidance!.actions,
               'monitoring': report.treatmentGuidance!.monitoring,
@@ -466,7 +505,9 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
               'escalate_if': report.treatmentGuidance!.escalateIf,
               'notes': report.treatmentGuidance!.notes,
             },
-      'inference_failure': report.inferenceFailure == null || !report.inferenceFailure!.hasFailure
+      'inference_failure':
+          report.inferenceFailure == null ||
+              !report.inferenceFailure!.hasFailure
           ? null
           : <String, dynamic>{
               'code': report.inferenceFailure!.code,
@@ -475,7 +516,8 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
               'detected': report.inferenceFailure!.detected,
               'message': report.inferenceFailure!.message,
               'confidence_score': report.inferenceFailure!.confidenceScore,
-              'occurred_at': report.inferenceFailure!.occurredAt?.toIso8601String(),
+              'occurred_at': report.inferenceFailure!.occurredAt
+                  ?.toIso8601String(),
             },
     };
   }
@@ -551,7 +593,10 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
         : fallback;
   }
 
-  Future<void> _loadFarms({bool clearExisting = true, bool refreshFromServer = true}) async {
+  Future<void> _loadFarms({
+    bool clearExisting = true,
+    bool refreshFromServer = true,
+  }) async {
     if (_farmsLoading) return;
     final hadLocalData = _farms.isNotEmpty;
 
@@ -622,7 +667,9 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
       final hasLocal = _farms.isNotEmpty;
       setState(() {
         _farmsLoading = false;
-        _farmsError = hasLocal ? null : L.t(LanguageStore.notifier.value, 'offline_saved_data_only');
+        _farmsError = hasLocal
+            ? null
+            : L.t(LanguageStore.notifier.value, 'offline_saved_data_only');
       });
     }
   }
@@ -647,18 +694,22 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
     });
     setPlotFarmMap({
       for (final p in cachedPlots)
-        if (p.serverId != null && p.farmServerId != null) p.serverId!: p.farmServerId!,
+        if (p.serverId != null && p.farmServerId != null)
+          p.serverId!: p.farmServerId!,
     });
 
     try {
       unawaited(() async {
         try {
-          await OfflineSyncService.instance.syncNow().timeout(const Duration(seconds: 12));
+          await OfflineSyncService.instance.syncNow().timeout(
+            const Duration(seconds: 12),
+          );
           final loadedPlots = await repo.listPlotsByFarmLocalId(farmId);
           if (requestId != _plotsRequestId || !mounted) return;
           setPlotFarmMap({
             for (final p in loadedPlots)
-              if (p.serverId != null && p.farmServerId != null) p.serverId!: p.farmServerId!,
+              if (p.serverId != null && p.farmServerId != null)
+                p.serverId!: p.farmServerId!,
           });
           setState(() {
             _plots
@@ -685,14 +736,17 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
       if (requestId != _plotsRequestId || !mounted) return;
       setState(() {
         _plotsLoading = false;
-        _plotsError = _plots.isNotEmpty ? null : _connectivityFriendlyMessage(e.message);
+        _plotsError = _plots.isNotEmpty
+            ? null
+            : _connectivityFriendlyMessage(e.message);
       });
     } catch (_) {
       if (requestId != _plotsRequestId || !mounted) return;
       setState(() {
         _plotsLoading = false;
-        _plotsError =
-            _plots.isNotEmpty ? null : L.t(LanguageStore.notifier.value, 'offline_saved_data_only');
+        _plotsError = _plots.isNotEmpty
+            ? null
+            : L.t(LanguageStore.notifier.value, 'offline_saved_data_only');
       });
     }
   }
@@ -716,7 +770,9 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
     try {
       unawaited(() async {
         try {
-          await OfflineSyncService.instance.syncNow().timeout(const Duration(seconds: 12));
+          await OfflineSyncService.instance.syncNow().timeout(
+            const Duration(seconds: 12),
+          );
           final loadedPlantings = await repo.listPlantingsByPlotLocalId(plotId);
           if (requestId != _plantingsRequestId || !mounted) return;
           setState(() {
@@ -743,8 +799,9 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
       if (requestId != _plantingsRequestId || !mounted) return;
       setState(() {
         _plantingsLoading = false;
-        _plantingsError =
-            _plantings.isNotEmpty ? null : _connectivityFriendlyMessage(e.message);
+        _plantingsError = _plantings.isNotEmpty
+            ? null
+            : _connectivityFriendlyMessage(e.message);
       });
     } catch (_) {
       if (requestId != _plantingsRequestId || !mounted) return;
@@ -785,68 +842,83 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
                   children: [
                     Expanded(
                       child: Builder(
-                      builder: (_) {
-                        if (selectedFarm == null) {
-                          if (_farmsError != null) {
-                            _showScopedErrorOnce(
-                              scope: 'farms',
-                              message: _farmsError!,
-                              onRetry: _loadFarms,
+                        builder: (_) {
+                          if (selectedFarm == null) {
+                            if (_farmsError != null) {
+                              _showScopedErrorOnce(
+                                scope: 'farms',
+                                message: _farmsError!,
+                                onRetry: _loadFarms,
+                              );
+                            }
+                            if (_farmsLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return FarmListWidget(
+                              farms: _farms,
+                              plotCounts: _plotCounts,
+                              onAdd: () => _showCreateFarmDialog(lang),
+                              onEdit: (farm) => _showEditFarmDialog(farm, lang),
+                              onDelete: (farm) =>
+                                  _confirmDeleteFarm(farm, lang),
                             );
                           }
-                          if (_farmsLoading) {
-                            return const Center(child: CircularProgressIndicator());
-                          }
-                          return FarmListWidget(
-                            farms: _farms,
-                            plotCounts: _plotCounts,
-                            onAdd: () => _showCreateFarmDialog(lang),
-                            onEdit: (farm) => _showEditFarmDialog(farm, lang),
-                            onDelete: (farm) => _confirmDeleteFarm(farm, lang),
-                          );
-                        }
 
-                        if (selectedPlot == null) {
-                          if (_plotsError != null) {
-                            _showScopedErrorOnce(
-                              scope: 'plots',
-                              message: _plotsError!,
-                              onRetry: () => _loadPlots(selectedFarm.id),
+                          if (selectedPlot == null) {
+                            if (_plotsError != null) {
+                              _showScopedErrorOnce(
+                                scope: 'plots',
+                                message: _plotsError!,
+                                onRetry: () => _loadPlots(selectedFarm.id),
+                              );
+                            }
+                            if (_plotsLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return PlotListWidget(
+                              farm: selectedFarm,
+                              plots: _plots,
+                              onAdd: () =>
+                                  _showCreatePlotDialog(selectedFarm.id, lang),
+                              onEdit: (plot) => _showEditPlotDialog(plot, lang),
+                              onDelete: (plot) =>
+                                  _confirmDeletePlot(plot, lang),
                             );
                           }
-                          if (_plotsLoading) {
-                            return const Center(child: CircularProgressIndicator());
-                          }
-                          return PlotListWidget(
-                            farm: selectedFarm,
-                            plots: _plots,
-                            onAdd: () => _showCreatePlotDialog(selectedFarm.id, lang),
-                            onEdit: (plot) => _showEditPlotDialog(plot, lang),
-                            onDelete: (plot) => _confirmDeletePlot(plot, lang),
-                          );
-                        }
 
-                        if (_plantingsError != null) {
-                          _showScopedErrorOnce(
-                            scope: 'plantings',
-                            message: _plantingsError!,
-                            onRetry: () => _loadPlantings(selectedPlot.id),
+                          if (_plantingsError != null) {
+                            _showScopedErrorOnce(
+                              scope: 'plantings',
+                              message: _plantingsError!,
+                              onRetry: () => _loadPlantings(selectedPlot.id),
+                            );
+                          }
+                          if (_plantingsLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return PlantingListWidget(
+                            plot: selectedPlot,
+                            plantings: _plantings,
+                            cropNameForId: _cropNameForId,
+                            onAdd: () => _showCreatePlantingDialog(
+                              selectedPlot.id,
+                              lang,
+                            ),
+                            onEdit: (planting) =>
+                                _showEditPlantingDialog(planting, lang),
+                            onDelete: (planting) =>
+                                _confirmDeletePlanting(planting, lang),
+                            onPredictYield: (planting) =>
+                                _openYieldPrediction(selectedPlot, planting),
                           );
-                        }
-                        if (_plantingsLoading) {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                        return PlantingListWidget(
-                          plot: selectedPlot,
-                          plantings: _plantings,
-                          cropNameForId: _cropNameForId,
-                          onAdd: () => _showCreatePlantingDialog(selectedPlot.id, lang),
-                          onEdit: (planting) => _showEditPlantingDialog(planting, lang),
-                          onDelete: (planting) => _confirmDeletePlanting(planting, lang),
-                          onPredictYield: (planting) => _openYieldPrediction(selectedPlot, planting),
-                        );
-                      },
-                    ),
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -868,14 +940,18 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
 
   Future<void> _showFarmDialog({required String lang, FarmRecord? farm}) async {
     final nameController = TextEditingController(text: farm?.farmName ?? '');
-    final regionController =
-        TextEditingController(text: farm?.regionId.toString() ?? '');
-    final latController =
-        TextEditingController(text: farm?.latitude?.toString() ?? '');
-    final lonController =
-        TextEditingController(text: farm?.longitude?.toString() ?? '');
-    final areaController =
-        TextEditingController(text: farm?.areaHectares?.toString() ?? '');
+    final regionController = TextEditingController(
+      text: farm?.regionId.toString() ?? '',
+    );
+    final latController = TextEditingController(
+      text: farm?.latitude?.toString() ?? '',
+    );
+    final lonController = TextEditingController(
+      text: farm?.longitude?.toString() ?? '',
+    );
+    final areaController = TextEditingController(
+      text: farm?.areaHectares?.toString() ?? '',
+    );
     String? selectedFarmType = farm?.farmType;
     bool isActive = farm?.isActive ?? true;
     final availableRegions = _availableFarmRegions(editingFarm: farm);
@@ -898,7 +974,8 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
               });
 
               try {
-                final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+                final serviceEnabled =
+                    await Geolocator.isLocationServiceEnabled();
                 if (!serviceEnabled) {
                   setDialogState(() {
                     fetchingLocation = false;
@@ -915,7 +992,10 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
                     permission == LocationPermission.deniedForever) {
                   setDialogState(() {
                     fetchingLocation = false;
-                    formError = L.t(lang, 'my_farm_location_permission_required');
+                    formError = L.t(
+                      lang,
+                      'my_farm_location_permission_required',
+                    );
                   });
                   return;
                 }
@@ -940,106 +1020,135 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
             }
 
             return _FarmerFormDialog(
-              title: farm == null ? L.t(lang, 'add_farm') : L.t(lang, 'edit_farm'),
+              title: farm == null
+                  ? L.t(lang, 'add_farm')
+                  : L.t(lang, 'edit_farm'),
               primaryAction: ElevatedButton(
                 onPressed: saving
-                      ? null
-                      : () async {
-                          setDialogState(() {
-                            farmNameError = null;
-                            regionError = null;
-                            formError = null;
-                          });
+                    ? null
+                    : () async {
+                        setDialogState(() {
+                          farmNameError = null;
+                          regionError = null;
+                          formError = null;
+                        });
 
-                          final name = nameController.text.trim();
-                          final regionId =
-                              selectedRegionId ?? int.tryParse(regionController.text.trim());
+                        final name = nameController.text.trim();
+                        final regionId =
+                            selectedRegionId ??
+                            int.tryParse(regionController.text.trim());
 
-                          var hasValidationError = false;
-                          if (name.isEmpty) {
-                            farmNameError = L.t(lang, 'my_farm_error_farm_name_required');
-                            hasValidationError = true;
-                          }
-                          if (regionId == null) {
-                            regionError = L.t(lang, 'my_farm_error_region_required');
-                            hasValidationError = true;
-                          }
-                          if (hasValidationError) {
-                            setDialogState(() {});
-                            return;
-                          }
+                        var hasValidationError = false;
+                        if (name.isEmpty) {
+                          farmNameError = L.t(
+                            lang,
+                            'my_farm_error_farm_name_required',
+                          );
+                          hasValidationError = true;
+                        }
+                        if (regionId == null) {
+                          regionError = L.t(
+                            lang,
+                            'my_farm_error_region_required',
+                          );
+                          hasValidationError = true;
+                        }
+                        if (hasValidationError) {
+                          setDialogState(() {});
+                          return;
+                        }
 
-                          final latitude = double.tryParse(latController.text.trim());
-                          final longitude = double.tryParse(lonController.text.trim());
-                          final area = double.tryParse(areaController.text.trim());
-                          final farmType = selectedFarmType;
+                        final latitude = double.tryParse(
+                          latController.text.trim(),
+                        );
+                        final longitude = double.tryParse(
+                          lonController.text.trim(),
+                        );
+                        final area = double.tryParse(
+                          areaController.text.trim(),
+                        );
+                        final farmType = selectedFarmType;
 
-                          setDialogState(() {
-                            saving = true;
-                          });
+                        setDialogState(() {
+                          saving = true;
+                        });
 
-                          try {
-                            final repo = OfflineRepository.instance;
-                            FarmRecord? savedFarm;
-                            if (farm == null) {
-                              savedFarm = await repo.createFarmLocal(
-                                regionId: regionId!,
-                                farmName: name,
-                                latitude: latitude,
-                                longitude: longitude,
-                                areaHectares: area,
-                                farmType: farmType,
-                                isActive: isActive,
-                              );
-                            } else {
-                              await repo.updateFarmLocal(
-                                localId: farm.localId,
-                                regionId: regionId!,
-                                farmName: name,
-                                latitude: latitude,
-                                longitude: longitude,
-                                areaHectares: area,
-                                farmType: farmType,
-                                isActive: isActive,
-                              );
-                            }
-                            unawaited(OfflineSyncService.instance.syncNow().catchError((_) {}));
-                            if (!dialogContext.mounted) return;
-                            Navigator.of(dialogContext).pop();
-                            if (!mounted) return;
-                            _loadFarms(clearExisting: false, refreshFromServer: false);
-                            _showSuccessMessage(
-                              farm == null ? L.t(lang, 'my_farm_success_farm_added') : L.t(lang, 'my_farm_success_farm_updated'),
-                              nextStep: farm == null
-                                  ? L.t(lang, 'action_next_farm_added')
-                                  : L.t(lang, 'action_next_farm_updated'),
-                              actionLabel: savedFarm == null ? null : L.t(lang, 'add_plot'),
-                              onAction: savedFarm == null
-                                  ? null
-                                  : () {
-                                      _farmContext?.setFarm(savedFarm!);
-                                      _showCreatePlotDialog(savedFarm!.localId, lang);
-                                    },
+                        try {
+                          final repo = OfflineRepository.instance;
+                          FarmRecord? savedFarm;
+                          if (farm == null) {
+                            savedFarm = await repo.createFarmLocal(
+                              regionId: regionId!,
+                              farmName: name,
+                              latitude: latitude,
+                              longitude: longitude,
+                              areaHectares: area,
+                              farmType: farmType,
+                              isActive: isActive,
                             );
-                          } on ApiUnauthorized {
-                            if (mounted) {
-                              setDialogState(() {
-                                saving = false;
-                              });
-                            }
-                            _redirectToLogin();
-                          } on ApiException catch (e) {
+                          } else {
+                            await repo.updateFarmLocal(
+                              localId: farm.localId,
+                              regionId: regionId!,
+                              farmName: name,
+                              latitude: latitude,
+                              longitude: longitude,
+                              areaHectares: area,
+                              farmType: farmType,
+                              isActive: isActive,
+                            );
+                          }
+                          unawaited(
+                            OfflineSyncService.instance.syncNow().catchError(
+                              (_) {},
+                            ),
+                          );
+                          if (!dialogContext.mounted) return;
+                          Navigator.of(dialogContext).pop();
+                          if (!mounted) return;
+                          _loadFarms(
+                            clearExisting: false,
+                            refreshFromServer: false,
+                          );
+                          _showSuccessMessage(
+                            farm == null
+                                ? L.t(lang, 'my_farm_success_farm_added')
+                                : L.t(lang, 'my_farm_success_farm_updated'),
+                            nextStep: farm == null
+                                ? L.t(lang, 'action_next_farm_added')
+                                : L.t(lang, 'action_next_farm_updated'),
+                            actionLabel: savedFarm == null
+                                ? null
+                                : L.t(lang, 'add_plot'),
+                            onAction: savedFarm == null
+                                ? null
+                                : () {
+                                    _farmContext?.setFarm(savedFarm!);
+                                    _showCreatePlotDialog(
+                                      savedFarm!.localId,
+                                      lang,
+                                    );
+                                  },
+                          );
+                        } on ApiUnauthorized {
+                          if (mounted) {
                             setDialogState(() {
                               saving = false;
-                              formError = e.message;
-                            });
-                          } catch (_) {
-                            setDialogState(() {
-                              saving = false;
-                              formError = L.t(lang, 'farm_save_failed');
                             });
                           }
-                        },
+                          _redirectToLogin();
+                        } on ApiException catch (e) {
+                          setDialogState(() {
+                            saving = false;
+                            formError = e.message;
+                          });
+                        } catch (_) {
+                          setDialogState(() {
+                            saving = false;
+                            formError = L.t(lang, 'farm_save_failed');
+                          });
+                        }
+                      },
                 child: saving
                     ? const SizedBox(
                         height: 16,
@@ -1049,151 +1158,167 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
                     : Text(L.t(lang, 'save')),
               ),
               secondaryAction: TextButton(
-                onPressed: saving ? null : () => Navigator.of(dialogContext).pop(),
+                onPressed: saving
+                    ? null
+                    : () => Navigator.of(dialogContext).pop(),
                 child: Text(L.t(lang, 'cancel')),
               ),
               child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      controller: nameController,
-                      decoration: _compactFieldDecoration(
-                        L.t(lang, 'farm_name'),
-                        errorText: farmNameError,
-                      ),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: nameController,
+                    decoration: _compactFieldDecoration(
+                      L.t(lang, 'farm_name'),
+                      errorText: farmNameError,
                     ),
-                    const SizedBox(height: 12),
-                    if (availableRegions.isNotEmpty)
-                      InkWell(
-                        onTap: () async {
-                          final picked = await _showSearchPicker(
-                            title: L.t(lang, 'select_region'),
-                            items: availableRegions,
-                            labelKey: 'display_name',
-                            idKey: 'id',
-                          );
-                          if (picked != null) {
-                            setDialogState(() {
-                              selectedRegionId = picked['id'] as int;
-                              regionController.text = selectedRegionId.toString();
-                              regionError = null;
-                            });
-                          }
-                        },
-                        child: InputDecorator(
-                          decoration: _compactFieldDecoration(
-                            L.t(lang, 'region'),
-                            errorText: regionError,
-                          ),
-                          child: Text(
-                            availableRegions
-                                    .firstWhere(
-                                      (r) => r['id'] == selectedRegionId,
-                                      orElse: () => {},
-                                    )['display_name']
-                                    ?.toString() ??
-                                L.t(lang, 'select_region'),
-                          ),
-                        ),
-                      )
-                    else
-                      TextField(
-                        controller: regionController,
-                        keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 12),
+                  if (availableRegions.isNotEmpty)
+                    InkWell(
+                      onTap: () async {
+                        final picked = await _showSearchPicker(
+                          title: L.t(lang, 'select_region'),
+                          items: availableRegions,
+                          labelKey: 'display_name',
+                          idKey: 'id',
+                        );
+                        if (picked != null) {
+                          setDialogState(() {
+                            selectedRegionId = picked['id'] as int;
+                            regionController.text = selectedRegionId.toString();
+                            regionError = null;
+                          });
+                        }
+                      },
+                      child: InputDecorator(
                         decoration: _compactFieldDecoration(
-                          L.t(lang, 'region_id'),
+                          L.t(lang, 'region'),
                           errorText: regionError,
                         ),
-                      ),
-                    const SizedBox(height: 14),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton.icon(
-                        onPressed: (saving || fetchingLocation)
-                            ? null
-                            : () => fillCurrentLocation(),
-                        icon: fetchingLocation
-                            ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              )
-                            : const Icon(Icons.my_location_outlined),
-                        label: Text(
-                          fetchingLocation ? L.t(lang, 'my_farm_location_getting') : L.t(lang, 'my_farm_location_use_current'),
+                        child: Text(
+                          availableRegions
+                                  .firstWhere(
+                                    (r) => r['id'] == selectedRegionId,
+                                    orElse: () => {},
+                                  )['display_name']
+                                  ?.toString() ??
+                              L.t(lang, 'select_region'),
                         ),
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: latController,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                              signed: true,
-                            ),
-                            decoration: _compactFieldDecoration(L.t(lang, 'latitude')),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TextField(
-                            controller: lonController,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                              signed: true,
-                            ),
-                            decoration: _compactFieldDecoration(L.t(lang, 'longitude')),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 14),
+                    )
+                  else
                     TextField(
-                      controller: areaController,
+                      controller: regionController,
                       keyboardType: TextInputType.number,
-                      decoration: _compactFieldDecoration(L.t(lang, 'area_hectares')),
+                      decoration: _compactFieldDecoration(
+                        L.t(lang, 'region_id'),
+                        errorText: regionError,
+                      ),
                     ),
-                    const SizedBox(height: 14),
-                    DropdownButtonFormField<String>(
-                      initialValue: _farmTypes.contains(selectedFarmType) ? selectedFarmType : null,
-                      decoration: _compactFieldDecoration(L.t(lang, 'farm_type')),
-                      items: _farmTypes
-                          .map((value) => DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(LocalizedValue.farmType(lang, value)),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setDialogState(() {
-                          selectedFarmType = value;
-                        });
-                      },
+                  const SizedBox(height: 14),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton.icon(
+                      onPressed: (saving || fetchingLocation)
+                          ? null
+                          : () => fillCurrentLocation(),
+                      icon: fetchingLocation
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.my_location_outlined),
+                      label: Text(
+                        fetchingLocation
+                            ? L.t(lang, 'my_farm_location_getting')
+                            : L.t(lang, 'my_farm_location_use_current'),
+                      ),
                     ),
-                    SwitchListTile(
-                      value: isActive,
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(L.t(lang, 'active')),
-                      onChanged: (value) {
-                        setDialogState(() {
-                          isActive = value;
-                        });
-                      },
-                    ),
-                    if (formError != null)
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            formError!,
-                            style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: latController,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                            signed: true,
+                          ),
+                          decoration: _compactFieldDecoration(
+                            L.t(lang, 'latitude'),
                           ),
                         ),
                       ),
-                  ],
-                ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: TextField(
+                          controller: lonController,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                            signed: true,
+                          ),
+                          decoration: _compactFieldDecoration(
+                            L.t(lang, 'longitude'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  TextField(
+                    controller: areaController,
+                    keyboardType: TextInputType.number,
+                    decoration: _compactFieldDecoration(
+                      L.t(lang, 'area_hectares'),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  DropdownButtonFormField<String>(
+                    initialValue: _farmTypes.contains(selectedFarmType)
+                        ? selectedFarmType
+                        : null,
+                    decoration: _compactFieldDecoration(L.t(lang, 'farm_type')),
+                    items: _farmTypes
+                        .map(
+                          (value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(LocalizedValue.farmType(lang, value)),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setDialogState(() {
+                        selectedFarmType = value;
+                      });
+                    },
+                  ),
+                  SwitchListTile(
+                    value: isActive,
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(L.t(lang, 'active')),
+                    onChanged: (value) {
+                      setDialogState(() {
+                        isActive = value;
+                      });
+                    },
+                  ),
+                  if (formError != null)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          formError!,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             );
           },
         );
@@ -1261,10 +1386,12 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
     PlotRecord? plot,
   }) async {
     final nameController = TextEditingController(text: plot?.plotName ?? '');
-    final areaController =
-        TextEditingController(text: plot?.areaHectares?.toString() ?? '');
-    String? selectedSoilType =
-        (plot?.soilType.trim().isEmpty ?? true) ? null : plot?.soilType.trim();
+    final areaController = TextEditingController(
+      text: plot?.areaHectares?.toString() ?? '',
+    );
+    String? selectedSoilType = (plot?.soilType.trim().isEmpty ?? true)
+        ? null
+        : plot?.soilType.trim();
     String? plotNameError;
     String? formError;
     bool isActive = plot?.isActive ?? true;
@@ -1276,88 +1403,106 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return _FarmerFormDialog(
-              title: plot == null ? L.t(lang, 'add_plot') : L.t(lang, 'edit_plot'),
+              title: plot == null
+                  ? L.t(lang, 'add_plot')
+                  : L.t(lang, 'edit_plot'),
               primaryAction: ElevatedButton(
                 onPressed: saving
-                      ? null
-                      : () async {
+                    ? null
+                    : () async {
+                        setDialogState(() {
+                          plotNameError = null;
+                          formError = null;
+                        });
+
+                        final name = nameController.text.trim();
+                        if (name.isEmpty) {
                           setDialogState(() {
-                            plotNameError = null;
-                            formError = null;
-                          });
-
-                          final name = nameController.text.trim();
-                          if (name.isEmpty) {
-                            setDialogState(() {
-                              plotNameError = L.t(lang, 'my_farm_error_plot_name_required');
-                            });
-                            return;
-                          }
-
-                          final area = double.tryParse(areaController.text.trim());
-                          final soilType = selectedSoilType ?? '';
-
-                          setDialogState(() {
-                            saving = true;
-                          });
-
-                          try {
-                            final repo = OfflineRepository.instance;
-                            PlotRecord? savedPlot;
-                            if (plot == null) {
-                              savedPlot = await repo.createPlotLocal(
-                                farmLocalId: farmId,
-                                plotName: name,
-                                areaHectares: area,
-                                soilType: soilType,
-                                isActive: isActive,
-                              );
-                            } else {
-                              await repo.updatePlotLocal(
-                                localId: plot.localId,
-                                plotName: name,
-                                areaHectares: area,
-                                soilType: soilType,
-                                isActive: isActive,
-                              );
-                            }
-                            unawaited(OfflineSyncService.instance.syncNow().catchError((_) {}));
-                            if (!dialogContext.mounted) return;
-                            Navigator.of(dialogContext).pop();
-                            if (!mounted) return;
-                            _loadPlots(farmId);
-                            _showSuccessMessage(
-                              plot == null ? L.t(lang, 'my_farm_success_plot_added') : L.t(lang, 'my_farm_success_plot_updated'),
-                              nextStep: plot == null
-                                  ? L.t(lang, 'action_next_plot_added')
-                                  : L.t(lang, 'action_next_plot_updated'),
-                              actionLabel: savedPlot == null ? null : L.t(lang, 'add_planting'),
-                              onAction: savedPlot == null
-                                  ? null
-                                  : () {
-                                      _farmContext?.setPlot(savedPlot!);
-                                      _showCreatePlantingDialog(savedPlot!.localId, lang);
-                                    },
+                            plotNameError = L.t(
+                              lang,
+                              'my_farm_error_plot_name_required',
                             );
-                          } on ApiUnauthorized {
-                            if (mounted) {
-                              setDialogState(() {
-                                saving = false;
-                              });
-                            }
-                            _redirectToLogin();
-                          } on ApiException catch (e) {
+                          });
+                          return;
+                        }
+
+                        final area = double.tryParse(
+                          areaController.text.trim(),
+                        );
+                        final soilType = selectedSoilType ?? '';
+
+                        setDialogState(() {
+                          saving = true;
+                        });
+
+                        try {
+                          final repo = OfflineRepository.instance;
+                          PlotRecord? savedPlot;
+                          if (plot == null) {
+                            savedPlot = await repo.createPlotLocal(
+                              farmLocalId: farmId,
+                              plotName: name,
+                              areaHectares: area,
+                              soilType: soilType,
+                              isActive: isActive,
+                            );
+                          } else {
+                            await repo.updatePlotLocal(
+                              localId: plot.localId,
+                              plotName: name,
+                              areaHectares: area,
+                              soilType: soilType,
+                              isActive: isActive,
+                            );
+                          }
+                          unawaited(
+                            OfflineSyncService.instance.syncNow().catchError(
+                              (_) {},
+                            ),
+                          );
+                          if (!dialogContext.mounted) return;
+                          Navigator.of(dialogContext).pop();
+                          if (!mounted) return;
+                          _loadPlots(farmId);
+                          _showSuccessMessage(
+                            plot == null
+                                ? L.t(lang, 'my_farm_success_plot_added')
+                                : L.t(lang, 'my_farm_success_plot_updated'),
+                            nextStep: plot == null
+                                ? L.t(lang, 'action_next_plot_added')
+                                : L.t(lang, 'action_next_plot_updated'),
+                            actionLabel: savedPlot == null
+                                ? null
+                                : L.t(lang, 'add_planting'),
+                            onAction: savedPlot == null
+                                ? null
+                                : () {
+                                    _farmContext?.setPlot(savedPlot!);
+                                    _showCreatePlantingDialog(
+                                      savedPlot!.localId,
+                                      lang,
+                                    );
+                                  },
+                          );
+                        } on ApiUnauthorized {
+                          if (mounted) {
                             setDialogState(() {
                               saving = false;
-                              formError = e.message;
-                            });
-                          } catch (_) {
-                            setDialogState(() {
-                              saving = false;
-                              formError = L.t(lang, 'plot_save_failed');
                             });
                           }
-                        },
+                          _redirectToLogin();
+                        } on ApiException catch (e) {
+                          setDialogState(() {
+                            saving = false;
+                            formError = e.message;
+                          });
+                        } catch (_) {
+                          setDialogState(() {
+                            saving = false;
+                            formError = L.t(lang, 'plot_save_failed');
+                          });
+                        }
+                      },
                 child: saving
                     ? const SizedBox(
                         height: 16,
@@ -1367,64 +1512,74 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
                     : Text(L.t(lang, 'save')),
               ),
               secondaryAction: TextButton(
-                onPressed: saving ? null : () => Navigator.of(dialogContext).pop(),
+                onPressed: saving
+                    ? null
+                    : () => Navigator.of(dialogContext).pop(),
                 child: Text(L.t(lang, 'cancel')),
               ),
               child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      controller: nameController,
-                      decoration: _compactFieldDecoration(
-                        L.t(lang, 'plot_name'),
-                        errorText: plotNameError,
-                      ),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: nameController,
+                    decoration: _compactFieldDecoration(
+                      L.t(lang, 'plot_name'),
+                      errorText: plotNameError,
                     ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: areaController,
-                      keyboardType: TextInputType.number,
-                      decoration: _compactFieldDecoration(L.t(lang, 'area_hectares')),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: areaController,
+                    keyboardType: TextInputType.number,
+                    decoration: _compactFieldDecoration(
+                      L.t(lang, 'area_hectares'),
                     ),
-                    const SizedBox(height: 12),
-                    DropdownButtonFormField<String>(
-                      initialValue: _soilTypes.contains(selectedSoilType) ? selectedSoilType : null,
-                      decoration: _compactFieldDecoration(L.t(lang, 'soil_type')),
-                      items: _soilTypes
-                          .map((value) => DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(LocalizedValue.soilType(lang, value)),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setDialogState(() {
-                          selectedSoilType = value;
-                        });
-                      },
-                    ),
-                    SwitchListTile(
-                      value: isActive,
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(L.t(lang, 'active')),
-                      onChanged: (value) {
-                        setDialogState(() {
-                          isActive = value;
-                        });
-                      },
-                    ),
-                    if (formError != null)
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            formError!,
-                            style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    initialValue: _soilTypes.contains(selectedSoilType)
+                        ? selectedSoilType
+                        : null,
+                    decoration: _compactFieldDecoration(L.t(lang, 'soil_type')),
+                    items: _soilTypes
+                        .map(
+                          (value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(LocalizedValue.soilType(lang, value)),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setDialogState(() {
+                        selectedSoilType = value;
+                      });
+                    },
+                  ),
+                  SwitchListTile(
+                    value: isActive,
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(L.t(lang, 'active')),
+                    onChanged: (value) {
+                      setDialogState(() {
+                        isActive = value;
+                      });
+                    },
+                  ),
+                  if (formError != null)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          formError!,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
                           ),
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
+              ),
             );
           },
         );
@@ -1497,7 +1652,10 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
     return '${LocalizedValue.fixed(LanguageStore.notifier.value, 'crop_short')} #$cropId';
   }
 
-  Future<void> _openYieldPrediction(PlotRecord plot, PlantingRecord planting) async {
+  Future<void> _openYieldPrediction(
+    PlotRecord plot,
+    PlantingRecord planting,
+  ) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => YieldPredictionScreen(
@@ -1526,16 +1684,19 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
       return '$y-$m-$d';
     }
 
-    final cropController =
-        TextEditingController(text: planting?.cropId.toString() ?? '');
-    final plantingDateController =
-        TextEditingController(text: planting == null ? '' : formatDate(planting.plantingDate));
+    final cropController = TextEditingController(
+      text: planting?.cropId.toString() ?? '',
+    );
+    final plantingDateController = TextEditingController(
+      text: planting == null ? '' : formatDate(planting.plantingDate),
+    );
     final expectedInitialDate = planting?.expectedHarvestDate;
     final expectedDateController = TextEditingController(
       text: expectedInitialDate == null ? '' : formatDate(expectedInitialDate),
     );
-    String? selectedStatus =
-        (planting?.status.trim().isEmpty ?? true) ? null : planting?.status.trim();
+    String? selectedStatus = (planting?.status.trim().isEmpty ?? true)
+        ? null
+        : planting?.status.trim();
     bool isActive = planting?.isActive ?? true;
     int? selectedCropId = planting?.cropId;
     String? cropError;
@@ -1545,7 +1706,9 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
     bool saving = false;
 
     final availableCrops = filterSupportedCropEntries(
-      _crops.where((c) => c['is_active'] == null || c['is_active'] == 1).toList(),
+      _crops
+          .where((c) => c['is_active'] == null || c['is_active'] == 1)
+          .toList(),
     );
     final availableCropIds = supportedCropIds(availableCrops);
 
@@ -1577,136 +1740,158 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
             }
 
             return _FarmerFormDialog(
-              title: planting == null ? L.t(lang, 'add_planting') : L.t(lang, 'edit_planting'),
+              title: planting == null
+                  ? L.t(lang, 'add_planting')
+                  : L.t(lang, 'edit_planting'),
               primaryAction: ElevatedButton(
                 onPressed: saving
-                      ? null
-                      : () async {
+                    ? null
+                    : () async {
+                        setDialogState(() {
+                          cropError = null;
+                          plantingDateError = null;
+                          expectedDateError = null;
+                          formError = null;
+                        });
+
+                        final cropId =
+                            selectedCropId ??
+                            int.tryParse(cropController.text.trim());
+                        final plantingDateRaw = plantingDateController.text
+                            .trim();
+                        final expectedDateRaw = expectedDateController.text
+                            .trim();
+                        final plantingDate = DateTime.tryParse(plantingDateRaw);
+                        final expectedDate = expectedDateRaw.isEmpty
+                            ? null
+                            : DateTime.tryParse(expectedDateRaw);
+
+                        var hasValidationError = false;
+                        if (cropId == null) {
+                          cropError = L.t(lang, 'my_farm_error_crop_required');
+                          hasValidationError = true;
+                        } else if (!availableCropIds.contains(cropId)) {
+                          cropError = L.t(
+                            lang,
+                            'my_farm_error_crop_out_of_scope',
+                          );
+                          hasValidationError = true;
+                        }
+                        if (plantingDateRaw.isEmpty || plantingDate == null) {
+                          plantingDateError = L.t(
+                            lang,
+                            'my_farm_error_planting_date_required',
+                          );
+                          hasValidationError = true;
+                        }
+                        if (expectedDateRaw.isNotEmpty &&
+                            expectedDate == null) {
+                          expectedDateError = L.t(
+                            lang,
+                            'my_farm_error_invalid_date',
+                          );
+                          hasValidationError = true;
+                        }
+                        if (plantingDate != null &&
+                            expectedDate != null &&
+                            !expectedDate.isAfter(plantingDate)) {
+                          expectedDateError = L.t(
+                            lang,
+                            'my_farm_error_expected_after_planting',
+                          );
+                          hasValidationError = true;
+                        }
+                        if (hasValidationError) {
+                          setDialogState(() {});
+                          return;
+                        }
+
+                        final validCropId = cropId;
+                        final validPlantingDate = plantingDate;
+                        if (validCropId == null || validPlantingDate == null) {
                           setDialogState(() {
-                            cropError = null;
-                            plantingDateError = null;
-                            expectedDateError = null;
-                            formError = null;
+                            formError = L.t(lang, 'planting_required');
                           });
+                          return;
+                        }
 
-                          final cropId = selectedCropId ?? int.tryParse(cropController.text.trim());
-                          final plantingDateRaw = plantingDateController.text.trim();
-                          final expectedDateRaw = expectedDateController.text.trim();
-                          final plantingDate = DateTime.tryParse(plantingDateRaw);
-                          final expectedDate = expectedDateRaw.isEmpty
-                              ? null
-                              : DateTime.tryParse(expectedDateRaw);
+                        setDialogState(() {
+                          saving = true;
+                        });
 
-                          var hasValidationError = false;
-                          if (cropId == null) {
-                            cropError = L.t(lang, 'my_farm_error_crop_required');
-                            hasValidationError = true;
-                          } else if (!availableCropIds.contains(cropId)) {
-                            cropError = L.t(lang, 'my_farm_error_crop_out_of_scope');
-                            hasValidationError = true;
-                          }
-                          if (plantingDateRaw.isEmpty || plantingDate == null) {
-                            plantingDateError = L.t(lang, 'my_farm_error_planting_date_required');
-                            hasValidationError = true;
-                          }
-                          if (expectedDateRaw.isNotEmpty && expectedDate == null) {
-                            expectedDateError = L.t(lang, 'my_farm_error_invalid_date');
-                            hasValidationError = true;
-                          }
-                          if (plantingDate != null &&
-                              expectedDate != null &&
-                              !expectedDate.isAfter(plantingDate)) {
-                            expectedDateError = L.t(
-                              lang,
-                              'my_farm_error_expected_after_planting',
+                        final status = selectedStatus ?? '';
+
+                        try {
+                          final repo = OfflineRepository.instance;
+                          PlantingRecord? savedPlanting;
+                          if (planting == null) {
+                            savedPlanting = await repo.createPlantingLocal(
+                              plotLocalId: plotId,
+                              cropId: validCropId,
+                              plantingDate: validPlantingDate,
+                              expectedHarvestDate: expectedDate,
+                              status: status,
+                              isActive: isActive,
                             );
-                            hasValidationError = true;
-                          }
-                          if (hasValidationError) {
-                            setDialogState(() {});
-                            return;
-                          }
-
-                          final validCropId = cropId;
-                          final validPlantingDate = plantingDate;
-                          if (validCropId == null || validPlantingDate == null) {
-                            setDialogState(() {
-                              formError = L.t(lang, 'planting_required');
-                            });
-                            return;
-                          }
-
-                          setDialogState(() {
-                            saving = true;
-                          });
-
-                          final status = selectedStatus ?? '';
-
-                          try {
-                            final repo = OfflineRepository.instance;
-                            PlantingRecord? savedPlanting;
-                            if (planting == null) {
-                              savedPlanting = await repo.createPlantingLocal(
-                                plotLocalId: plotId,
-                                cropId: validCropId,
-                                plantingDate: validPlantingDate,
-                                expectedHarvestDate: expectedDate,
-                                status: status,
-                                isActive: isActive,
-                              );
-                            } else {
-                              await repo.updatePlantingLocal(
-                                localId: planting.localId,
-                                cropId: validCropId,
-                                plantingDate: validPlantingDate,
-                                expectedHarvestDate: expectedDate,
-                                status: status,
-                                isActive: isActive,
-                              );
-                            }
-                            unawaited(OfflineSyncService.instance.syncNow().catchError((_) {}));
-                            if (!dialogContext.mounted) return;
-                            Navigator.of(dialogContext).pop();
-                            if (!mounted) return;
-                            _loadPlantings(plotId);
-                            _showSuccessMessage(
-                              planting == null
-                                  ? L.t(lang, 'my_farm_success_planting_added')
-                                  : L.t(lang, 'my_farm_success_planting_updated'),
-                              nextStep: planting == null
-                                  ? L.t(lang, 'action_next_planting_added')
-                                  : L.t(lang, 'action_next_planting_updated'),
-                              actionLabel: savedPlanting == null ? null : L.t(lang, 'scan'),
-                              onAction: savedPlanting == null
-                                  ? null
-                                  : () {
-                                      _farmContext?.setPlanting(savedPlanting!);
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute<void>(
-                                          builder: (_) => const ScanScreen(),
-                                        ),
-                                      );
-                                    },
+                          } else {
+                            await repo.updatePlantingLocal(
+                              localId: planting.localId,
+                              cropId: validCropId,
+                              plantingDate: validPlantingDate,
+                              expectedHarvestDate: expectedDate,
+                              status: status,
+                              isActive: isActive,
                             );
-                          } on ApiUnauthorized {
-                            if (mounted) {
-                              setDialogState(() {
-                                saving = false;
-                              });
-                            }
-                            _redirectToLogin();
-                          } on ApiException catch (e) {
+                          }
+                          unawaited(
+                            OfflineSyncService.instance.syncNow().catchError(
+                              (_) {},
+                            ),
+                          );
+                          if (!dialogContext.mounted) return;
+                          Navigator.of(dialogContext).pop();
+                          if (!mounted) return;
+                          _loadPlantings(plotId);
+                          _showSuccessMessage(
+                            planting == null
+                                ? L.t(lang, 'my_farm_success_planting_added')
+                                : L.t(lang, 'my_farm_success_planting_updated'),
+                            nextStep: planting == null
+                                ? L.t(lang, 'action_next_planting_added')
+                                : L.t(lang, 'action_next_planting_updated'),
+                            actionLabel: savedPlanting == null
+                                ? null
+                                : L.t(lang, 'scan'),
+                            onAction: savedPlanting == null
+                                ? null
+                                : () {
+                                    _farmContext?.setPlanting(savedPlanting!);
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute<void>(
+                                        builder: (_) => const ScanScreen(),
+                                      ),
+                                    );
+                                  },
+                          );
+                        } on ApiUnauthorized {
+                          if (mounted) {
                             setDialogState(() {
                               saving = false;
-                              formError = e.message;
-                            });
-                          } catch (_) {
-                            setDialogState(() {
-                              saving = false;
-                              formError = L.t(lang, 'planting_save_failed');
                             });
                           }
-                        },
+                          _redirectToLogin();
+                        } on ApiException catch (e) {
+                          setDialogState(() {
+                            saving = false;
+                            formError = e.message;
+                          });
+                        } catch (_) {
+                          setDialogState(() {
+                            saving = false;
+                            formError = L.t(lang, 'planting_save_failed');
+                          });
+                        }
+                      },
                 child: saving
                     ? const SizedBox(
                         height: 16,
@@ -1716,136 +1901,146 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
                     : Text(L.t(lang, 'save')),
               ),
               secondaryAction: TextButton(
-                onPressed: saving ? null : () => Navigator.of(dialogContext).pop(),
+                onPressed: saving
+                    ? null
+                    : () => Navigator.of(dialogContext).pop(),
                 child: Text(L.t(lang, 'cancel')),
               ),
               child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (availableCrops.isNotEmpty)
-                      InkWell(
-                        onTap: () async {
-                          final picked = await _showSearchPicker(
-                            title: L.t(lang, 'select_crop'),
-                            items: availableCrops,
-                            labelKey: 'name',
-                            idKey: 'id',
-                          );
-                          if (picked != null) {
-                            setDialogState(() {
-                              selectedCropId = picked['id'] as int;
-                              cropController.text = selectedCropId.toString();
-                              cropError = null;
-                            });
-                          }
-                        },
-                        child: InputDecorator(
-                          decoration: _compactFieldDecoration(
-                            L.t(lang, 'crop'),
-                            errorText: cropError,
-                          ),
-                          child: Text(
-                            availableCrops
-                                    .firstWhere(
-                                      (c) => c['id'] == selectedCropId,
-                                      orElse: () => {},
-                                    )['name']
-                                    ?.toString() ??
-                                L.t(lang, 'select_crop'),
-                          ),
-                        ),
-                      )
-                    else
-                      TextField(
-                        controller: cropController,
-                        keyboardType: TextInputType.number,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (availableCrops.isNotEmpty)
+                    InkWell(
+                      onTap: () async {
+                        final picked = await _showSearchPicker(
+                          title: L.t(lang, 'select_crop'),
+                          items: availableCrops,
+                          labelKey: 'name',
+                          idKey: 'id',
+                        );
+                        if (picked != null) {
+                          final pickedId = _toInt(picked['id']);
+                          setDialogState(() {
+                            selectedCropId = pickedId;
+                            cropController.text = pickedId?.toString() ?? '';
+                            cropError = null;
+                          });
+                        }
+                      },
+                      child: InputDecorator(
                         decoration: _compactFieldDecoration(
-                          L.t(lang, 'crop_id'),
+                          L.t(lang, 'crop'),
                           errorText: cropError,
                         ),
-                      ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: plantingDateController,
-                      readOnly: true,
-                      onTap: () => pickDate(plantingDateController),
-                      decoration: _compactFieldDecoration(
-                        L.t(lang, 'planting_date'),
-                        hintText: 'YYYY-MM-DD',
-                        errorText: plantingDateError,
-                        suffixIcon: IconButton(
-                          onPressed: () => pickDate(plantingDateController),
-                          icon: const Icon(Icons.calendar_today_outlined),
+                        child: Text(
+                          availableCrops
+                                  .firstWhere(
+                                    (c) => c['id'] == selectedCropId,
+                                    orElse: () => {},
+                                  )['name']
+                                  ?.toString() ??
+                              L.t(lang, 'select_crop'),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
+                    )
+                  else
                     TextField(
-                      controller: expectedDateController,
-                      readOnly: true,
-                      onTap: () => pickDate(expectedDateController),
+                      controller: cropController,
+                      keyboardType: TextInputType.number,
                       decoration: _compactFieldDecoration(
-                        L.t(lang, 'expected_harvest_date'),
-                        hintText: 'YYYY-MM-DD',
-                        errorText: expectedDateError,
-                        suffixIcon: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () => setDialogState(() {
-                                expectedDateController.clear();
-                                expectedDateError = null;
-                              }),
-                              icon: const Icon(Icons.clear),
-                            ),
-                            IconButton(
-                              onPressed: () => pickDate(expectedDateController),
-                              icon: const Icon(Icons.calendar_today_outlined),
-                            ),
-                          ],
-                        ),
+                        L.t(lang, 'crop_id'),
+                        errorText: cropError,
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    DropdownButtonFormField<String>(
-                      initialValue:
-                          _plantingStatuses.contains(selectedStatus) ? selectedStatus : null,
-                      decoration: _compactFieldDecoration(L.t(lang, 'status_label')),
-                      items: _plantingStatuses
-                          .map((value) => DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(LocalizedValue.status(lang, value)),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setDialogState(() {
-                          selectedStatus = value;
-                        });
-                      },
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: plantingDateController,
+                    readOnly: true,
+                    onTap: () => pickDate(plantingDateController),
+                    decoration: _compactFieldDecoration(
+                      L.t(lang, 'planting_date'),
+                      hintText: 'YYYY-MM-DD',
+                      errorText: plantingDateError,
+                      suffixIcon: IconButton(
+                        onPressed: () => pickDate(plantingDateController),
+                        icon: const Icon(Icons.calendar_today_outlined),
+                      ),
                     ),
-                    SwitchListTile(
-                      value: isActive,
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(L.t(lang, 'active')),
-                      onChanged: (value) {
-                        setDialogState(() {
-                          isActive = value;
-                        });
-                      },
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: expectedDateController,
+                    readOnly: true,
+                    onTap: () => pickDate(expectedDateController),
+                    decoration: _compactFieldDecoration(
+                      L.t(lang, 'expected_harvest_date'),
+                      hintText: 'YYYY-MM-DD',
+                      errorText: expectedDateError,
+                      suffixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: () => setDialogState(() {
+                              expectedDateController.clear();
+                              expectedDateError = null;
+                            }),
+                            icon: const Icon(Icons.clear),
+                          ),
+                          IconButton(
+                            onPressed: () => pickDate(expectedDateController),
+                            icon: const Icon(Icons.calendar_today_outlined),
+                          ),
+                        ],
+                      ),
                     ),
-                    if (formError != null)
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            formError!,
-                            style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    initialValue: _plantingStatuses.contains(selectedStatus)
+                        ? selectedStatus
+                        : null,
+                    decoration: _compactFieldDecoration(
+                      L.t(lang, 'status_label'),
+                    ),
+                    items: _plantingStatuses
+                        .map(
+                          (value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(LocalizedValue.status(lang, value)),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setDialogState(() {
+                        selectedStatus = value;
+                      });
+                    },
+                  ),
+                  SwitchListTile(
+                    value: isActive,
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(L.t(lang, 'active')),
+                    onChanged: (value) {
+                      setDialogState(() {
+                        isActive = value;
+                      });
+                    },
+                  ),
+                  if (formError != null)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          formError!,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
                           ),
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
+              ),
             );
           },
         );
@@ -1853,7 +2048,10 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
     );
   }
 
-  Future<void> _confirmDeletePlanting(PlantingRecord planting, String lang) async {
+  Future<void> _confirmDeletePlanting(
+    PlantingRecord planting,
+    String lang,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -1905,7 +2103,9 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
     required String idKey,
   }) async {
     final searchController = TextEditingController();
-    List<Map<String, dynamic>> filtered = List<Map<String, dynamic>>.from(items);
+    List<Map<String, dynamic>> filtered = List<Map<String, dynamic>>.from(
+      items,
+    );
 
     return showModalBottomSheet<Map<String, dynamic>>(
       context: context,
@@ -1927,7 +2127,10 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
                       filtered = items
                           .where(
                             (item) =>
-                                item[labelKey]?.toString().toLowerCase().contains(q) ??
+                                item[labelKey]
+                                    ?.toString()
+                                    .toLowerCase()
+                                    .contains(q) ??
                                 false,
                           )
                           .toList();
@@ -1977,13 +2180,17 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
                               itemCount: filtered.length,
                               itemBuilder: (context, index) {
                                 final item = filtered[index];
-                                final label = item[labelKey]?.toString() ??
+                                final label =
+                                    item[labelKey]?.toString() ??
                                     LocalizedValue.fixed(
                                       LanguageStore.notifier.value,
                                       'unknown',
                                     );
                                 return Card(
-                                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 4,
+                                  ),
                                   child: ListTile(
                                     contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 16,
@@ -1991,13 +2198,18 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
                                     ),
                                     title: Text(
                                       label,
-                                      style: const TextStyle(fontWeight: FontWeight.w600),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                     trailing: const Icon(Icons.chevron_right),
-                                    onTap: () => Navigator.of(sheetContext).pop({
-                                      'id': (item[idKey] as num).toInt(),
-                                      'name': label,
-                                    }),
+                                    onTap: () {
+                                      final id = _toInt(item[idKey]);
+                                      if (id == null) return;
+                                      Navigator.of(
+                                        sheetContext,
+                                      ).pop({'id': id, 'name': label});
+                                    },
                                   ),
                                 );
                               },
@@ -2035,75 +2247,72 @@ class _FarmerFormDialog extends StatelessWidget {
         padding: EdgeInsets.zero,
         child: SafeArea(
           child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(14, 12, 14, 8),
-              padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF2F5E12), Color(0xFF7EA120)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.18),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: const Icon(Icons.agriculture_rounded, color: Colors.white),
+            children: [
+              Container(
+                margin: const EdgeInsets.fromLTRB(14, 12, 14, 8),
+                padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF2F5E12), Color(0xFF7EA120)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w900,
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: const Icon(
+                        Icons.agriculture_rounded,
                         color: Colors.white,
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).maybePop(),
-                    icon: const Icon(Icons.close, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                child: FarmPanel(child: child),
-              ),
-            ),
-            SafeArea(
-              top: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                child: Row(
-                  children: [
-                    Expanded(child: secondaryAction),
                     const SizedBox(width: 12),
-                    Expanded(child: primaryAction),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).maybePop(),
+                      icon: const Icon(Icons.close, color: Colors.white),
+                    ),
                   ],
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                  child: FarmPanel(child: child),
+                ),
+              ),
+              SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                  child: Row(
+                    children: [
+                      Expanded(child: secondaryAction),
+                      const SizedBox(width: 12),
+                      Expanded(child: primaryAction),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 }
-
-
-
-
-
-

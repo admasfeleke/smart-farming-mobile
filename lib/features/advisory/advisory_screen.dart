@@ -128,7 +128,10 @@ class _AdvisoryScreenState extends State<AdvisoryScreen> {
                       LanguageStore.notifier.value,
                       item['name']!.toString().trim(),
                     )
-                  : AppCopy.cropFallback(LanguageStore.notifier.value, item['id']),
+                  : AppCopy.cropFallback(
+                      LanguageStore.notifier.value,
+                      item['id'],
+                    ),
             ),
           ),
         );
@@ -224,7 +227,10 @@ class _AdvisoryScreenState extends State<AdvisoryScreen> {
           planting: planting,
           cropLabel:
               _cropNames[planting.cropId] ??
-              AppCopy.cropFallback(LanguageStore.notifier.value, planting.cropId),
+              AppCopy.cropFallback(
+                LanguageStore.notifier.value,
+                planting.cropId,
+              ),
         ),
       ),
     );
@@ -244,138 +250,140 @@ class _AdvisoryScreenState extends State<AdvisoryScreen> {
               onRefresh: _load,
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-              children: [
-                _AdvisoryHeroCard(
-                  languageCode: lang,
-                  farmName: _farm?.farmName,
-                  plotName: _plot?.plotName,
-                  plantingStatus: _planting?.status,
-                  soilRecordCount: _soilRecordCount,
-                  loading: _loading,
-                ),
-                if (_error != null) ...[
-                  const SizedBox(height: 12),
-                  Card(
-                    color: Colors.red.shade50,
-                    child: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: Text(
-                        _error!,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.red.shade800,
+                children: [
+                  _AdvisoryHeroCard(
+                    languageCode: lang,
+                    farmName: _farm?.farmName,
+                    plotName: _plot?.plotName,
+                    plantingStatus: _planting?.status,
+                    soilRecordCount: _soilRecordCount,
+                    loading: _loading,
+                  ),
+                  if (_error != null) ...[
+                    const SizedBox(height: 12),
+                    Card(
+                      color: Colors.red.shade50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Text(
+                          _error!,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.red.shade800,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-                const SizedBox(height: 12),
-                ValueListenableBuilder(
-                  valueListenable: ConnectivityStatusService.instance.notifier,
-                  builder: (context, ApiConnectivityStatus status, _) {
-                    if (status.state == ApiConnectivityState.apiOnline) {
-                      return const SizedBox.shrink();
-                    }
-                    final isOffline =
-                        status.state == ApiConnectivityState.offline;
-                    return Card(
-                      color: Colors.orange.shade50,
-                      child: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              isOffline ? Icons.cloud_off : Icons.wifi_find,
-                              color: Colors.orange.shade800,
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                isOffline
-                                    ? L.t(lang, 'guidance_offline_notice')
-                                    : L.t(lang, 'guidance_api_unreachable_notice'),
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: Colors.orange.shade900,
+                  ],
+                  const SizedBox(height: 12),
+                  ValueListenableBuilder(
+                    valueListenable:
+                        ConnectivityStatusService.instance.notifier,
+                    builder: (context, ApiConnectivityStatus status, _) {
+                      if (status.state == ApiConnectivityState.apiOnline) {
+                        return const SizedBox.shrink();
+                      }
+                      final isOffline =
+                          status.state == ApiConnectivityState.offline;
+                      return Card(
+                        color: Colors.orange.shade50,
+                        child: Padding(
+                          padding: const EdgeInsets.all(14),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                isOffline ? Icons.cloud_off : Icons.wifi_find,
+                                color: Colors.orange.shade800,
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  isOffline
+                                      ? L.t(lang, 'guidance_offline_notice')
+                                      : L.t(
+                                          lang,
+                                          'guidance_api_unreachable_notice',
+                                        ),
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: Colors.orange.shade900,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  L.t(lang, 'guidelines'),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
+                      );
+                    },
                   ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  L.t(lang, 'guidance_intro'),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey.shade700,
+                  const SizedBox(height: 18),
+                  Text(
+                    L.t(lang, 'guidelines'),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 14),
-                _AdvisoryActionCard(
-                  icon: Icons.wb_sunny_outlined,
-                  title: L.t(lang, 'weatherMonitoring'),
-                  subtitle: L.t(lang, 'weatherMonitoringSubtitle'),
-                  trailing: _farm?.farmName,
-                  onTap: () => _openWeather(context),
-                ),
-                const SizedBox(height: 12),
-                _AdvisoryActionCard(
-                  icon: Icons.science_outlined,
-                  title: L.t(lang, 'soilHealthMonitoring'),
-                  subtitle: L.t(lang, 'soilHealthMonitoringSubtitle'),
-                  trailing: _soilRecordCount == 0
-                      ? L.t(lang, 'advisory_no_soil_records')
-                      : L.t(
-                          lang,
-                          'advisory_soil_records_ready',
-                          params: {'count': '$_soilRecordCount'},
-                        ),
-                  onTap: () => _openSoilHealth(context),
-                ),
-                const SizedBox(height: 12),
-                _AdvisoryActionCard(
-                  icon: Icons.shield_outlined,
-                  title: L.t(lang, 'disease_prevention'),
-                  subtitle: L.t(lang, 'disease_prevention_subtitle'),
-                  trailing:
-                      _plot?.plotName ?? L.t(lang, 'advisory_choose_plot_hint'),
-                  onTap: () => _openDiseasePrevention(context),
-                ),
-                const SizedBox(height: 12),
-                _AdvisoryActionCard(
-                  icon: Icons.history_rounded,
-                  title: L.t(lang, 'scan_history'),
-                  subtitle: L.t(lang, 'disease_history_entry_subtitle'),
-                  trailing: L.t(lang, 'disease_history_entry_trailing'),
-                  onTap: () => _openDiseaseHistory(context),
-                ),
-                const SizedBox(height: 12),
-                _AdvisoryActionCard(
-                  icon: Icons.auto_graph_outlined,
-                  title: L.t(lang, 'yield_outlook'),
-                  subtitle: _planting == null
-                      ? L.t(lang, 'advisory_add_planting_for_yield')
-                      : L.t(lang, 'advisory_estimate_yield'),
-                  trailing: _planting == null
-                      ? L.t(lang, 'advisory_no_active_planting_selected')
-                      : (_cropNames[_planting!.cropId] ??
-                            AppCopy.cropFallback(
-                              lang,
-                              _planting!.cropId,
-                            )),
-                  enabled: _plot != null && _planting != null,
-                  onTap: () => _openYieldPrediction(context),
-                ),
-              ],
+                  const SizedBox(height: 6),
+                  Text(
+                    L.t(lang, 'guidance_intro'),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  _AdvisoryActionCard(
+                    icon: Icons.wb_sunny_outlined,
+                    title: L.t(lang, 'weatherMonitoring'),
+                    subtitle: L.t(lang, 'weatherMonitoringSubtitle'),
+                    trailing: _farm?.farmName,
+                    onTap: () => _openWeather(context),
+                  ),
+                  const SizedBox(height: 12),
+                  _AdvisoryActionCard(
+                    icon: Icons.science_outlined,
+                    title: L.t(lang, 'soilHealthMonitoring'),
+                    subtitle: L.t(lang, 'soilHealthMonitoringSubtitle'),
+                    trailing: _soilRecordCount == 0
+                        ? L.t(lang, 'advisory_no_soil_records')
+                        : L.t(
+                            lang,
+                            'advisory_soil_records_ready',
+                            params: {'count': '$_soilRecordCount'},
+                          ),
+                    onTap: () => _openSoilHealth(context),
+                  ),
+                  const SizedBox(height: 12),
+                  _AdvisoryActionCard(
+                    icon: Icons.shield_outlined,
+                    title: L.t(lang, 'disease_prevention'),
+                    subtitle: L.t(lang, 'disease_prevention_subtitle'),
+                    trailing:
+                        _plot?.plotName ??
+                        L.t(lang, 'advisory_choose_plot_hint'),
+                    onTap: () => _openDiseasePrevention(context),
+                  ),
+                  const SizedBox(height: 12),
+                  _AdvisoryActionCard(
+                    icon: Icons.history_rounded,
+                    title: L.t(lang, 'scan_history'),
+                    subtitle: L.t(lang, 'disease_history_entry_subtitle'),
+                    trailing: L.t(lang, 'disease_history_entry_trailing'),
+                    onTap: () => _openDiseaseHistory(context),
+                  ),
+                  const SizedBox(height: 12),
+                  _AdvisoryActionCard(
+                    icon: Icons.auto_graph_outlined,
+                    title: L.t(lang, 'yield_outlook'),
+                    subtitle: _planting == null
+                        ? L.t(lang, 'advisory_add_planting_for_yield')
+                        : L.t(lang, 'advisory_estimate_yield'),
+                    trailing: _planting == null
+                        ? L.t(lang, 'advisory_no_active_planting_selected')
+                        : (_cropNames[_planting!.cropId] ??
+                              AppCopy.cropFallback(lang, _planting!.cropId)),
+                    enabled: _plot != null && _planting != null,
+                    onTap: () => _openYieldPrediction(context),
+                  ),
+                ],
               ),
             ),
           ),
@@ -405,101 +413,177 @@ class _AdvisoryHeroCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary;
 
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          colors: <Color>[
-            primary.withValues(alpha: 0.16),
-            const Color(0xFFF2E9D8),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.84),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(Icons.track_changes_outlined, color: primary),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  L.t(languageCode, 'guidance_center'),
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-            ],
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(28),
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 230),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/home/quick_guidelines.jpg'),
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
           ),
-          const SizedBox(height: 14),
-          if (loading)
-            const LinearProgressIndicator(minHeight: 3)
-          else ...[
-            Text(
-              farmName == null
-                  ? L.t(languageCode, 'guidance_add_farm_hint')
-                  : L.t(
-                      languageCode,
-                      'guidance_focus_today',
-                      params: {'name': plotName ?? farmName!},
-                    ),
-              style: theme.textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+        ),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                const Color(0xFF102408).withValues(alpha: 0.92),
+                const Color(0xFF244F12).withValues(alpha: 0.76),
+                Colors.black.withValues(alpha: 0.36),
+              ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
             ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _FactChip(
-                  icon: Icons.grass,
-                  label:
-                      farmName ??
-                      L.t(languageCode, 'guidance_no_farm_selected'),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE8FFB6).withValues(alpha: 0.92),
+                        borderRadius: BorderRadius.circular(18),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.18),
+                            blurRadius: 18,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.track_changes_outlined,
+                        color: Color(0xFF275A12),
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            L.t(languageCode, 'guidance_center'),
+                            style: theme.textTheme.headlineSmall?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            farmName == null
+                                ? L.t(languageCode, 'guidance_add_farm_hint')
+                                : L.t(
+                                    languageCode,
+                                    'guidance_focus_today',
+                                    params: {'name': plotName ?? farmName!},
+                                  ),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: const Color(0xFFEAF8D3),
+                              fontWeight: FontWeight.w700,
+                              height: 1.35,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                _FactChip(
-                  icon: Icons.map_outlined,
-                  label:
-                      plotName ??
-                      L.t(languageCode, 'guidance_no_plot_selected'),
-                ),
-                _FactChip(
-                  icon: Icons.eco_outlined,
-                  label: plantingStatus == null
-                      ? L.t(languageCode, 'dashboard_no_active_planting')
-                      : L.t(
-                          languageCode,
-                          'guidance_status_label',
-                          params: {'value': plantingStatus!},
-                        ),
-                ),
-                _FactChip(
-                  icon: Icons.science_outlined,
-                  label: soilRecordCount == 1
-                      ? L.t(languageCode, 'guidance_soil_record_one')
-                      : L.t(
-                          languageCode,
-                          'guidance_soil_record_many',
-                          params: {'count': '$soilRecordCount'},
-                        ),
-                ),
+                const SizedBox(height: 18),
+                if (loading)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(99),
+                    child: LinearProgressIndicator(
+                      minHeight: 5,
+                      backgroundColor: Colors.white.withValues(alpha: 0.24),
+                      color: const Color(0xFFC6F75C),
+                    ),
+                  )
+                else
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      _HeroFactChip(
+                        icon: Icons.grass,
+                        label:
+                            farmName ??
+                            L.t(languageCode, 'guidance_no_farm_selected'),
+                      ),
+                      _HeroFactChip(
+                        icon: Icons.map_outlined,
+                        label:
+                            plotName ??
+                            L.t(languageCode, 'guidance_no_plot_selected'),
+                      ),
+                      _HeroFactChip(
+                        icon: Icons.eco_outlined,
+                        label: plantingStatus == null
+                            ? L.t(languageCode, 'dashboard_no_active_planting')
+                            : L.t(
+                                languageCode,
+                                'guidance_status_label',
+                                params: {'value': plantingStatus!},
+                              ),
+                      ),
+                      _HeroFactChip(
+                        icon: Icons.science_outlined,
+                        label: soilRecordCount == 1
+                            ? L.t(languageCode, 'guidance_soil_record_one')
+                            : L.t(
+                                languageCode,
+                                'guidance_soil_record_many',
+                                params: {'count': '$soilRecordCount'},
+                              ),
+                      ),
+                    ],
+                  ),
               ],
             ),
-          ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeroFactChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _HeroFactChip({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.72)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: const Color(0xFF3F6E12)),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: const Color(0xFF203214),
+                fontWeight: FontWeight.w800,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );
@@ -591,35 +675,6 @@ class _AdvisoryActionCard extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _FactChip extends StatelessWidget {
-  final IconData icon;
-  final String label;
-
-  const _FactChip({required this.icon, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.86),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: Colors.black87),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-          ),
-        ],
       ),
     );
   }
