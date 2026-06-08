@@ -1613,6 +1613,15 @@ class _MyFarmScreenState extends State<MyFarmScreen> {
                             expectedDateError = L.t(lang, 'my_farm_error_invalid_date');
                             hasValidationError = true;
                           }
+                          if (plantingDate != null &&
+                              expectedDate != null &&
+                              !expectedDate.isAfter(plantingDate)) {
+                            expectedDateError = L.t(
+                              lang,
+                              'my_farm_error_expected_after_planting',
+                            );
+                            hasValidationError = true;
+                          }
                           if (hasValidationError) {
                             setDialogState(() {});
                             return;

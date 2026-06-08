@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:sqflite/sqflite.dart';
@@ -96,6 +97,25 @@ class OfflineRepository {
     if (value is double) return value;
     if (value is num) return value.toDouble();
     return double.tryParse(value.toString());
+  }
+
+  Map<String, dynamic>? _jsonMapOrNull(Object? value) {
+    if (value is Map<String, dynamic>) return value;
+    if (value is Map) return Map<String, dynamic>.from(value);
+    if (value is! String || value.trim().isEmpty) return null;
+    try {
+      final decoded = jsonDecode(value);
+      if (decoded is Map<String, dynamic>) return decoded;
+      if (decoded is Map) return Map<String, dynamic>.from(decoded);
+    } catch (_) {
+      return null;
+    }
+    return null;
+  }
+
+  String? _jsonOrNull(Map<String, dynamic>? value) {
+    if (value == null || value.isEmpty) return null;
+    return jsonEncode(value);
   }
 
   bool _toBool(Object? value) {
@@ -466,6 +486,12 @@ class OfflineRepository {
       soilType: row['soil_type']?.toString(),
       testDate: _parseDate(row['test_date']),
       testMethod: row['test_method']?.toString(),
+      dataSource: row['data_source']?.toString(),
+      sensorDeviceId: row['sensor_device_id']?.toString(),
+      sensorReadingId: row['sensor_reading_id']?.toString(),
+      sensorPayload: _jsonMapOrNull(row['sensor_payload']),
+      fieldContext: _jsonMapOrNull(row['field_context']),
+      confidenceScore: _toDouble(row['confidence_score']),
       reviewStatus: row['review_status']?.toString(),
       reviewedBy: _toNullableInt(row['reviewed_by']),
       reviewedAt: _parseDate(row['reviewed_at']),
@@ -980,6 +1006,12 @@ class OfflineRepository {
     String? soilType,
     DateTime? testDate,
     String? testMethod,
+    String? dataSource,
+    String? sensorDeviceId,
+    String? sensorReadingId,
+    Map<String, dynamic>? sensorPayload,
+    Map<String, dynamic>? fieldContext,
+    double? confidenceScore,
     String? reviewStatus,
     String? evidencePath,
   }) async {
@@ -1001,6 +1033,12 @@ class OfflineRepository {
         'soil_type': soilType,
         'test_date': _dateOrNull(testDate ?? now),
         'test_method': testMethod,
+        'data_source': dataSource ?? testMethod ?? 'manual',
+        'sensor_device_id': sensorDeviceId,
+        'sensor_reading_id': sensorReadingId,
+        'sensor_payload': _jsonOrNull(sensorPayload),
+        'field_context': _jsonOrNull(fieldContext),
+        'confidence_score': confidenceScore,
         'review_status': reviewStatus,
         'review_reason_code': null,
         'review_comment': null,
@@ -1026,6 +1064,12 @@ class OfflineRepository {
     String? soilType,
     DateTime? testDate,
     String? testMethod,
+    String? dataSource,
+    String? sensorDeviceId,
+    String? sensorReadingId,
+    Map<String, dynamic>? sensorPayload,
+    Map<String, dynamic>? fieldContext,
+    double? confidenceScore,
     String? reviewStatus,
     String? evidencePath,
   }) async {
@@ -1051,6 +1095,12 @@ class OfflineRepository {
         'soil_type': soilType ?? existing.soilType,
         'test_date': _dateOrNull(testDate ?? existing.testDate),
         'test_method': testMethod ?? existing.testMethod,
+        'data_source': dataSource ?? existing.dataSource,
+        'sensor_device_id': sensorDeviceId ?? existing.sensorDeviceId,
+        'sensor_reading_id': sensorReadingId ?? existing.sensorReadingId,
+        'sensor_payload': _jsonOrNull(sensorPayload ?? existing.sensorPayload),
+        'field_context': _jsonOrNull(fieldContext ?? existing.fieldContext),
+        'confidence_score': confidenceScore ?? existing.confidenceScore,
         'review_status': reviewStatus ?? existing.reviewStatus,
         'review_reason_code': null,
         'review_comment': null,
@@ -1256,6 +1306,12 @@ class OfflineRepository {
         'reviewed_at': _dateOrNull(_parseDate(server['reviewed_at'])),
         'review_reason_code': server['review_reason_code']?.toString(),
         'review_comment': server['review_comment']?.toString(),
+        'data_source': server['data_source']?.toString(),
+        'sensor_device_id': server['sensor_device_id']?.toString(),
+        'sensor_reading_id': server['sensor_reading_id']?.toString(),
+        'sensor_payload': _jsonOrNull(_jsonMapOrNull(server['sensor_payload'])),
+        'field_context': _jsonOrNull(_jsonMapOrNull(server['field_context'])),
+        'confidence_score': _toDouble(server['confidence_score']),
         'evidence_path': null,
         'local_updated_at': _dateOrNull(_nowUtc()),
         'sync_state': syncStateToString(SyncState.synced),
@@ -1796,6 +1852,12 @@ class OfflineRepository {
             'soil_type': item['soil_type']?.toString(),
             'test_date': _dateOrNull(testDate),
             'test_method': item['test_method']?.toString(),
+            'data_source': item['data_source']?.toString(),
+            'sensor_device_id': item['sensor_device_id']?.toString(),
+            'sensor_reading_id': item['sensor_reading_id']?.toString(),
+            'sensor_payload': _jsonOrNull(_jsonMapOrNull(item['sensor_payload'])),
+            'field_context': _jsonOrNull(_jsonMapOrNull(item['field_context'])),
+            'confidence_score': _toDouble(item['confidence_score']),
             'review_status': item['review_status']?.toString(),
             'reviewed_by': _toNullableInt(item['reviewed_by']),
             'reviewed_at': _dateOrNull(_parseDate(item['reviewed_at'])),
@@ -1829,6 +1891,12 @@ class OfflineRepository {
               'soil_type': item['soil_type']?.toString(),
               'test_date': _dateOrNull(testDate),
               'test_method': item['test_method']?.toString(),
+              'data_source': item['data_source']?.toString(),
+              'sensor_device_id': item['sensor_device_id']?.toString(),
+              'sensor_reading_id': item['sensor_reading_id']?.toString(),
+              'sensor_payload': _jsonOrNull(_jsonMapOrNull(item['sensor_payload'])),
+              'field_context': _jsonOrNull(_jsonMapOrNull(item['field_context'])),
+              'confidence_score': _toDouble(item['confidence_score']),
               'review_status': item['review_status']?.toString(),
               'reviewed_by': _toNullableInt(item['reviewed_by']),
               'reviewed_at': _dateOrNull(_parseDate(item['reviewed_at'])),

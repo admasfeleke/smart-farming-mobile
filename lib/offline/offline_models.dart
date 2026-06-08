@@ -298,6 +298,12 @@ class SoilHealthRecord {
   final String? soilType;
   final DateTime? testDate;
   final String? testMethod;
+  final String? dataSource;
+  final String? sensorDeviceId;
+  final String? sensorReadingId;
+  final Map<String, dynamic>? sensorPayload;
+  final Map<String, dynamic>? fieldContext;
+  final double? confidenceScore;
   final String? reviewStatus;
   final int? reviewedBy;
   final DateTime? reviewedAt;
@@ -330,6 +336,12 @@ class SoilHealthRecord {
     required this.soilType,
     required this.testDate,
     required this.testMethod,
+    required this.dataSource,
+    required this.sensorDeviceId,
+    required this.sensorReadingId,
+    required this.sensorPayload,
+    required this.fieldContext,
+    required this.confidenceScore,
     required this.reviewStatus,
     required this.reviewedBy,
     required this.reviewedAt,
@@ -366,6 +378,12 @@ class SoilHealthRecord {
     String? soilType,
     DateTime? testDate,
     String? testMethod,
+    String? dataSource,
+    String? sensorDeviceId,
+    String? sensorReadingId,
+    Map<String, dynamic>? sensorPayload,
+    Map<String, dynamic>? fieldContext,
+    double? confidenceScore,
     String? reviewStatus,
     int? reviewedBy,
     DateTime? reviewedAt,
@@ -398,6 +416,12 @@ class SoilHealthRecord {
       soilType: soilType ?? this.soilType,
       testDate: testDate ?? this.testDate,
       testMethod: testMethod ?? this.testMethod,
+      dataSource: dataSource ?? this.dataSource,
+      sensorDeviceId: sensorDeviceId ?? this.sensorDeviceId,
+      sensorReadingId: sensorReadingId ?? this.sensorReadingId,
+      sensorPayload: sensorPayload ?? this.sensorPayload,
+      fieldContext: fieldContext ?? this.fieldContext,
+      confidenceScore: confidenceScore ?? this.confidenceScore,
       reviewStatus: reviewStatus ?? this.reviewStatus,
       reviewedBy: reviewedBy ?? this.reviewedBy,
       reviewedAt: reviewedAt ?? this.reviewedAt,

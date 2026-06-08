@@ -830,6 +830,24 @@ class _ScanScreenState extends State<ScanScreen>
     return metadata;
   }
 
+  Map<String, dynamic> _fieldContextFromMetadata(Map<String, dynamic> metadata) {
+    final context = <String, dynamic>{};
+    for (final key in <String>[
+      'growth_stage',
+      'symptom_days',
+      'recent_rain',
+      'field_notes',
+      'crop_name',
+      'plot_name',
+    ]) {
+      final value = metadata[key];
+      if (value == null) continue;
+      if (value is String && value.trim().isEmpty) continue;
+      context[key] = value;
+    }
+    return context;
+  }
+
   Map<String, dynamic> _metadataWithOfflineProvisional({
     required Map<String, dynamic> baseMetadata,
     required ({
@@ -2952,6 +2970,7 @@ class _ScanScreenState extends State<ScanScreen>
   }
 
   Widget _buildScanMetadataCard() {
+    final lang = LanguageStore.notifier.value;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -2965,7 +2984,7 @@ class _ScanScreenState extends State<ScanScreen>
         children: [
           Text(
             LocalizedValue.fixed(
-              LanguageStore.notifier.value,
+              lang,
               'optional_field_context',
             ),
             style: TextStyle(fontWeight: FontWeight.w700),
@@ -2974,8 +2993,8 @@ class _ScanScreenState extends State<ScanScreen>
           DropdownButtonFormField<String>(
             initialValue: _selectedGrowthStage,
             isExpanded: true,
-            decoration: const InputDecoration(
-              labelText: 'Growth stage',
+            decoration: InputDecoration(
+              labelText: L.t(lang, 'scan_growth_stage'),
               isDense: true,
             ),
             items: _growthStageOptions
@@ -2999,8 +3018,8 @@ class _ScanScreenState extends State<ScanScreen>
             controller: _symptomDaysController,
             keyboardType: TextInputType.number,
             enabled: !_isBusy,
-            decoration: const InputDecoration(
-              labelText: 'Symptom days (optional)',
+            decoration: InputDecoration(
+              labelText: L.t(lang, 'scan_symptom_days_optional'),
               isDense: true,
             ),
           ),
@@ -3027,8 +3046,8 @@ class _ScanScreenState extends State<ScanScreen>
             controller: _fieldNotesController,
             enabled: !_isBusy,
             maxLines: 2,
-            decoration: const InputDecoration(
-              labelText: 'Field notes (optional)',
+            decoration: InputDecoration(
+              labelText: L.t(lang, 'scan_field_notes_optional'),
               isDense: true,
             ),
           ),
@@ -3038,12 +3057,17 @@ class _ScanScreenState extends State<ScanScreen>
   }
 
   Widget _buildStructuredCaptureCard() {
+    final lang = LanguageStore.notifier.value;
     final collected = _structuredCaptureCandidates.length;
     final remaining = _structuredCaptureRequiredShots - collected;
     final completed = remaining <= 0;
     final subtitle = completed
-        ? 'Protocol complete. Ready to submit.'
-        : 'Capture $remaining more leaf angle${remaining == 1 ? '' : 's'} before submit.';
+        ? L.t(lang, 'scan_protocol_complete')
+        : L.t(
+            lang,
+            'scan_capture_remaining_angles',
+            params: {'count': '$remaining'},
+          );
 
     return Container(
       width: double.infinity,
@@ -3057,7 +3081,14 @@ class _ScanScreenState extends State<ScanScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Structured capture: $collected/$_structuredCaptureRequiredShots',
+            L.t(
+              lang,
+              'scan_structured_capture_count',
+              params: {
+                'collected': '$collected',
+                'required': '$_structuredCaptureRequiredShots',
+              },
+            ),
             style: const TextStyle(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 4),
@@ -3367,6 +3398,9 @@ class _ScanScreenState extends State<ScanScreen>
             symptomDays: _metadataInt(entry.scanMetadata, 'symptom_days'),
             recentRain: _metadataBool(entry.scanMetadata, 'recent_rain'),
             fieldNotes: _metadataString(entry.scanMetadata, 'field_notes'),
+            fieldContext: _fieldContextFromMetadata(
+              entry.scanMetadata ?? const <String, dynamic>{},
+            ),
             captureShots:
                 _metadataInt(entry.scanMetadata, 'capture_shots') ??
                 _structuredCaptureRequiredShots,
@@ -3584,6 +3618,7 @@ class _ScanScreenState extends State<ScanScreen>
         symptomDays: _metadataInt(onlineMetadata, 'symptom_days'),
         recentRain: _metadataBool(onlineMetadata, 'recent_rain'),
         fieldNotes: _metadataString(onlineMetadata, 'field_notes'),
+        fieldContext: _fieldContextFromMetadata(onlineMetadata),
         captureShots:
             _metadataInt(onlineMetadata, 'capture_shots') ??
             _structuredCaptureRequiredShots,
@@ -4800,6 +4835,9 @@ class _ScanScreenState extends State<ScanScreen>
                                   fieldNotes: _metadataString(
                                     onlineMetadata,
                                     'field_notes',
+                                  ),
+                                  fieldContext: _fieldContextFromMetadata(
+                                    onlineMetadata,
                                   ),
                                   captureShots:
                                       _metadataInt(

@@ -137,6 +137,8 @@ class L {
       'my_farm_error_crop_required': 'የሰብል መለያ ያስፈልጋል',
       'my_farm_error_planting_date_required': 'የተከላ ቀን ያስፈልጋል',
       'my_farm_error_invalid_date': 'የቀን ቅርጸት ልክ አይደለም (YYYY-MM-DD)',
+      'my_farm_error_expected_after_planting':
+          'የመከር ቀን ከተከላ ቀን በኋላ መሆን አለበት',
       'technical_details': 'ቴክኒካዊ ዝርዝሮች',
       'rescan': 'እንደገና ስካን',
       'close': 'ዝጋ',
@@ -653,7 +655,7 @@ class L {
       'insect_model_required': 'የIP102 ሞዴል ጥቅል ያስፈልጋል',
       'insect_model_metadata': 'ሞዴል፦ {model}\nክፍሎች፦ {classes}\nተግባር፦ {task}',
       'insect_model_expected_bundle':
-          'የሚጠበቀው ጥቅል፦ {path}\nmodel.tflite፣ labels.json፣ manifest.json እና አማራጭ guidance.json መያዝ አለበት።',
+          'የነፍሳት መለያ ሞዴል ገና አልተዘጋጀም። እስከሚጠናቀቅ ድረስ የበሽታ ስካንን ይጠቀሙ እና ከባለሙያ ግምገማ ጋር ያረጋግጡ።',
       'insect_scope_pests': 'የተባይ ጉዳቶች',
       'insect_scope_separate': 'የተለየ የሥራ ፍሰት',
       'insect_next_steps':
@@ -847,6 +849,12 @@ class L {
       'scan_context_picker_hint':
           'ከስካን በፊት ለዚህ ሰብል እርሻና ማሳ ይምረጡ።',
       'scan_contexts_count': '{count} የእርሻ/ማሳ አማራጮች',
+      'scan_growth_stage': 'የእድገት ደረጃ',
+      'scan_symptom_days_optional': 'ምልክቱ የታየባቸው ቀናት (አማራጭ)',
+      'scan_field_notes_optional': 'የማሳ ማስታወሻ (አማራጭ)',
+      'scan_protocol_complete': 'የቀረጻ መመሪያው ተጠናቋል። ለመላክ ዝግጁ ነው።',
+      'scan_capture_remaining_angles': 'ከመላክ በፊት ተጨማሪ {count} የቅጠል አቅጣጫ ያንሱ።',
+      'scan_structured_capture_count': 'የተደራጀ ቀረጻ፦ {collected}/{required}',
       'scan_planting_number': 'ተከላ #{id}',
       'scan_continue_last_crop': 'የመጨረሻውን ሰብል ቀጥል',
       'scan_recommended_crop': 'የሚመከር ሰብል',
@@ -1019,6 +1027,8 @@ class L {
       'my_farm_error_crop_required': 'Midhaan barbaachisa',
       'my_farm_error_planting_date_required': 'Guyyaan dhaabbii barbaachisa',
       'my_farm_error_invalid_date': 'Bifa guyyaa dogoggora (YYYY-MM-DD)',
+      'my_farm_error_expected_after_planting':
+          'Guyyaan haamaa guyyaa dhaabbii booda ta\'uu qaba',
       'technical_details': 'Ibsa teeknikaa',
       'rescan': 'Irra deebi\'ii sakatta\'i',
       'close': 'Cufi',
@@ -1104,6 +1114,12 @@ class L {
       'scan_choose_context_for_crop': 'Qonnaa fi lafa {crop} filadhu',
       'scan_context_picker_hint': 'Osoo hin sakatta\'in qonnaa fi lafa sirrii midhaan kanaa filadhu.',
       'scan_contexts_count': '{count} filannoo qonnaa/lafaa',
+      'scan_growth_stage': 'Sadarkaa guddinaa',
+      'scan_symptom_days_optional': 'Guyyoota mallattoon mul\'ate (filannoo)',
+      'scan_field_notes_optional': 'Yaadannoo dirree (filannoo)',
+      'scan_protocol_complete': 'Adeemsi suuraa xumurameera. Erguuf qophaa\'e.',
+      'scan_capture_remaining_angles': 'Erguu dura kallattii baalaa dabalataa {count} kaasi.',
+      'scan_structured_capture_count': 'Suuraa qindaa\'aa: {collected}/{required}',
       'scan_continue_last_crop': 'Midhaan duraanii itti fufi',
       'scan_recommended_crop': 'Midhaan gorfame',
       'scan_last_used_badge': 'Dhumarratti kan fayyadamte',
@@ -1334,7 +1350,7 @@ class L {
       'insect_model_required': 'Kuufamni moodeela IP102 barbaachisa',
       'insect_model_metadata': 'Moodeela: {model}\nGosoota: {classes}\nHojii: {task}',
       'insect_model_expected_bundle':
-          'Kuufama eegamu: {path}\nmodel.tflite, labels.json, manifest.json fi guidance.json filannoo qabaachuu qaba.',
+          'Moodeelli adda baasa ilbiisaa amma hin xumuramne. Hanga qophaa\'utti sakatta\'a dhukkuba midhaanii fayyadami, murtii immoo ogeessa qonnaatiin mirkaneessi.',
       'insect_scope_pests': 'Miidhaa ilbiisaa',
       'insect_scope_separate': 'Adeemsa hojii addaa',
       'insect_next_steps':
@@ -1771,6 +1787,8 @@ class L {
       'my_farm_error_crop_required': 'Crop ID is required',
       'my_farm_error_planting_date_required': 'Planting date is required',
       'my_farm_error_invalid_date': 'Invalid date format (YYYY-MM-DD)',
+      'my_farm_error_expected_after_planting':
+          'Expected harvest date must be after planting date',
       'technical_details': 'Technical details',
       'rescan': 'Rescan',
       'close': 'Close',
@@ -1868,6 +1886,12 @@ class L {
       'scan_context_picker_hint':
           'ቅድሚ ምስካን ናይዚ ሰብሊ ትኽክለኛ ሕርሻን ቦታን ምረጽ።',
       'scan_contexts_count': '{count} ምርጫ ሕርሻ/ቦታ',
+      'scan_growth_stage': 'ደረጃ ዕብየት',
+      'scan_symptom_days_optional': 'ምልክት ዝተራእየሉ መዓልታት (ኣማራጺ)',
+      'scan_field_notes_optional': 'መዘኻኸሪ ማሳ (ኣማራጺ)',
+      'scan_protocol_complete': 'መምርሒ ስእሊ ተዛዚሙ። ንምልኣኽ ድሉው እዩ።',
+      'scan_capture_remaining_angles': 'ቅድሚ ምልኣኽ ተወሳኺ {count} ኩርናዕ ቆጽሊ ስኣል።',
+      'scan_structured_capture_count': 'የተደራጀ ቀረጻ፦ {collected}/{required}',
       'scan_planting_number': 'ተኽሊ #{id}',
       'scan_continue_last_crop': 'Continue last crop',
       'scan_recommended_crop': 'Recommended crop',
@@ -2098,7 +2122,7 @@ class L {
       'insect_model_required': 'ጥምረት ሞዴል IP102 የድሊ',
       'insect_model_metadata': 'ሞዴል፦ {model}\nክፍልታት፦ {classes}\nስራሕ፦ {task}',
       'insect_model_expected_bundle':
-          'ዝጽበ ጥምረት፦ {path}\nmodel.tflite፣ labels.json፣ manifest.jsonን ኣማራጺ guidance.jsonን ክህልዎ ኣለዎ።',
+          'ሞዴል መለለዪ ተባዕታይ ነፍሳት ገና ኣይተዳለወን። ክሳብ ዝተዳለወ ስካን ሕማም ተኽሊ ተጠቐም፣ ውሳነ ድማ ብባለሞያ ኣረጋግጽ።',
       'insect_scope_pests': 'ጉድኣት ተባይ',
       'insect_scope_separate': 'ፍሉይ ዋሕዚ ስራሕ',
       'insect_next_steps':
@@ -2536,6 +2560,8 @@ class L {
       'my_farm_error_crop_required': 'Crop ID is required',
       'my_farm_error_planting_date_required': 'Planting date is required',
       'my_farm_error_invalid_date': 'Invalid date format (YYYY-MM-DD)',
+      'my_farm_error_expected_after_planting':
+          'Expected harvest date must be after planting date',
       'add_farm': 'Add Farm',
       'edit_farm': 'Edit Farm',
       'farm_name': 'Farm Name',
@@ -2688,6 +2714,12 @@ class L {
       'scan_context_picker_hint':
           'Select the farm and plot for this crop before scanning.',
       'scan_contexts_count': '{count} farm/plot options',
+      'scan_growth_stage': 'Growth stage',
+      'scan_symptom_days_optional': 'Symptom days (optional)',
+      'scan_field_notes_optional': 'Field notes (optional)',
+      'scan_protocol_complete': 'Capture protocol complete. Ready to submit.',
+      'scan_capture_remaining_angles': 'Capture {count} more leaf angle before submitting.',
+      'scan_structured_capture_count': 'Structured capture: {collected}/{required}',
       'scan_planting_number': 'Planting #{id}',
       'scan_continue_last_crop': 'Continue last crop',
       'scan_recommended_crop': 'Recommended crop',
@@ -3146,7 +3178,7 @@ class L {
       'insect_model_required': 'IP102 model bundle required',
       'insect_model_metadata': 'Model: {model}\nClasses: {classes}\nTask: {task}',
       'insect_model_expected_bundle':
-          'Expected bundle: {path}\nIt must include model.tflite, labels.json, manifest.json, and optional guidance.json.',
+          'The insect detection model is not ready yet. Use crop disease scan for now and confirm pest decisions with expert review.',
       'insect_scope_pests': 'Insect pests',
       'insect_scope_separate': 'Separate workflow',
       'insect_next_steps':

@@ -7,7 +7,7 @@ class LocalDb {
   LocalDb._();
 
   static final LocalDb instance = LocalDb._();
-  static const int _dbVersion = 2;
+  static const int _dbVersion = 3;
   static const String _dbName = 'smart_farm_local.db';
 
   Database? _db;
@@ -51,6 +51,14 @@ class LocalDb {
             'review_comment',
             'TEXT',
           );
+        }
+        if (oldVersion < 3) {
+          await _ensureColumn(database, 'soil_health', 'data_source', 'TEXT');
+          await _ensureColumn(database, 'soil_health', 'sensor_device_id', 'TEXT');
+          await _ensureColumn(database, 'soil_health', 'sensor_reading_id', 'TEXT');
+          await _ensureColumn(database, 'soil_health', 'sensor_payload', 'TEXT');
+          await _ensureColumn(database, 'soil_health', 'field_context', 'TEXT');
+          await _ensureColumn(database, 'soil_health', 'confidence_score', 'REAL');
         }
       },
     );
@@ -171,6 +179,12 @@ class LocalDb {
       soil_type TEXT,
       test_date TEXT,
       test_method TEXT,
+      data_source TEXT,
+      sensor_device_id TEXT,
+      sensor_reading_id TEXT,
+      sensor_payload TEXT,
+      field_context TEXT,
+      confidence_score REAL,
       review_status TEXT,
       reviewed_by INTEGER,
       reviewed_at TEXT,

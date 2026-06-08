@@ -1757,6 +1757,12 @@ class ApiClient {
     double? moisture,
     String? soilType,
     String? testMethod,
+    String? dataSource,
+    String? sensorDeviceId,
+    String? sensorReadingId,
+    Map<String, dynamic>? sensorPayload,
+    Map<String, dynamic>? fieldContext,
+    double? confidenceScore,
     DateTime? testedAt,
     String? evidencePath,
   }) async {
@@ -1783,11 +1789,19 @@ class ApiClient {
         if (soilType != null && soilType.trim().isNotEmpty) {
           request.fields['soil_type'] = soilType.trim();
         }
-        request.fields['test_date'] = (testedAt ?? DateTime.now())
-            .toIso8601String();
+        request.fields['test_date'] = _formatApiDate(testedAt ?? DateTime.now());
         request.fields['test_method'] = resolvedTestMethod.isNotEmpty
             ? resolvedTestMethod
             : 'manual';
+        _addOptionalMonitoringFields(
+          request.fields,
+          dataSource: dataSource,
+          sensorDeviceId: sensorDeviceId,
+          sensorReadingId: sensorReadingId,
+          sensorPayload: sensorPayload,
+          fieldContext: fieldContext,
+          confidenceScore: confidenceScore,
+        );
         request.files.add(
           await http.MultipartFile.fromPath('evidence', evidenceFilePath),
         );
@@ -1800,7 +1814,7 @@ class ApiClient {
         final normalizedSoilType = soilType?.trim();
         final body = <String, dynamic>{
           'plot_id': plotId,
-          'test_date': (testedAt ?? DateTime.now()).toIso8601String(),
+          'test_date': _formatApiDate(testedAt ?? DateTime.now()),
           'test_method': resolvedTestMethod.isNotEmpty
               ? resolvedTestMethod
               : 'manual',
@@ -1814,6 +1828,15 @@ class ApiClient {
         if ((normalizedSoilType ?? '').isNotEmpty) {
           body['soil_type'] = normalizedSoilType;
         }
+        _addOptionalMonitoringBodyFields(
+          body,
+          dataSource: dataSource,
+          sensorDeviceId: sensorDeviceId,
+          sensorReadingId: sensorReadingId,
+          sensorPayload: sensorPayload,
+          fieldContext: fieldContext,
+          confidenceScore: confidenceScore,
+        );
         response = await _sendWithRetry(
           () async => http.post(
             uri,
@@ -1855,6 +1878,12 @@ class ApiClient {
     double? moisture,
     String? soilType,
     String? testMethod,
+    String? dataSource,
+    String? sensorDeviceId,
+    String? sensorReadingId,
+    Map<String, dynamic>? sensorPayload,
+    Map<String, dynamic>? fieldContext,
+    double? confidenceScore,
     DateTime? testedAt,
     String? reviewStatus,
     String? evidencePath,
@@ -1883,11 +1912,20 @@ class ApiClient {
           request.fields['soil_type'] = soilType.trim();
         }
         if (testedAt != null) {
-          request.fields['test_date'] = testedAt.toIso8601String();
+          request.fields['test_date'] = _formatApiDate(testedAt);
         }
         if (resolvedTestMethod.isNotEmpty) {
           request.fields['test_method'] = resolvedTestMethod;
         }
+        _addOptionalMonitoringFields(
+          request.fields,
+          dataSource: dataSource,
+          sensorDeviceId: sensorDeviceId,
+          sensorReadingId: sensorReadingId,
+          sensorPayload: sensorPayload,
+          fieldContext: fieldContext,
+          confidenceScore: confidenceScore,
+        );
         if (reviewStatus != null && reviewStatus.trim().isNotEmpty) {
           request.fields['review_status'] = reviewStatus.trim();
         }
@@ -1903,7 +1941,7 @@ class ApiClient {
         final normalizedSoilType = soilType?.trim();
         final normalizedReviewStatus = reviewStatus?.trim();
         final body = <String, dynamic>{
-          if (testedAt != null) 'test_date': testedAt.toIso8601String(),
+          if (testedAt != null) 'test_date': _formatApiDate(testedAt),
           if (resolvedTestMethod.isNotEmpty) 'test_method': resolvedTestMethod,
         };
         if (phLevel != null) body['ph_level'] = phLevel;
@@ -1918,6 +1956,15 @@ class ApiClient {
         if ((normalizedReviewStatus ?? '').isNotEmpty) {
           body['review_status'] = normalizedReviewStatus;
         }
+        _addOptionalMonitoringBodyFields(
+          body,
+          dataSource: dataSource,
+          sensorDeviceId: sensorDeviceId,
+          sensorReadingId: sensorReadingId,
+          sensorPayload: sensorPayload,
+          fieldContext: fieldContext,
+          confidenceScore: confidenceScore,
+        );
         response = await _sendWithRetry(
           () async => http.put(
             uri,
@@ -2211,6 +2258,7 @@ class ApiClient {
     int? symptomDays,
     bool? recentRain,
     String? fieldNotes,
+    Map<String, dynamic>? fieldContext,
     int? captureShots,
     String? captureProtocol,
     String? provisionalDiseaseName,
@@ -2267,6 +2315,9 @@ class ApiClient {
         }
         if (fieldNotes != null && fieldNotes.trim().isNotEmpty) {
           request.fields['scan_metadata[field_notes]'] = fieldNotes.trim();
+        }
+        if (fieldContext != null && fieldContext.isNotEmpty) {
+          request.fields['field_context'] = jsonEncode(fieldContext);
         }
         if (captureShots != null) {
           request.fields['scan_metadata[capture_shots]'] = '$captureShots';
@@ -3061,6 +3112,64 @@ class ApiClient {
     } on TimeoutException {
       throw const ApiException('Request timed out.');
     }
+  }
+
+  static void _addOptionalMonitoringFields(
+    Map<String, String> fields, {
+    String? dataSource,
+    String? sensorDeviceId,
+    String? sensorReadingId,
+    Map<String, dynamic>? sensorPayload,
+    Map<String, dynamic>? fieldContext,
+    double? confidenceScore,
+  }) {
+    final source = dataSource?.trim();
+    if (source != null && source.isNotEmpty) fields['data_source'] = source;
+    final deviceId = sensorDeviceId?.trim();
+    if (deviceId != null && deviceId.isNotEmpty) {
+      fields['sensor_device_id'] = deviceId;
+    }
+    final readingId = sensorReadingId?.trim();
+    if (readingId != null && readingId.isNotEmpty) {
+      fields['sensor_reading_id'] = readingId;
+    }
+    if (sensorPayload != null && sensorPayload.isNotEmpty) {
+      fields['sensor_payload'] = jsonEncode(sensorPayload);
+    }
+    if (fieldContext != null && fieldContext.isNotEmpty) {
+      fields['field_context'] = jsonEncode(fieldContext);
+    }
+    if (confidenceScore != null) {
+      fields['confidence_score'] = confidenceScore.toString();
+    }
+  }
+
+  static void _addOptionalMonitoringBodyFields(
+    Map<String, dynamic> body, {
+    String? dataSource,
+    String? sensorDeviceId,
+    String? sensorReadingId,
+    Map<String, dynamic>? sensorPayload,
+    Map<String, dynamic>? fieldContext,
+    double? confidenceScore,
+  }) {
+    final source = dataSource?.trim();
+    if (source != null && source.isNotEmpty) body['data_source'] = source;
+    final deviceId = sensorDeviceId?.trim();
+    if (deviceId != null && deviceId.isNotEmpty) {
+      body['sensor_device_id'] = deviceId;
+    }
+    final readingId = sensorReadingId?.trim();
+    if (readingId != null && readingId.isNotEmpty) {
+      body['sensor_reading_id'] = readingId;
+    }
+    if (sensorPayload != null && sensorPayload.isNotEmpty) {
+      body['sensor_payload'] = sensorPayload;
+    }
+    if (fieldContext != null && fieldContext.isNotEmpty) {
+      body['field_context'] = fieldContext;
+    }
+    if (confidenceScore != null) body['confidence_score'] = confidenceScore;
   }
 
   static Future<Map<String, dynamic>> createSoilHealthData({
