@@ -13,7 +13,7 @@ Smart Farming Ethiopia was developed as an applied technology-transfer project f
 - Phone: 0900824328
 - Institution: Dalocha Polytechnic College
 - Approval context: Technology Transfer Core, Dalocha Polytechnic College
-- Target users: Farmers using Android phones in field conditions
+- Target users: Farmers using Android and iOS phones in field conditions
 
 ## Core Features
 
@@ -124,6 +124,7 @@ docs/
 - Dart SDK bundled with Flutter
 - Android SDK / Android Studio
 - A connected Android device or emulator
+- macOS with Xcode and CocoaPods for iOS builds
 - Laravel API for full online and sync behavior
 
 Recommended checks:
@@ -168,6 +169,27 @@ build/app/outputs/flutter-apk/
 ```
 
 Generated APKs should not be committed to GitHub.
+
+## Building iOS
+
+The iOS project is configured under `ios/` with the app name `Smart Farming Ethiopia`, bundle identifier `com.admasfeleke.smartfarmingethiopia`, camera/photo/location permission text, and app icons generated from the project logo.
+
+iOS archives cannot be built from Windows. Use a Mac with Xcode:
+
+```bash
+cd ~/path/to/smart_farm
+flutter pub get
+cd ios
+pod install
+cd ..
+flutter build ipa --release
+```
+
+For local simulator/device testing on macOS:
+
+```bash
+flutter run -d ios
+```
 
 ## Offline Capability
 
