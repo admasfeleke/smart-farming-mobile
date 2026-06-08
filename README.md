@@ -21,10 +21,11 @@ Smart Farming Ethiopia was developed as an applied technology-transfer project f
 - Offline login after a successful online session
 - Farm, plot, and planting management
 - Crop-aware disease scan flow
+- Farm/plot/planting-aware scan context selection
 - Offline TensorFlow Lite inference for supported crops
 - Online API sync for expert/supporter verification
 - Disease history with image evidence and treatment guidance
-- Soil health records, evidence capture, and offline/online guidance
+- Soil health records, evidence capture, sensor-ready context, and offline/online guidance
 - Weather monitoring and field advisory screens
 - Disease prevention and yield outlook
 - Alerts and sync diagnostics
@@ -80,6 +81,8 @@ Runtime behavior:
 - Farmers can keep working offline after an authenticated session.
 - New local records are queued and synced when the API becomes reachable.
 - Disease scan images are saved locally and uploaded as evidence when sync is possible.
+- Disease scan uploads include the selected farm, plot, crop/planting, and optional field context such as growth stage, symptom days, recent rain, and field notes.
+- Soil health sync preserves optional IoT/sensor metadata, sensor payloads, and field context for future sensor integrations.
 - Expert/supporter review happens through the backend/back-office workflow.
 
 ## Repository Structure
@@ -175,8 +178,10 @@ Offline-supported areas:
 - Login unlock after a previous online login
 - Farm/plot/planting local records
 - Soil health records and local guidance
+- Sensor-ready soil metadata stored locally until sync
 - Disease scan provisional results
 - Disease scan image retention
+- Disease scan field context retained for queued uploads
 - Pending scan/report replay after reconnect
 - Cached disease history and advisory data
 
@@ -185,6 +190,7 @@ Online-required areas:
 - First account verification/login
 - Server-side review and confirmation
 - Backend-approved treatment registry updates
+- Backend schema-backed localized treatment registry content
 - Weather refresh from server/API
 - Yield prediction verification
 - Supporter/expert decisions
@@ -210,6 +216,34 @@ Important constraints:
 - Healthy results should still be monitored if symptoms spread.
 - Treatment guidance should follow locally approved pesticide and agronomy recommendations.
 - Model labels must remain stable to protect sync and history consistency.
+
+## Scan Workflow
+
+The production scan flow is intentionally context-first:
+
+```text
+Select crop
+  -> choose farm and plot where that crop is planted
+  -> attach optional field context
+  -> run offline provisional inference
+  -> upload image evidence and context when API is reachable
+  -> receive server/expert verification through disease history
+```
+
+This prevents ambiguous scans when the same crop exists in multiple farms or plots. Offline quick-test behavior is kept separate from synced farm reports so farmers do not confuse a local provisional result with an expert-reviewed report.
+
+## Sensor-Ready Monitoring
+
+The mobile app can store and sync optional soil-health sensor metadata:
+
+- `data_source`
+- `sensor_device_id`
+- `sensor_reading_id`
+- `sensor_payload`
+- `field_context`
+- `confidence_score`
+
+Current farmer forms remain manual-first. These fields are for future IoT/sensor intake and do not block normal offline CRUD.
 
 ## GitHub Hygiene
 
@@ -248,6 +282,6 @@ Completed focus areas:
 Remaining recommended work:
 
 - Full expert validation of Oromo and Tigrinya disease terminology
-- Schema-backed localization for backend treatment registry content
+- Populate backend treatment registry translation fields with expert-approved local wording
 - Final end-to-end QA on real Android devices
 - Release signing and deployment configuration
