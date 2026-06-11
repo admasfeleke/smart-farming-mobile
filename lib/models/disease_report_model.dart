@@ -71,18 +71,24 @@ class DiseaseReportModel {
       id: _toInt(json['id']),
       plotId: _toInt(json['plot_id']),
       cropId: _toInt(json['crop_id']),
-      plantingId: json['planting_id'] == null ? null : _toInt(json['planting_id']),
+      plantingId: json['planting_id'] == null
+          ? null
+          : _toInt(json['planting_id']),
       clientSubmissionId: _firstNonEmptyString(json, const [
         'client_submission_id',
         'clientSubmissionId',
         'submission_id',
       ]),
-      diseaseName: displayName != null && displayName.isNotEmpty ? displayName : rawDiseaseName,
+      diseaseName: displayName != null && displayName.isNotEmpty
+          ? displayName
+          : rawDiseaseName,
       severity: json['severity']?.toString() ?? '',
       confidenceScore: _toDouble(json['confidence_score']),
       description: json['description'] as String?,
       status: json['status']?.toString() ?? '',
-      reportedAt: _parseDate(json['reported_at']) ?? DateTime.fromMillisecondsSinceEpoch(0),
+      reportedAt:
+          _parseDate(json['reported_at']) ??
+          DateTime.fromMillisecondsSinceEpoch(0),
       treatmentGuidance: DiseaseTreatmentGuidance.fromJson(
         json['treatment_guidance'] is Map<String, dynamic>
             ? json['treatment_guidance'] as Map<String, dynamic>
@@ -114,7 +120,8 @@ class DiseaseReportModel {
       verifiedCanonicalDiseaseName: _firstNonEmptyString(json, const [
         'verified_canonical_disease_name',
       ]),
-      namingStage: _firstNonEmptyString(json, const ['naming_stage']) ?? 'pending',
+      namingStage:
+          _firstNonEmptyString(json, const ['naming_stage']) ?? 'pending',
       likelyIssueName: _firstNonEmptyString(json, const ['likely_issue_name']),
       likelyIssueCanonicalDiseaseName: _firstNonEmptyString(json, const [
         'likely_issue_canonical_disease_name',
@@ -129,7 +136,10 @@ class DiseaseReportModel {
         'decision_reason_code',
         'decisionReasonCode',
       ]),
-      decisionComment: _firstNonEmptyString(json, const ['decision_comment', 'decisionComment']),
+      decisionComment: _firstNonEmptyString(json, const [
+        'decision_comment',
+        'decisionComment',
+      ]),
       reviewedAt: _parseDate(json['reviewed_at']),
       verifiedAt: _parseDate(json['verified_at']),
     );
@@ -150,7 +160,8 @@ class DiseaseReportModel {
     }
 
     final resolvedDisplayName = _meaningfulName(diseaseName);
-    final inferredName = _meaningfulName(inferredDiseaseName) ??
+    final inferredName =
+        _meaningfulName(inferredDiseaseName) ??
         ((namingStage == 'inferred' || namingStage == 'verified')
             ? resolvedDisplayName
             : null);
@@ -166,7 +177,8 @@ class DiseaseReportModel {
       );
     }
 
-    final provisionalName = _meaningfulName(provisionalDiseaseName) ??
+    final provisionalName =
+        _meaningfulName(provisionalDiseaseName) ??
         (namingStage == 'provisional' ? resolvedDisplayName : null);
     final provisionalKey = _meaningfulCanonicalKey(
       provisionalCanonicalDiseaseName ?? canonicalDiseaseName,
@@ -251,8 +263,7 @@ class DiseaseReportModel {
         s == 'done' ||
         s == 'completed' ||
         s == 'resolved' ||
-        verifiedAt != null ||
-        reviewedAt != null;
+        verifiedAt != null;
   }
 
   static String? _meaningfulName(String? value) {
@@ -263,7 +274,10 @@ class DiseaseReportModel {
     return trimmed;
   }
 
-  static String _meaningfulCanonicalKey(String? preferredKey, String? fallbackName) {
+  static String _meaningfulCanonicalKey(
+    String? preferredKey,
+    String? fallbackName,
+  ) {
     final normalizedKey = normalizeDiseaseKey(preferredKey ?? '');
     if (!isPendingDiseaseKey(normalizedKey) && normalizedKey.isNotEmpty) {
       return normalizedKey;
@@ -293,7 +307,10 @@ class DiseaseReportModel {
     return DateTime.tryParse(value.toString());
   }
 
-  static String? _firstNonEmptyString(Map<String, dynamic> json, List<String> keys) {
+  static String? _firstNonEmptyString(
+    Map<String, dynamic> json,
+    List<String> keys,
+  ) {
     for (final key in keys) {
       final value = json[key]?.toString().trim();
       if (value != null && value.isNotEmpty) {
@@ -308,8 +325,9 @@ class DiseaseReportModel {
     return value
         .whereType<Map>()
         .map(
-          (item) =>
-              DiseaseReportEvidence.fromJson(item.map((key, val) => MapEntry(key.toString(), val))),
+          (item) => DiseaseReportEvidence.fromJson(
+            item.map((key, val) => MapEntry(key.toString(), val)),
+          ),
         )
         .where((item) => item.isUsable)
         .toList(growable: false);
@@ -336,9 +354,9 @@ class DiseaseFindingResolution {
   });
 
   const DiseaseFindingResolution.pending()
-      : stage = DiseaseFindingStage.pending,
-        name = null,
-        canonicalKey = 'pending_analysis';
+    : stage = DiseaseFindingStage.pending,
+      name = null,
+      canonicalKey = 'pending_analysis';
 
   bool get hasMeaningfulName => name != null && name!.trim().isNotEmpty;
   bool get isPending => stage == DiseaseFindingStage.pending;
@@ -431,7 +449,10 @@ class DiseaseReportEvidence {
     return DateTime.tryParse(value.toString());
   }
 
-  static String? _firstNonEmptyString(Map<String, dynamic> json, List<String> keys) {
+  static String? _firstNonEmptyString(
+    Map<String, dynamic> json,
+    List<String> keys,
+  ) {
     for (final key in keys) {
       final value = json[key]?.toString().trim();
       if (value != null && value.isNotEmpty) {
@@ -608,17 +629,24 @@ class DiseaseTreatmentGuidance {
       mode: json['mode']?.toString() ?? '',
       treatmentReady: _toBool(json['treatment_ready']),
       advisoryTreatmentAvailable: _toBool(json['advisory_treatment_available']),
-      reviewStatus: json['review_status']?.toString().trim().toLowerCase() ?? 'draft',
+      reviewStatus:
+          json['review_status']?.toString().trim().toLowerCase() ?? 'draft',
       expertVerified: _toBool(json['expert_verified']),
       source: json['source']?.toString().trim() ?? 'fallback_config',
-      verificationNote: _firstNonEmptyString(json, const ['verification_note', 'verificationNote']),
+      verificationNote: _firstNonEmptyString(json, const [
+        'verification_note',
+        'verificationNote',
+      ]),
       reliability: json['reliability']?.toString() ?? '',
       riskLevel: json['risk_level']?.toString() ?? '',
       confidenceScore: _toDouble(json['confidence_score']),
       cropFamily: json['crop_family']?.toString(),
       headline: json['headline']?.toString() ?? '',
       nextStep: json['next_step']?.toString() ?? '',
-      activeIngredient: _firstNonEmptyString(json, const ['active_ingredient', 'activeIngredient']),
+      activeIngredient: _firstNonEmptyString(json, const [
+        'active_ingredient',
+        'activeIngredient',
+      ]),
       dosage: _firstNonEmptyString(json, const ['dosage', 'dose']),
       ppe: _firstNonEmptyString(json, const ['ppe', 'safety_gear']),
       preHarvestInterval: _firstNonEmptyString(json, const [
@@ -626,7 +654,10 @@ class DiseaseTreatmentGuidance {
         'pre_harvest_interval_days',
         'phi',
       ]),
-      reEntryInterval: _firstNonEmptyString(json, const ['re_entry_interval', 'rei']),
+      reEntryInterval: _firstNonEmptyString(json, const [
+        're_entry_interval',
+        'rei',
+      ]),
       actions: _toStringList(json['actions']),
       monitoring: _toStringList(json['monitoring']),
       prevention: _toStringList(json['prevention']),
@@ -659,7 +690,9 @@ class DiseaseTreatmentGuidance {
       'monitoring': monitoring,
       'prevention': prevention,
       'escalate_if': escalateIf,
-      'treatment_options': treatmentOptions.map((option) => option.toJson()).toList(),
+      'treatment_options': treatmentOptions
+          .map((option) => option.toJson())
+          .toList(),
       'notes': notes,
     };
   }
@@ -683,7 +716,8 @@ class DiseaseTreatmentGuidance {
     if (value is bool) return value;
     if (value is num) return value != 0;
     final text = value?.toString().trim().toLowerCase();
-    if (text == 'true' || text == '1' || text == 'yes' || text == 'y') return true;
+    if (text == 'true' || text == '1' || text == 'yes' || text == 'y')
+      return true;
     return false;
   }
 
@@ -703,7 +737,10 @@ class DiseaseTreatmentGuidance {
         .toList();
   }
 
-  static String? _firstNonEmptyString(Map<String, dynamic> json, List<String> keys) {
+  static String? _firstNonEmptyString(
+    Map<String, dynamic> json,
+    List<String> keys,
+  ) {
     for (final key in keys) {
       final value = json[key]?.toString().trim();
       if (value != null && value.isNotEmpty) {
@@ -770,17 +807,31 @@ class DiseaseTreatmentOption {
       title: json['title']?.toString().trim() ?? '',
       crop: _optionFirstNonEmptyString(json, const ['crop']),
       diseaseKey: _optionFirstNonEmptyString(json, const ['disease_key']),
-      diseaseKeyword: _optionFirstNonEmptyString(json, const ['disease_keyword']),
+      diseaseKeyword: _optionFirstNonEmptyString(json, const [
+        'disease_keyword',
+      ]),
       summary: _optionFirstNonEmptyString(json, const ['summary']),
-      naturalTreatment: _optionFirstNonEmptyString(json, const ['natural_treatment']),
-      modernTreatment: _optionFirstNonEmptyString(json, const ['modern_treatment']),
+      naturalTreatment: _optionFirstNonEmptyString(json, const [
+        'natural_treatment',
+      ]),
+      modernTreatment: _optionFirstNonEmptyString(json, const [
+        'modern_treatment',
+      ]),
       productName: _optionFirstNonEmptyString(json, const ['product_name']),
-      activeIngredient: _optionFirstNonEmptyString(json, const ['active_ingredient']),
+      activeIngredient: _optionFirstNonEmptyString(json, const [
+        'active_ingredient',
+      ]),
       formulation: _optionFirstNonEmptyString(json, const ['formulation']),
-      registrationStatus: _optionFirstNonEmptyString(json, const ['registration_status']),
+      registrationStatus: _optionFirstNonEmptyString(json, const [
+        'registration_status',
+      ]),
       dosage: _optionFirstNonEmptyString(json, const ['dosage']),
-      applicationTiming: _optionFirstNonEmptyString(json, const ['application_timing']),
-      preHarvestIntervalDays: _toOptionIntOrNull(json['pre_harvest_interval_days']),
+      applicationTiming: _optionFirstNonEmptyString(json, const [
+        'application_timing',
+      ]),
+      preHarvestIntervalDays: _toOptionIntOrNull(
+        json['pre_harvest_interval_days'],
+      ),
       reEntryIntervalHours: _toOptionIntOrNull(json['re_entry_interval_hours']),
       maxApplications: _toOptionIntOrNull(json['max_applications']),
       ppe: _optionFirstNonEmptyString(json, const ['ppe']),
@@ -824,7 +875,10 @@ class DiseaseTreatmentOption {
     return int.tryParse(value.toString());
   }
 
-  static String? _optionFirstNonEmptyString(Map<String, dynamic> json, List<String> keys) {
+  static String? _optionFirstNonEmptyString(
+    Map<String, dynamic> json,
+    List<String> keys,
+  ) {
     for (final key in keys) {
       final value = json[key]?.toString().trim();
       if (value != null && value.isNotEmpty) {

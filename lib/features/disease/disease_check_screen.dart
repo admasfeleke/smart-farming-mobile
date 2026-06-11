@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -20,9 +20,9 @@ import '../scan/offline_treatment_guidance_service.dart';
 import '../scan/local_scan_history_store.dart';
 import '../scan/pending_scan_queue_store.dart';
 
-// 
+//
 // Public entry point
-// 
+//
 
 class DiseaseCheckScreen extends StatefulWidget {
   final bool showHeader;
@@ -72,14 +72,20 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
 
   void _onScroll() {
     if (_scroll.position.pixels >= _scroll.position.maxScrollExtent - 200 &&
-        !_loadingMore && _hasMore) {
+        !_loadingMore &&
+        _hasMore) {
       _loadMore();
     }
   }
 
   Future<void> _load({bool refresh = false}) async {
     if (refresh) {
-      setState(() { _page = 1; _hasMore = true; _reports = []; _errorMessage = null; });
+      setState(() {
+        _page = 1;
+        _hasMore = true;
+        _reports = [];
+        _errorMessage = null;
+      });
     }
     setState(() => _loading = true);
 
@@ -116,7 +122,8 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
         DateTime.now().difference(connectivity.checkedAt) <=
         _historyConnectivityStaleAfter;
     final canReachApiNow =
-        connectivity.state == ApiConnectivityState.apiOnline && connectivityFresh;
+        connectivity.state == ApiConnectivityState.apiOnline &&
+        connectivityFresh;
 
     if (offline || !hasToken || !canReachApiNow) {
       if (mounted) {
@@ -134,7 +141,10 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
     }
 
     try {
-      final result = await ApiClient.getDiseaseReportsPage(page: 1, perPage: 20);
+      final result = await ApiClient.getDiseaseReportsPage(
+        page: 1,
+        perPage: 20,
+      );
       await DiseaseHistoryCacheStore.instance.saveAll(result.items);
       final remainingSyncedLocal = await _reconcileSyncedLocalEntries(
         result.items,
@@ -158,7 +168,11 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
         });
       }
     } on ApiUnauthorized {
-      if (mounted) setState(() { _loading = false; _errorMessage = null; });
+      if (mounted)
+        setState(() {
+          _loading = false;
+          _errorMessage = null;
+        });
     } on ApiException catch (e) {
       final connectivityIssue = ApiClient.isConnectivityIssueMessage(e.message);
       if (mounted) {
@@ -170,7 +184,11 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
         });
       }
     } catch (e) {
-      if (mounted) setState(() { _loading = false; _errorMessage = e.toString(); });
+      if (mounted)
+        setState(() {
+          _loading = false;
+          _errorMessage = e.toString();
+        });
     }
   }
 
@@ -201,7 +219,10 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
     setState(() => _loadingMore = true);
     try {
       final next = _page + 1;
-      final result = await ApiClient.getDiseaseReportsPage(page: next, perPage: 20);
+      final result = await ApiClient.getDiseaseReportsPage(
+        page: next,
+        perPage: 20,
+      );
       final combined = <DiseaseReportModel>[..._reports, ...result.items];
       await DiseaseHistoryCacheStore.instance.saveAll(combined);
       if (mounted) {
@@ -240,7 +261,9 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
   }
 
   Future<void> _deleteLocalHistory(LocalScanHistoryEntry entry) async {
-    await LocalScanHistoryStore.instance.deleteBySubmissionId(entry.submissionId);
+    await LocalScanHistoryStore.instance.deleteBySubmissionId(
+      entry.submissionId,
+    );
     if (entry.imagePath.trim().isNotEmpty) {
       try {
         final file = File(entry.imagePath);
@@ -253,7 +276,9 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
     }
     if (!mounted) return;
     setState(() {
-      _syncedLocal.removeWhere((item) => item.submissionId == entry.submissionId);
+      _syncedLocal.removeWhere(
+        (item) => item.submissionId == entry.submissionId,
+      );
     });
   }
 
@@ -281,13 +306,16 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
         continue;
       }
 
-      if (!matchedReport.finding.isInferred && !matchedReport.finding.isVerified) {
+      if (!matchedReport.finding.isInferred &&
+          !matchedReport.finding.isVerified) {
         reports.remove(matchedReport);
         remaining.add(entry);
         continue;
       }
 
-      await LocalScanHistoryStore.instance.deleteBySubmissionId(entry.submissionId);
+      await LocalScanHistoryStore.instance.deleteBySubmissionId(
+        entry.submissionId,
+      );
       try {
         final file = File(entry.imagePath);
         if (await file.exists()) {
@@ -303,65 +331,77 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
 
   List<PendingScanQueueEntry> _filteredPending() {
     final query = _searchController.text.trim().toLowerCase();
-    return _pending.where((entry) {
-      if (!_matchesPendingFilter(entry)) return false;
-      if (!_matchesDateFilter(entry.capturedAtUtc)) return false;
-      if (query.isEmpty) return true;
-      final haystack = <String>[
-        entry.queueId,
-        entry.cropId.toString(),
-        entry.plotId.toString(),
-        _metadataString(entry.scanMetadata, 'crop_name') ?? '',
-        _metadataString(entry.scanMetadata, 'plot_name') ?? '',
-        _metadataString(entry.scanMetadata, 'offline_local_disease_name') ?? '',
-        _metadataString(entry.scanMetadata, 'offline_local_disease_key') ?? '',
-        _metadataString(entry.scanMetadata, 'offline_local_inference') ?? '',
-      ].join(' ').toLowerCase();
-      return haystack.contains(query);
-    }).toList(growable: false);
+    return _pending
+        .where((entry) {
+          if (!_matchesPendingFilter(entry)) return false;
+          if (!_matchesDateFilter(entry.capturedAtUtc)) return false;
+          if (query.isEmpty) return true;
+          final haystack = <String>[
+            entry.queueId,
+            entry.cropId.toString(),
+            entry.plotId.toString(),
+            _metadataString(entry.scanMetadata, 'crop_name') ?? '',
+            _metadataString(entry.scanMetadata, 'plot_name') ?? '',
+            _metadataString(entry.scanMetadata, 'offline_local_disease_name') ??
+                '',
+            _metadataString(entry.scanMetadata, 'offline_local_disease_key') ??
+                '',
+            _metadataString(entry.scanMetadata, 'offline_local_inference') ??
+                '',
+          ].join(' ').toLowerCase();
+          return haystack.contains(query);
+        })
+        .toList(growable: false);
   }
 
   List<LocalScanHistoryEntry> _filteredSyncedLocal() {
     final query = _searchController.text.trim().toLowerCase();
-    return _syncedLocal.where((entry) {
-      if (!_matchesLocalFilter(entry)) return false;
-      if (!_matchesDateFilter(entry.capturedAtUtc)) return false;
-      if (query.isEmpty) return true;
-      final haystack = <String>[
-        entry.submissionId,
-        entry.cropId.toString(),
-        entry.plotId.toString(),
-        _metadataString(entry.scanMetadata, 'crop_name') ?? '',
-        _metadataString(entry.scanMetadata, 'plot_name') ?? '',
-        _metadataString(entry.scanMetadata, 'offline_local_disease_name') ?? '',
-        _metadataString(entry.scanMetadata, 'offline_local_disease_key') ?? '',
-        _metadataString(entry.scanMetadata, 'offline_local_inference') ?? '',
-      ].join(' ').toLowerCase();
-      return haystack.contains(query);
-    }).toList(growable: false);
+    return _syncedLocal
+        .where((entry) {
+          if (!_matchesLocalFilter(entry)) return false;
+          if (!_matchesDateFilter(entry.capturedAtUtc)) return false;
+          if (query.isEmpty) return true;
+          final haystack = <String>[
+            entry.submissionId,
+            entry.cropId.toString(),
+            entry.plotId.toString(),
+            _metadataString(entry.scanMetadata, 'crop_name') ?? '',
+            _metadataString(entry.scanMetadata, 'plot_name') ?? '',
+            _metadataString(entry.scanMetadata, 'offline_local_disease_name') ??
+                '',
+            _metadataString(entry.scanMetadata, 'offline_local_disease_key') ??
+                '',
+            _metadataString(entry.scanMetadata, 'offline_local_inference') ??
+                '',
+          ].join(' ').toLowerCase();
+          return haystack.contains(query);
+        })
+        .toList(growable: false);
   }
 
   List<DiseaseReportModel> _filteredReports(String lang) {
     final query = _searchController.text.trim().toLowerCase();
-    return _reports.where((report) {
-      if (!_matchesReportFilter(report)) return false;
-      if (!_matchesDateFilter(report.reportedAt)) return false;
-      if (query.isEmpty) return true;
-      final haystack = <String>[
-        report.id.toString(),
-        report.status,
-        report.severity,
-        report.diseaseName,
-        report.resolvedDiseaseName,
-        report.resolvedCanonicalDiseaseName,
-        _resolvedFindingDisplayName(report, lang),
-        report.provisionalDiseaseName ?? '',
-        report.inferredDiseaseName ?? '',
-        report.verifiedDiseaseName ?? '',
-        report.likelyIssueName ?? '',
-      ].join(' ').toLowerCase();
-      return haystack.contains(query);
-    }).toList(growable: false);
+    return _reports
+        .where((report) {
+          if (!_matchesReportFilter(report)) return false;
+          if (!_matchesDateFilter(report.reportedAt)) return false;
+          if (query.isEmpty) return true;
+          final haystack = <String>[
+            report.id.toString(),
+            report.status,
+            report.severity,
+            report.diseaseName,
+            report.resolvedDiseaseName,
+            report.resolvedCanonicalDiseaseName,
+            _resolvedFindingDisplayName(report, lang),
+            report.provisionalDiseaseName ?? '',
+            report.inferredDiseaseName ?? '',
+            report.verifiedDiseaseName ?? '',
+            report.likelyIssueName ?? '',
+          ].join(' ').toLowerCase();
+          return haystack.contains(query);
+        })
+        .toList(growable: false);
   }
 
   bool _matchesPendingFilter(PendingScanQueueEntry entry) {
@@ -398,7 +438,9 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
       'pending' => _reportIsPendingReview(report),
       'local' => false,
       'confirmed' =>
-        report.finding.isVerified || report.finding.isInferred || report.isConfirmedWorkflowState,
+        report.finding.isVerified ||
+            report.finding.isInferred ||
+            report.isConfirmedWorkflowState,
       'healthy' => isHealthyDiseaseKey(report.resolvedCanonicalDiseaseName),
       'treatment' => _reportHasTreatment(report),
       _ => true,
@@ -450,8 +492,11 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
         final filteredSyncedLocal = _filteredSyncedLocal();
         final filteredReports = _filteredReports(lang);
         final hasAnyHistory =
-            _pending.isNotEmpty || _syncedLocal.isNotEmpty || _reports.isNotEmpty;
-        final hasFilteredHistory = filteredPending.isNotEmpty ||
+            _pending.isNotEmpty ||
+            _syncedLocal.isNotEmpty ||
+            _reports.isNotEmpty;
+        final hasFilteredHistory =
+            filteredPending.isNotEmpty ||
             filteredSyncedLocal.isNotEmpty ||
             filteredReports.isNotEmpty;
         // Material ensures showModalBottomSheet and showDialog have a valid
@@ -462,126 +507,129 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
           child: FarmSurface(
             padding: EdgeInsets.zero,
             child: RefreshIndicator(
-          onRefresh: () => _load(refresh: true),
-          child: CustomScrollView(
-            controller: _scroll,
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              if (widget.showHeader)
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-                    child: Text(
-                      L.t(lang, 'scan_history'),
-                      style: Theme.of(context).textTheme.headlineMedium,
+              onRefresh: () => _load(refresh: true),
+              child: CustomScrollView(
+                controller: _scroll,
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  if (widget.showHeader)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                        child: Text(
+                          L.t(lang, 'scan_history'),
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              if (_offlineMode)
-                SliverToBoxAdapter(
-                  child: _OfflineBanner(lang: lang),
-                ),
-              if (_errorMessage != null)
-                SliverToBoxAdapter(
-                  child: _ErrorBanner(message: _errorMessage!, onRetry: () => _load(refresh: true)),
-                ),
-              if (hasAnyHistory)
-                SliverToBoxAdapter(
-                  child: _DiseaseHistoryFilters(
-                    lang: lang,
-                    selectedFilter: _filter,
-                    selectedDateFilter: _dateFilter,
-                    searchController: _searchController,
-                    onFilterChanged: (value) => setState(() => _filter = value),
-                    onDateFilterChanged: (value) =>
-                        setState(() => _dateFilter = value),
-                    onSearchChanged: (_) => setState(() {}),
-                  ),
-                ),
-              //  Pending local queue 
-              if (filteredPending.isNotEmpty) ...[
-                SliverToBoxAdapter(
-                  child: _SectionHeader(
-                    icon: Icons.cloud_upload_outlined,
-                    label: L.t(lang, 'disease_history_pending_title'),
-                    subtitle: L.t(lang, 'disease_history_pending_subtitle'),
-                    color: const Color(0xFFF59E0B),
-                  ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (ctx, i) => _PendingQueueCard(
-                      entry: filteredPending[i],
-                      lang: lang,
-                      onDelete: () => _deletePending(filteredPending[i].queueId),
+                  if (_offlineMode)
+                    SliverToBoxAdapter(child: _OfflineBanner(lang: lang)),
+                  if (_errorMessage != null)
+                    SliverToBoxAdapter(
+                      child: _ErrorBanner(
+                        message: _errorMessage!,
+                        onRetry: () => _load(refresh: true),
+                      ),
                     ),
-                    childCount: filteredPending.length,
-                  ),
-                ),
-              ],
-              if (filteredSyncedLocal.isNotEmpty) ...[
-                SliverToBoxAdapter(
-                  child: _SectionHeader(
-                    icon: Icons.history_toggle_off_rounded,
-                    label: L.t(lang, 'disease_review_results_title'),
-                    subtitle: _dh(lang, 'saved_local_review_pending'),
-                    color: const Color(0xFF2563EB),
-                  ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (ctx, i) => _SyncedLocalCard(
-                      entry: filteredSyncedLocal[i],
-                      lang: lang,
-                      onDelete: () => _deleteLocalHistory(filteredSyncedLocal[i]),
+                  if (hasAnyHistory)
+                    SliverToBoxAdapter(
+                      child: _DiseaseHistoryFilters(
+                        lang: lang,
+                        selectedFilter: _filter,
+                        selectedDateFilter: _dateFilter,
+                        searchController: _searchController,
+                        onFilterChanged: (value) =>
+                            setState(() => _filter = value),
+                        onDateFilterChanged: (value) =>
+                            setState(() => _dateFilter = value),
+                        onSearchChanged: (_) => setState(() {}),
+                      ),
                     ),
-                    childCount: filteredSyncedLocal.length,
-                  ),
-                ),
-              ],
-              //  Server history 
-              if (_loading)
-                const SliverFillRemaining(
-                  child: Center(child: CircularProgressIndicator()),
-                )
-              else if (!hasAnyHistory)
-                SliverFillRemaining(
-                  child: _EmptyState(lang: lang),
-                )
-              else if (!hasFilteredHistory)
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: _NoFilteredHistory(lang: lang),
-                )
-              else if (filteredReports.isNotEmpty) ...[
-                SliverToBoxAdapter(
-                  child: _SectionHeader(
-                    icon: Icons.history_rounded,
-                    label: L.t(lang, 'disease_review_results_title'),
-                    color: const Color(0xFF2E7D32),
-                  ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (ctx, i) => _ReportCard(
-                      report: filteredReports[i],
-                      lang: lang,
-                      onTap: () => _openDetail(context, filteredReports[i], lang),
+                  //  Pending local queue
+                  if (filteredPending.isNotEmpty) ...[
+                    SliverToBoxAdapter(
+                      child: _SectionHeader(
+                        icon: Icons.cloud_upload_outlined,
+                        label: L.t(lang, 'disease_history_pending_title'),
+                        subtitle: L.t(lang, 'disease_history_pending_subtitle'),
+                        color: const Color(0xFFF59E0B),
+                      ),
                     ),
-                    childCount: filteredReports.length,
-                  ),
-                ),
-                if (_loadingMore)
-                  const SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (ctx, i) => _PendingQueueCard(
+                          entry: filteredPending[i],
+                          lang: lang,
+                          onDelete: () =>
+                              _deletePending(filteredPending[i].queueId),
+                        ),
+                        childCount: filteredPending.length,
+                      ),
+                    ),
+                  ],
+                  if (filteredSyncedLocal.isNotEmpty) ...[
+                    SliverToBoxAdapter(
+                      child: _SectionHeader(
+                        icon: Icons.history_toggle_off_rounded,
+                        label: L.t(lang, 'disease_review_results_title'),
+                        subtitle: _dh(lang, 'saved_local_review_pending'),
+                        color: const Color(0xFF2563EB),
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (ctx, i) => _SyncedLocalCard(
+                          entry: filteredSyncedLocal[i],
+                          lang: lang,
+                          onDelete: () =>
+                              _deleteLocalHistory(filteredSyncedLocal[i]),
+                        ),
+                        childCount: filteredSyncedLocal.length,
+                      ),
+                    ),
+                  ],
+                  //  Server history
+                  if (_loading)
+                    const SliverFillRemaining(
                       child: Center(child: CircularProgressIndicator()),
+                    )
+                  else if (!hasAnyHistory)
+                    SliverFillRemaining(child: _EmptyState(lang: lang))
+                  else if (!hasFilteredHistory)
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: _NoFilteredHistory(lang: lang),
+                    )
+                  else if (filteredReports.isNotEmpty) ...[
+                    SliverToBoxAdapter(
+                      child: _SectionHeader(
+                        icon: Icons.history_rounded,
+                        label: L.t(lang, 'disease_review_results_title'),
+                        color: const Color(0xFF2E7D32),
+                      ),
                     ),
-                  ),
-              ],
-              const SliverToBoxAdapter(child: SizedBox(height: 32)),
-            ],
-          ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (ctx, i) => _ReportCard(
+                          report: filteredReports[i],
+                          lang: lang,
+                          onTap: () =>
+                              _openDetail(context, filteredReports[i], lang),
+                        ),
+                        childCount: filteredReports.length,
+                      ),
+                    ),
+                    if (_loadingMore)
+                      const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                      ),
+                  ],
+                  const SliverToBoxAdapter(child: SizedBox(height: 32)),
+                ],
+              ),
             ), // RefreshIndicator
           ),
         ); // Material
@@ -589,7 +637,11 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
     );
   }
 
-  void _openDetail(BuildContext context, DiseaseReportModel report, String lang) {
+  void _openDetail(
+    BuildContext context,
+    DiseaseReportModel report,
+    String lang,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -600,22 +652,32 @@ class _DiseaseCheckScreenState extends State<DiseaseCheckScreen> {
   }
 }
 
-// 
+//
 // Section header
-// 
+//
 
 class _SectionHeader extends StatelessWidget {
   final IconData icon;
   final String label;
   final String? subtitle;
   final Color color;
-  const _SectionHeader({required this.icon, required this.label, this.subtitle, required this.color});
+  const _SectionHeader({
+    required this.icon,
+    required this.label,
+    this.subtitle,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: FarmSectionTitle(icon: icon, title: label, subtitle: subtitle, color: color),
+      child: FarmSectionTitle(
+        icon: icon,
+        title: label,
+        subtitle: subtitle,
+        color: color,
+      ),
     );
   }
 }
@@ -641,11 +703,23 @@ class _DiseaseHistoryFilters extends StatelessWidget {
 
   static const List<({String key, String labelKey, IconData icon})> _filters = [
     (key: 'all', labelKey: 'filter_all', icon: Icons.list_alt_rounded),
-    (key: 'pending', labelKey: 'filter_pending', icon: Icons.hourglass_top_rounded),
+    (
+      key: 'pending',
+      labelKey: 'filter_pending',
+      icon: Icons.hourglass_top_rounded,
+    ),
     (key: 'local', labelKey: 'filter_local', icon: Icons.phone_android_rounded),
-    (key: 'confirmed', labelKey: 'filter_confirmed', icon: Icons.verified_outlined),
+    (
+      key: 'confirmed',
+      labelKey: 'filter_confirmed',
+      icon: Icons.verified_outlined,
+    ),
     (key: 'healthy', labelKey: 'filter_healthy', icon: Icons.eco_outlined),
-    (key: 'treatment', labelKey: 'filter_treatment', icon: Icons.medical_services_outlined),
+    (
+      key: 'treatment',
+      labelKey: 'filter_treatment',
+      icon: Icons.medical_services_outlined,
+    ),
   ];
   static const List<({String key, String labelKey})> _dateFilters = [
     (key: 'all', labelKey: 'date_filter_all'),
@@ -696,52 +770,62 @@ class _DiseaseHistoryFilters extends StatelessWidget {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: _filters.map((filter) {
-                final selected = selectedFilter == filter.key;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: FilterChip(
-                    selected: selected,
-                    avatar: Icon(
-                      filter.icon,
-                      size: 16,
-                      color: selected ? theme.colorScheme.onPrimary : theme.colorScheme.primary,
-                    ),
-                    label: Text(_dh(lang, filter.labelKey)),
-                    onSelected: (_) => onFilterChanged(filter.key),
-                    selectedColor: theme.colorScheme.primary,
-                    checkmarkColor: theme.colorScheme.onPrimary,
-                    labelStyle: TextStyle(
-                      color: selected ? theme.colorScheme.onPrimary : Colors.grey.shade800,
-                      fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                    ),
-                  ),
-                );
-              }).toList(growable: false),
+              children: _filters
+                  .map((filter) {
+                    final selected = selectedFilter == filter.key;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: FilterChip(
+                        selected: selected,
+                        avatar: Icon(
+                          filter.icon,
+                          size: 16,
+                          color: selected
+                              ? theme.colorScheme.onPrimary
+                              : theme.colorScheme.primary,
+                        ),
+                        label: Text(_dh(lang, filter.labelKey)),
+                        onSelected: (_) => onFilterChanged(filter.key),
+                        selectedColor: theme.colorScheme.primary,
+                        checkmarkColor: theme.colorScheme.onPrimary,
+                        labelStyle: TextStyle(
+                          color: selected
+                              ? theme.colorScheme.onPrimary
+                              : Colors.grey.shade800,
+                          fontWeight: selected
+                              ? FontWeight.w700
+                              : FontWeight.w500,
+                        ),
+                      ),
+                    );
+                  })
+                  .toList(growable: false),
             ),
           ),
           const SizedBox(height: 8),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: _dateFilters.map((filter) {
-                final selected = selectedDateFilter == filter.key;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: ChoiceChip(
-                    selected: selected,
-                    label: Text(_dh(lang, filter.labelKey)),
-                    avatar: Icon(
-                      Icons.calendar_today_outlined,
-                      size: 15,
-                      color: selected
-                          ? theme.colorScheme.onSecondaryContainer
-                          : Colors.grey.shade700,
-                    ),
-                    onSelected: (_) => onDateFilterChanged(filter.key),
-                  ),
-                );
-              }).toList(growable: false),
+              children: _dateFilters
+                  .map((filter) {
+                    final selected = selectedDateFilter == filter.key;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChoiceChip(
+                        selected: selected,
+                        label: Text(_dh(lang, filter.labelKey)),
+                        avatar: Icon(
+                          Icons.calendar_today_outlined,
+                          size: 15,
+                          color: selected
+                              ? theme.colorScheme.onSecondaryContainer
+                              : Colors.grey.shade700,
+                        ),
+                        onSelected: (_) => onDateFilterChanged(filter.key),
+                      ),
+                    );
+                  })
+                  .toList(growable: false),
             ),
           ),
         ],
@@ -763,18 +847,26 @@ class _NoFilteredHistory extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.filter_alt_off_outlined, size: 48, color: Colors.grey.shade500),
+            Icon(
+              Icons.filter_alt_off_outlined,
+              size: 48,
+              color: Colors.grey.shade500,
+            ),
             const SizedBox(height: 12),
             Text(
               _dh(lang, 'no_filtered_history_title'),
               textAlign: TextAlign.center,
-              style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
             ),
             const SizedBox(height: 6),
             Text(
               _dh(lang, 'no_filtered_history_body'),
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey.shade700),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: Colors.grey.shade700,
+              ),
             ),
           ],
         ),
@@ -819,12 +911,15 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
     'en': {
       'disease_confirmed': 'Disease confirmed',
       'awaiting_analysis': 'Awaiting analysis',
-      'saved_local_review_pending': 'Saved local finding while server review is pending',
+      'saved_local_review_pending':
+          'Saved local finding while server review is pending',
       'unknown_disease': 'Unknown disease',
       'ai_confidence': 'AI: {value}%',
-      'on_device_result_pending': 'On-device result, awaiting expert confirmation',
+      'on_device_result_pending':
+          'On-device result, awaiting expert confirmation',
       'crop_plot_context': 'Crop #{crop} • Plot #{plot}',
-      'no_device_result_upload': 'No on-device result, will analyze when uploaded',
+      'no_device_result_upload':
+          'No on-device result, will analyze when uploaded',
       'waiting_upload': 'Waiting to upload to server',
       'upload_attempt_retry': 'Upload attempt {count}, retrying soon',
       'remove_from_queue': 'Remove from queue',
@@ -833,9 +928,11 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
       'remove': 'Remove',
       'uploaded_review_pending': 'Uploaded, review pending',
       'likely_issue_detected': 'Likely issue detected',
-      'server_review_keep_local': 'Server review is still pending. Keeping local result visible.',
+      'server_review_keep_local':
+          'Server review is still pending. Keeping local result visible.',
       'treatment_ready': 'Treatment ready',
-      'awaiting_expert_review': 'Awaiting expert review. Do not apply treatment yet.',
+      'awaiting_expert_review':
+          'Awaiting expert review. Do not apply treatment yet.',
       'active_ingredient': 'Active Ingredient',
       'dosage': 'Dosage',
       'protective_equipment': 'Protective Equipment (PPE)',
@@ -859,7 +956,8 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
       'on_device_ai_result': 'On-device AI result',
       'confidence_percent': 'Confidence: {value}%',
       'provisional_pending_title': 'Provisional, awaiting expert confirmation',
-      'provisional_pending_body': 'This result comes from the on-device AI model. It will be reviewed by an agricultural expert once uploaded. Do not apply chemical treatment based on this result alone.',
+      'provisional_pending_body':
+          'This result comes from the on-device AI model. It will be reviewed by an agricultural expert once uploaded. Do not apply chemical treatment based on this result alone.',
       'offline_treatment_guide': 'Offline Treatment Guide',
       'bundled_guide': 'Bundled guide',
       'call_for_help_if_short': 'Call for help if',
@@ -876,8 +974,10 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
       'date_filter_week': 'Last 7 days',
       'date_filter_month': 'Last 30 days',
       'no_filtered_history_title': 'No matching history',
-      'no_filtered_history_body': 'Change the filter or clear the search to see more records.',
-      'disease_history_empty_any': 'No scan history yet. Offline scan results and synced reports will appear here.',
+      'no_filtered_history_body':
+          'Change the filter or clear the search to see more records.',
+      'disease_history_empty_any':
+          'No scan history yet. Offline scan results and synced reports will appear here.',
       'delete_local_history': 'Delete local history',
       'delete_local_history_title': 'Delete local scan result?',
       'delete_local_history_body':
@@ -894,6 +994,9 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
       'not_available': 'Not available',
       'no_server_ai_yet': 'No server AI result yet',
       'no_expert_decision_yet': 'No expert decision yet',
+      'expert_confirmed_diagnosis': 'Expert confirmed diagnosis',
+      'ai_provisional_awaiting_expert':
+          'AI provisional, awaiting expert confirmation',
     },
     'am': {
       'disease_confirmed': 'በሽታው ተረጋግጧል',
@@ -912,7 +1015,8 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
       'remove': 'አስወግድ',
       'uploaded_review_pending': 'ተልኳል፣ ግምገማ በመጠባበቅ ላይ',
       'likely_issue_detected': 'ሊሆን የሚችል ችግኝ ተገኝቷል',
-      'server_review_keep_local': 'የሰርቨር ግምገማ አሁንም በመጠባበቅ ላይ ነው። የአካባቢ ውጤቱ ተጠብቆ ይታያል።',
+      'server_review_keep_local':
+          'የሰርቨር ግምገማ አሁንም በመጠባበቅ ላይ ነው። የአካባቢ ውጤቱ ተጠብቆ ይታያል።',
       'treatment_ready': 'ህክምና ዝግጁ ነው',
       'awaiting_expert_review': 'የባለሙያ ግምገማን በመጠባበቅ ላይ። እስካሁን ሕክምና አይፈጽሙ።',
       'active_ingredient': 'ንጥረ ነገር',
@@ -938,31 +1042,40 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
       'on_device_ai_result': 'የመሣሪያ AI ውጤት',
       'confidence_percent': 'እምነት: {value}%',
       'provisional_pending_title': 'ጊዜያዊ ውጤት፣ የባለሙያ ማረጋገጫ በመጠባበቅ ላይ',
-      'provisional_pending_body': 'ይህ ውጤት ከመሣሪያው AI ሞዴል የመጣ ነው። ከተላከ በኋላ በግብርና ባለሙያ ይገምገማል። በዚህ ውጤት ብቻ መሠረት የኬሚካል ሕክምና አይፈጽሙ።',
+      'provisional_pending_body':
+          'ይህ ውጤት ከመሣሪያው AI ሞዴል የመጣ ነው። ከተላከ በኋላ በግብርና ባለሙያ ይገምገማል። በዚህ ውጤት ብቻ መሠረት የኬሚካል ሕክምና አይፈጽሙ።',
       'offline_treatment_guide': 'ኦፍላይን የሕክምና መመሪያ',
       'bundled_guide': 'አብሮ የተካተተ መመሪያ',
       'call_for_help_if_short': 'እርዳታ ይጠይቁ ካዩ',
+      'expert_confirmed_diagnosis': 'ባለሙያው ምርመራውን አረጋግጧል',
+      'ai_provisional_awaiting_expert': 'ጊዜያዊ የAI ውጤት፣ የባለሙያ ማረጋገጫ በመጠባበቅ ላይ',
     },
     'om': {
       'disease_confirmed': 'Dhukkubni mirkanaaʼeera',
       'awaiting_analysis': 'Xiinxalli eeggamaa jira',
-      'saved_local_review_pending': 'Bu’aan naannoo keessaa kuufameera; gamaaggamni sirna irraa eeggamaa jira',
+      'saved_local_review_pending':
+          'Bu’aan naannoo keessaa kuufameera; gamaaggamni sirna irraa eeggamaa jira',
       'unknown_disease': 'Dhukkuba hin beekamne',
       'ai_confidence': 'AI: {value}%',
-      'on_device_result_pending': 'Bu’aa bilbilaa irratti argame; mirkaneessi ogeessaa eeggamaa jira',
+      'on_device_result_pending':
+          'Bu’aa bilbilaa irratti argame; mirkaneessi ogeessaa eeggamaa jira',
       'crop_plot_context': 'Midhaan #{crop} • Lafa #{plot}',
-      'no_device_result_upload': 'Bu’aan bilbilaa irratti hin argamne; yeroo ergamu ni xiinxalama',
+      'no_device_result_upload':
+          'Bu’aan bilbilaa irratti hin argamne; yeroo ergamu ni xiinxalama',
       'waiting_upload': 'Sirnatti erguuf eeggamaa jira',
-      'upload_attempt_retry': 'Yaalii ergaa {count}; yeroo dhihoo keessatti irra deebi’ama',
+      'upload_attempt_retry':
+          'Yaalii ergaa {count}; yeroo dhihoo keessatti irra deebi’ama',
       'remove_from_queue': 'Hiriira keessaa haqi',
       'remove_scan_title': 'Sakaanii kana haquu?',
       'cancel': 'Dhiisi',
       'remove': 'Haqi',
       'uploaded_review_pending': 'Ergameera; gamaaggamni eeggamaa jira',
       'likely_issue_detected': 'Rakkoon ta’uu malu ni mul’ate',
-      'server_review_keep_local': 'Gamaaggamni sirnaa amma iyyuu eeggamaa jira. Bu’aan naannoo keessaa akka mul’atu tursiifameera.',
+      'server_review_keep_local':
+          'Gamaaggamni sirnaa amma iyyuu eeggamaa jira. Bu’aan naannoo keessaa akka mul’atu tursiifameera.',
       'treatment_ready': 'Qorichi qophaa’eera',
-      'awaiting_expert_review': 'Gamaaggama ogeessaa eeggachaa jira. Ammaaf yaalii hin raawwatinaa.',
+      'awaiting_expert_review':
+          'Gamaaggama ogeessaa eeggachaa jira. Ammaaf yaalii hin raawwatinaa.',
       'active_ingredient': 'Wantaa hojii irra oolu',
       'dosage': 'Hamma',
       'protective_equipment': 'Meeshaa ittisa (PPE)',
@@ -971,7 +1084,8 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
       'what_to_do_now': 'Amma maal gochuu qabdu',
       'what_to_watch_for': 'Maal hordofuu qabdu',
       'prevention_next_season': 'Yeroo itti aanuuf ittisa',
-      'call_for_help_if': 'Kanneen armaan gadii yoo argitan gargaarsa gaafadhaa',
+      'call_for_help_if':
+          'Kanneen armaan gadii yoo argitan gargaarsa gaafadhaa',
       'important_notes': 'Yaadannoo barbaachisoo',
       'approved_registry_guidance': 'Galmee yaalii mirkanaaʼe',
       'general_advisory_guidance': 'Gorsa waliigalaa',
@@ -985,11 +1099,16 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
       'next_step': 'Tarkaanfii itti aanu',
       'on_device_ai_result': 'Bu’aa AI bilbilaa',
       'confidence_percent': 'Amanamummaa: {value}%',
-      'provisional_pending_title': 'Bu’aa yeroo keessaa, mirkaneessi ogeessaa eeggamaa jira',
-      'provisional_pending_body': 'Bu’aan kun moodeela AI bilbilaa irraa dhufe. Erga ergamee booda ogeessa qonnaatiin ni ilaalama. Bu’aa kana qofaan irratti hundaa’uun qoricha keemikaalaa hin fayyadaminaa.',
+      'provisional_pending_title':
+          'Bu’aa yeroo keessaa, mirkaneessi ogeessaa eeggamaa jira',
+      'provisional_pending_body':
+          'Bu’aan kun moodeela AI bilbilaa irraa dhufe. Erga ergamee booda ogeessa qonnaatiin ni ilaalama. Bu’aa kana qofaan irratti hundaa’uun qoricha keemikaalaa hin fayyadaminaa.',
       'offline_treatment_guide': 'Qajeelfama yaalii oflaayinii',
       'bundled_guide': 'Qajeelfama keessaa',
       'call_for_help_if_short': 'Gargaarsa gaafadhaa yoo',
+      'expert_confirmed_diagnosis': 'Ogeessi bu’aa qorannoo mirkaneesseera',
+      'ai_provisional_awaiting_expert':
+          'Bu’aa AI yeroo keessaa, mirkaneessa ogeessaa eeggachaa jira',
     },
     'ti': {
       'disease_confirmed': 'ሕማሙ ተረጋጊጹ እዩ',
@@ -1008,7 +1127,8 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
       'remove': 'ኣውጽእ',
       'uploaded_review_pending': 'ተላኢኹ ኣሎ፣ ግምገማ ይጽበ ኣሎ',
       'likely_issue_detected': 'ክኸውን ዝኽእል ጸገም ተረኺቡ',
-      'server_review_keep_local': 'ናይ ሰርቨር ግምገማ ክሳብ ሕጂ ይጽበ ኣሎ። ናይ ኣካባቢ ውጽኢት ክርአ ይቕጽል።',
+      'server_review_keep_local':
+          'ናይ ሰርቨር ግምገማ ክሳብ ሕጂ ይጽበ ኣሎ። ናይ ኣካባቢ ውጽኢት ክርአ ይቕጽል።',
       'treatment_ready': 'ሕክምና ድሉው እዩ',
       'awaiting_expert_review': 'ግምገማ ባለሞያ ይጽበ ኣሎ። ሕክምና ገና ኣይትፈጽሙ።',
       'active_ingredient': 'ንጥረ ነገር',
@@ -1034,10 +1154,13 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
       'on_device_ai_result': 'ናይ መሳርሒ AI ውጽኢት',
       'confidence_percent': 'እምነት: {value}%',
       'provisional_pending_title': 'ግዜያዊ ውጽኢት፣ ምርግጋጽ ባለሞያ ይጽበ ኣሎ',
-      'provisional_pending_body': 'እዚ ውጽኢት ካብ ናይ መሳርሒ AI ሞዴል መጺኡ እዩ። ምስ ተላእከ ብናይ ሕርሻ ባለሞያ ክግምገም እዩ። በዚ ውጽኢት ጥራይ ተመርኲስኩም ኬሚካላዊ ሕክምና ኣይትግበሩ።',
+      'provisional_pending_body':
+          'እዚ ውጽኢት ካብ ናይ መሳርሒ AI ሞዴል መጺኡ እዩ። ምስ ተላእከ ብናይ ሕርሻ ባለሞያ ክግምገም እዩ። በዚ ውጽኢት ጥራይ ተመርኲስኩም ኬሚካላዊ ሕክምና ኣይትግበሩ።',
       'offline_treatment_guide': 'ኦፍላይን መምርሒ ሕክምና',
       'bundled_guide': 'ኣብ መተግበሪ ዝተኻተተ መምርሒ',
       'call_for_help_if_short': 'ሓገዝ ጸውዑ እንተ',
+      'expert_confirmed_diagnosis': 'ባለሞያ ምርመራ ኣረጋጊጹ እዩ',
+      'ai_provisional_awaiting_expert': 'ግዝያዊ ውጽኢት AI፣ ምርግጋጽ ባለሞያ ይጽበ ኣሎ',
     },
   };
   final table = strings[lang] ?? strings['en']!;
@@ -1048,15 +1171,19 @@ String _dh(String lang, String key, {Map<String, String>? params}) {
   return value;
 }
 
-// 
+//
 // Pending queue card  (local scan not yet uploaded)
-// 
+//
 
 class _PendingQueueCard extends StatelessWidget {
   final PendingScanQueueEntry entry;
   final String lang;
   final VoidCallback onDelete;
-  const _PendingQueueCard({required this.entry, required this.lang, required this.onDelete});
+  const _PendingQueueCard({
+    required this.entry,
+    required this.lang,
+    required this.onDelete,
+  });
 
   // Pull offline inference fields from scan_metadata
   String? get _offlineDiseaseName =>
@@ -1070,6 +1197,7 @@ class _PendingQueueCard extends StatelessWidget {
     if (v is num) return v.toDouble();
     return double.tryParse(v?.toString() ?? '');
   }
+
   bool get _hasOfflineResult =>
       _offlineDiseaseName != null && _offlineDiseaseName!.isNotEmpty;
 
@@ -1080,8 +1208,8 @@ class _PendingQueueCard extends StatelessWidget {
     final ageLabel = age.inDays > 0
         ? '${age.inDays}d ago'
         : age.inHours > 0
-            ? '${age.inHours}h ago'
-            : '${age.inMinutes}m ago';
+        ? '${age.inHours}h ago'
+        : '${age.inMinutes}m ago';
 
     final imageFile = File(entry.imagePath);
     final hasImage = imageFile.existsSync();
@@ -1093,8 +1221,8 @@ class _PendingQueueCard extends StatelessWidget {
     final displayName = localizedName.isNotEmpty
         ? localizedName
         : displayDiseaseLabel(canonicalKey).isNotEmpty
-            ? displayDiseaseLabel(canonicalKey)
-            : rawName;
+        ? displayDiseaseLabel(canonicalKey)
+        : rawName;
 
     final isHealthy = isHealthyDiseaseKey(canonicalKey);
     final severity = _offlineSeverity ?? '';
@@ -1104,9 +1232,7 @@ class _PendingQueueCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
-        onTap: _hasOfflineResult
-            ? () => _openOfflineDetail(context)
-            : null,
+        onTap: _hasOfflineResult ? () => _openOfflineDetail(context) : null,
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -1125,11 +1251,20 @@ class _PendingQueueCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: hasImage
-                      ? Image.file(imageFile, width: 64, height: 64, fit: BoxFit.cover)
+                      ? Image.file(
+                          imageFile,
+                          width: 64,
+                          height: 64,
+                          fit: BoxFit.cover,
+                        )
                       : Container(
-                          width: 64, height: 64,
+                          width: 64,
+                          height: 64,
                           color: Colors.grey.shade100,
-                          child: const Icon(Icons.image_not_supported_outlined, color: Colors.grey),
+                          child: const Icon(
+                            Icons.image_not_supported_outlined,
+                            color: Colors.grey,
+                          ),
                         ),
                 ),
                 const SizedBox(width: 12),
@@ -1141,7 +1276,10 @@ class _PendingQueueCard extends StatelessWidget {
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFFEF3C7),
                               borderRadius: BorderRadius.circular(20),
@@ -1149,17 +1287,30 @@ class _PendingQueueCard extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.cloud_upload_outlined, size: 13, color: Color(0xFFD97706)),
+                                const Icon(
+                                  Icons.cloud_upload_outlined,
+                                  size: 13,
+                                  color: Color(0xFFD97706),
+                                ),
                                 const SizedBox(width: 4),
                                 Text(
                                   L.t(lang, 'disease_history_pending_badge'),
-                                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFFD97706)),
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFFD97706),
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                           const Spacer(),
-                          Text(ageLabel, style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey.shade500)),
+                          Text(
+                            ageLabel,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -1167,10 +1318,14 @@ class _PendingQueueCard extends StatelessWidget {
                       // Disease name — the most important thing
                       if (_hasOfflineResult) ...[
                         Text(
-                          displayName.isNotEmpty ? displayName : _dh(lang, 'unknown_disease'),
+                          displayName.isNotEmpty
+                              ? displayName
+                              : _dh(lang, 'unknown_disease'),
                           style: theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: isHealthy ? Colors.green.shade800 : Colors.grey.shade900,
+                            color: isHealthy
+                                ? Colors.green.shade800
+                                : Colors.grey.shade900,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -1181,16 +1336,28 @@ class _PendingQueueCard extends StatelessWidget {
                               _SeverityChip(severity: severity),
                             if (confidence != null)
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 7,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
                                   color: Colors.grey.shade100,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
-                                  _dh(lang, 'ai_confidence', params: {
-                                    'value': (confidence * 100).toStringAsFixed(0),
-                                  }),
-                                  style: TextStyle(fontSize: 11, color: Colors.grey.shade700, fontWeight: FontWeight.w600),
+                                  _dh(
+                                    lang,
+                                    'ai_confidence',
+                                    params: {
+                                      'value': (confidence * 100)
+                                          .toStringAsFixed(0),
+                                    },
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.grey.shade700,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                           ],
@@ -1207,16 +1374,24 @@ class _PendingQueueCard extends StatelessWidget {
                       ] else ...[
                         // No offline result — show crop/plot context
                         Text(
-                          _dh(lang, 'crop_plot_context', params: {
-                            'crop': '${entry.cropId}',
-                            'plot': '${entry.plotId}',
-                          }),
-                          style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                          _dh(
+                            lang,
+                            'crop_plot_context',
+                            params: {
+                              'crop': '${entry.cropId}',
+                              'plot': '${entry.plotId}',
+                            },
+                          ),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           _dh(lang, 'no_device_result_upload'),
-                          style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: Colors.grey.shade600,
+                          ),
                         ),
                       ],
 
@@ -1225,29 +1400,45 @@ class _PendingQueueCard extends StatelessWidget {
                       Text(
                         entry.attempts == 0
                             ? _dh(lang, 'waiting_upload')
-                            : _dh(lang, 'upload_attempt_retry', params: {
-                                'count': '${entry.attempts}',
-                              }),
-                        style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey.shade500),
+                            : _dh(
+                                lang,
+                                'upload_attempt_retry',
+                                params: {'count': '${entry.attempts}'},
+                              ),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: Colors.grey.shade500,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 // Delete button
                 IconButton(
-                  icon: const Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    size: 20,
+                    color: Colors.red,
+                  ),
                   tooltip: _dh(lang, 'remove_from_queue'),
                   onPressed: () async {
                     final confirmed = await showDialog<bool>(
                       context: context,
                       builder: (ctx) => AlertDialog(
                         title: Text(_dh(lang, 'remove_scan_title')),
-                        content: Text(L.t(lang, 'disease_pending_scan_delete_confirm')),
+                        content: Text(
+                          L.t(lang, 'disease_pending_scan_delete_confirm'),
+                        ),
                         actions: [
-                          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(_dh(lang, 'cancel'))),
+                          TextButton(
+                            onPressed: () => Navigator.pop(ctx, false),
+                            child: Text(_dh(lang, 'cancel')),
+                          ),
                           TextButton(
                             onPressed: () => Navigator.pop(ctx, true),
-                            child: Text(_dh(lang, 'remove'), style: const TextStyle(color: Colors.red)),
+                            child: Text(
+                              _dh(lang, 'remove'),
+                              style: const TextStyle(color: Colors.red),
+                            ),
                           ),
                         ],
                       ),
@@ -1286,23 +1477,26 @@ class _SyncedLocalCard extends StatelessWidget {
   });
 
   PendingScanQueueEntry get _detailEntry => PendingScanQueueEntry(
-        queueId: entry.submissionId,
-        plotId: entry.plotId,
-        cropId: entry.cropId,
-        plantingId: entry.plantingId,
-        imagePath: entry.imagePath,
-        capturedAtUtc: entry.capturedAtUtc,
-        attempts: 0,
-        nextRetryAtUtc: entry.syncedAtUtc,
-        createdAtUtc: entry.capturedAtUtc,
-        scanMetadata: entry.scanMetadata,
-      );
+    queueId: entry.submissionId,
+    plotId: entry.plotId,
+    cropId: entry.cropId,
+    plantingId: entry.plantingId,
+    imagePath: entry.imagePath,
+    capturedAtUtc: entry.capturedAtUtc,
+    attempts: 0,
+    nextRetryAtUtc: entry.syncedAtUtc,
+    createdAtUtc: entry.capturedAtUtc,
+    scanMetadata: entry.scanMetadata,
+  );
 
   String get _offlineDiseaseName =>
-      entry.scanMetadata?['offline_local_disease_name']?.toString().trim() ?? '';
+      entry.scanMetadata?['offline_local_disease_name']?.toString().trim() ??
+      '';
 
   String get _offlineDiseaseKey {
-    final raw = entry.scanMetadata?['offline_local_disease_key']?.toString().trim();
+    final raw = entry.scanMetadata?['offline_local_disease_key']
+        ?.toString()
+        .trim();
     if (raw != null && raw.isNotEmpty) {
       return raw;
     }
@@ -1327,11 +1521,13 @@ class _SyncedLocalCard extends StatelessWidget {
     final displayName = localizedName.isNotEmpty
         ? localizedName
         : (displayDiseaseLabel(_offlineDiseaseKey).isNotEmpty
-            ? displayDiseaseLabel(_offlineDiseaseKey)
-            : _offlineDiseaseName);
+              ? displayDiseaseLabel(_offlineDiseaseKey)
+              : _offlineDiseaseName);
     final isHealthy = isHealthyDiseaseKey(_offlineDiseaseKey);
     final confidence = _offlineConfidence;
-    final syncedLabel = DateFormat('MMM d, HH:mm').format(entry.syncedAtUtc.toLocal());
+    final syncedLabel = DateFormat(
+      'MMM d, HH:mm',
+    ).format(entry.syncedAtUtc.toLocal());
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
@@ -1343,13 +1539,16 @@ class _SyncedLocalCard extends StatelessWidget {
             isScrollControlled: true,
             useSafeArea: true,
             backgroundColor: Colors.transparent,
-            builder: (_) => _OfflinePendingDetailSheet(entry: _detailEntry, lang: lang),
+            builder: (_) =>
+                _OfflinePendingDetailSheet(entry: _detailEntry, lang: lang),
           );
         },
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
-            side: BorderSide(color: const Color(0xFF2563EB).withValues(alpha: 0.35)),
+            side: BorderSide(
+              color: const Color(0xFF2563EB).withValues(alpha: 0.35),
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(12),
@@ -1359,7 +1558,12 @@ class _SyncedLocalCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: hasImage
-                      ? Image.file(imageFile, width: 64, height: 64, fit: BoxFit.cover)
+                      ? Image.file(
+                          imageFile,
+                          width: 64,
+                          height: 64,
+                          fit: BoxFit.cover,
+                        )
                       : Container(
                           width: 64,
                           height: 64,
@@ -1417,10 +1621,14 @@ class _SyncedLocalCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        displayName.isNotEmpty ? displayName : _dh(lang, 'likely_issue_detected'),
+                        displayName.isNotEmpty
+                            ? displayName
+                            : _dh(lang, 'likely_issue_detected'),
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: isHealthy ? Colors.green.shade800 : Colors.grey.shade900,
+                          color: isHealthy
+                              ? Colors.green.shade800
+                              : Colors.grey.shade900,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -1440,9 +1648,15 @@ class _SyncedLocalCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
-                                _dh(lang, 'ai_confidence', params: {
-                                  'value': (confidence * 100).toStringAsFixed(0),
-                                }),
+                                _dh(
+                                  lang,
+                                  'ai_confidence',
+                                  params: {
+                                    'value': (confidence * 100).toStringAsFixed(
+                                      0,
+                                    ),
+                                  },
+                                ),
                                 style: TextStyle(
                                   fontSize: 11,
                                   color: Colors.grey.shade700,
@@ -1505,15 +1719,19 @@ class _SyncedLocalCard extends StatelessWidget {
   }
 }
 
-// 
+//
 // Server report card
-// 
+//
 
 class _ReportCard extends StatelessWidget {
   final DiseaseReportModel report;
   final String lang;
   final VoidCallback onTap;
-  const _ReportCard({required this.report, required this.lang, required this.onTap});
+  const _ReportCard({
+    required this.report,
+    required this.lang,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1538,11 +1756,7 @@ class _ReportCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (hasImage) ...[
-                  _HistoryNetworkThumb(
-                    url: imageUrl,
-                    width: 72,
-                    height: 72,
-                  ),
+                  _HistoryNetworkThumb(url: imageUrl, width: 72, height: 72),
                   const SizedBox(width: 12),
                 ],
                 Expanded(
@@ -1552,11 +1766,17 @@ class _ReportCard extends StatelessWidget {
                       // Status badge + date
                       Row(
                         children: [
-                          _StatusBadge(label: style.badgeLabel, color: style.badgeColor, icon: style.badgeIcon),
+                          _StatusBadge(
+                            label: style.badgeLabel,
+                            color: style.badgeColor,
+                            icon: style.badgeIcon,
+                          ),
                           const Spacer(),
                           Text(
                             _formatDate(report.reportedAt),
-                            style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey.shade500),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: Colors.grey.shade500,
+                            ),
                           ),
                         ],
                       ),
@@ -1580,10 +1800,17 @@ class _ReportCard extends StatelessWidget {
                           if (report.confidenceScore != null) ...[
                             const SizedBox(width: 8),
                             Text(
-                              _dh(lang, 'ai_confidence', params: {
-                                'value': (report.confidenceScore! * 100).toStringAsFixed(0),
-                              }),
-                              style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+                              _dh(
+                                lang,
+                                'ai_confidence',
+                                params: {
+                                  'value': (report.confidenceScore! * 100)
+                                      .toStringAsFixed(0),
+                                },
+                              ),
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: Colors.grey.shade600,
+                              ),
                             ),
                           ],
                           const Spacer(),
@@ -1591,9 +1818,19 @@ class _ReportCard extends StatelessWidget {
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.medical_services_outlined, size: 14, color: Colors.green.shade700),
+                                Icon(
+                                  Icons.medical_services_outlined,
+                                  size: 14,
+                                  color: Colors.green.shade700,
+                                ),
                                 const SizedBox(width: 4),
-                                Text(_dh(lang, 'treatment_ready'), style: theme.textTheme.bodySmall?.copyWith(color: Colors.green.shade700, fontWeight: FontWeight.w600)),
+                                Text(
+                                  _dh(lang, 'treatment_ready'),
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: Colors.green.shade700,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ],
                             ),
                         ],
@@ -1601,7 +1838,10 @@ class _ReportCard extends StatelessWidget {
                       if (_isPendingReview(report)) ...[
                         const SizedBox(height: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.amber.shade50,
                             borderRadius: BorderRadius.circular(8),
@@ -1609,12 +1849,19 @@ class _ReportCard extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              Icon(Icons.hourglass_top_rounded, size: 14, color: Colors.amber.shade800),
+                              Icon(
+                                Icons.hourglass_top_rounded,
+                                size: 14,
+                                color: Colors.amber.shade800,
+                              ),
                               const SizedBox(width: 6),
                               Expanded(
                                 child: Text(
                                   _dh(lang, 'awaiting_expert_review'),
-                                  style: theme.textTheme.bodySmall?.copyWith(color: Colors.amber.shade900, fontWeight: FontWeight.w600),
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: Colors.amber.shade900,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ],
@@ -1651,10 +1898,12 @@ class _ReportCard extends StatelessWidget {
   bool _hasTreatment(DiseaseReportModel r) {
     final g = r.treatmentGuidance;
     if (g == null) return false;
-    return g.canShowTreatmentDetails && (g.activeIngredient?.isNotEmpty == true || g.actions.isNotEmpty);
+    return g.canShowTreatmentDetails &&
+        (g.activeIngredient?.isNotEmpty == true || g.actions.isNotEmpty);
   }
 
-  String _displayName(DiseaseReportModel r, String lang) => _resolvedFindingDisplayName(r, lang);
+  String _displayName(DiseaseReportModel r, String lang) =>
+      _resolvedFindingDisplayName(r, lang);
 
   String _formatDate(DateTime dt) {
     final local = dt.toLocal();
@@ -1683,7 +1932,11 @@ class _ReportCard extends StatelessWidget {
         nameColor: Colors.grey.shade800,
       );
     }
-    if (s == 'confirmed' || s == 'completed' || s == 'verified' || s == 'done' || s == 'resolved') {
+    if (s == 'confirmed' ||
+        s == 'completed' ||
+        s == 'verified' ||
+        s == 'done' ||
+        s == 'resolved') {
       return _ReportStyle(
         badgeLabel: 'Confirmed',
         badgeColor: Colors.red.shade700,
@@ -1730,40 +1983,37 @@ class _InferenceSourceStrip extends StatelessWidget {
   final DiseaseReportModel report;
   final String lang;
 
-  const _InferenceSourceStrip({
-    required this.report,
-    required this.lang,
-  });
+  const _InferenceSourceStrip({required this.report, required this.lang});
 
   @override
   Widget build(BuildContext context) {
     final finding = report.finding;
     final source = switch (finding.stage) {
       DiseaseFindingStage.verified => (
-          label: _dh(lang, 'source_expert'),
-          icon: Icons.verified_user_outlined,
-          color: Colors.green.shade700,
-        ),
+        label: _dh(lang, 'source_expert'),
+        icon: Icons.verified_user_outlined,
+        color: Colors.green.shade700,
+      ),
       DiseaseFindingStage.inferred => (
-          label: _dh(lang, 'source_server_ai'),
-          icon: Icons.cloud_done_outlined,
-          color: Colors.blue.shade700,
-        ),
+        label: _dh(lang, 'source_server_ai'),
+        icon: Icons.cloud_done_outlined,
+        color: Colors.blue.shade700,
+      ),
       DiseaseFindingStage.provisional => (
-          label: _dh(lang, 'source_on_device'),
-          icon: Icons.offline_bolt_outlined,
-          color: Colors.orange.shade800,
-        ),
+        label: _dh(lang, 'source_on_device'),
+        icon: Icons.offline_bolt_outlined,
+        color: Colors.orange.shade800,
+      ),
       DiseaseFindingStage.likelyIssue => (
-          label: _dh(lang, 'source_likely_issue'),
-          icon: Icons.troubleshoot_outlined,
-          color: Colors.blueGrey.shade700,
-        ),
+        label: _dh(lang, 'source_likely_issue'),
+        icon: Icons.troubleshoot_outlined,
+        color: Colors.blueGrey.shade700,
+      ),
       DiseaseFindingStage.pending => (
-          label: _dh(lang, 'source_awaiting'),
-          icon: Icons.hourglass_top_rounded,
-          color: Colors.grey.shade700,
-        ),
+        label: _dh(lang, 'source_awaiting'),
+        icon: Icons.hourglass_top_rounded,
+        color: Colors.grey.shade700,
+      ),
     };
     final offlineName = _localizedDiseaseNameFromRaw(
       lang,
@@ -1833,23 +2083,27 @@ class _CompactSourceLabel extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w800,
-            ),
+          color: color,
+          fontWeight: FontWeight.w800,
+        ),
       ),
     );
   }
 }
 
-// 
+//
 // Status badge
-// 
+//
 
 class _StatusBadge extends StatelessWidget {
   final String label;
   final Color color;
   final IconData icon;
-  const _StatusBadge({required this.label, required this.color, required this.icon});
+  const _StatusBadge({
+    required this.label,
+    required this.color,
+    required this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1865,16 +2119,23 @@ class _StatusBadge extends StatelessWidget {
         children: [
           Icon(icon, size: 14, color: color),
           const SizedBox(width: 5),
-          Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: color)),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-// 
+//
 // Severity chip
-// 
+//
 
 class _SeverityChip extends StatelessWidget {
   final String severity;
@@ -1886,10 +2147,10 @@ class _SeverityChip extends StatelessWidget {
     final color = s == 'critical'
         ? Colors.red.shade900
         : s == 'high'
-            ? Colors.red.shade700
-            : s == 'medium'
-                ? Colors.orange.shade700
-                : Colors.grey.shade600;
+        ? Colors.red.shade700
+        : s == 'medium'
+        ? Colors.orange.shade700
+        : Colors.grey.shade600;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -1899,15 +2160,19 @@ class _SeverityChip extends StatelessWidget {
       ),
       child: Text(
         severity.toUpperCase(),
-        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: color),
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: color,
+        ),
       ),
     );
   }
 }
 
-// 
+//
 // Empty state
-// 
+//
 
 class _EmptyState extends StatelessWidget {
   final String lang;
@@ -1926,7 +2191,9 @@ class _EmptyState extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               _dh(lang, 'disease_history_empty_any'),
-              style: theme.textTheme.bodyLarge?.copyWith(color: Colors.grey.shade600),
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: Colors.grey.shade600,
+              ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -1936,9 +2203,9 @@ class _EmptyState extends StatelessWidget {
   }
 }
 
-// 
+//
 // Offline banner
-// 
+//
 
 class _OfflineBanner extends StatelessWidget {
   final String lang;
@@ -1962,7 +2229,10 @@ class _OfflineBanner extends StatelessWidget {
             Expanded(
               child: Text(
                 L.t(lang, 'disease_history_showing_saved_history'),
-                style: TextStyle(color: Colors.blue.shade900, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  color: Colors.blue.shade900,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],
@@ -1972,9 +2242,9 @@ class _OfflineBanner extends StatelessWidget {
   }
 }
 
-// 
+//
 // Error banner
-// 
+//
 
 class _ErrorBanner extends StatelessWidget {
   final String message;
@@ -1996,7 +2266,12 @@ class _ErrorBanner extends StatelessWidget {
           children: [
             Icon(Icons.error_outline, color: Colors.red.shade700, size: 20),
             const SizedBox(width: 10),
-            Expanded(child: Text(message, style: TextStyle(color: Colors.red.shade900))),
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(color: Colors.red.shade900),
+              ),
+            ),
             TextButton(
               onPressed: onRetry,
               child: Text(L.t(LanguageStore.notifier.value, 'retry')),
@@ -2008,9 +2283,9 @@ class _ErrorBanner extends StatelessWidget {
   }
 }
 
-// 
+//
 // Detail bottom sheet
-// 
+//
 
 class _ReportDetailSheet extends StatefulWidget {
   final DiseaseReportModel report;
@@ -2043,7 +2318,11 @@ class _ReportDetailSheetState extends State<_ReportDetailSheet> {
     try {
       final guidance = await OfflineTreatmentGuidanceService.instance
           .guidanceForDiseaseLabel(key, cropName: key.split('_').first);
-      if (mounted) setState(() { _offlineGuidance = guidance; _loadingGuidance = false; });
+      if (mounted)
+        setState(() {
+          _offlineGuidance = guidance;
+          _loadingGuidance = false;
+        });
     } catch (_) {
       if (mounted) setState(() => _loadingGuidance = false);
     }
@@ -2057,9 +2336,15 @@ class _ReportDetailSheetState extends State<_ReportDetailSheet> {
 
     // Determine which guidance to show
     final serverGuidance = report.treatmentGuidance;
-    final showServerTreatment = serverGuidance != null && serverGuidance.canShowTreatmentDetails;
-    final showOfflineTreatment = !showServerTreatment && _offlineGuidance != null && _offlineGuidance!.canShowTreatmentDetails;
-    final guidance = showServerTreatment ? serverGuidance : (showOfflineTreatment ? _offlineGuidance : null);
+    final showServerTreatment =
+        serverGuidance != null && serverGuidance.canShowTreatmentDetails;
+    final showOfflineTreatment =
+        !showServerTreatment &&
+        _offlineGuidance != null &&
+        _offlineGuidance!.canShowTreatmentDetails;
+    final guidance = showServerTreatment
+        ? serverGuidance
+        : (showOfflineTreatment ? _offlineGuidance : null);
 
     final isPending = _isPendingStatus(report.status);
     final isRejected = _isRejectedStatus(report.status);
@@ -2077,8 +2362,12 @@ class _ReportDetailSheetState extends State<_ReportDetailSheet> {
           Center(
             child: Container(
               margin: const EdgeInsets.only(top: 10, bottom: 4),
-              width: 40, height: 4,
-              decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(2)),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
           Expanded(
@@ -2087,7 +2376,7 @@ class _ReportDetailSheetState extends State<_ReportDetailSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //  Header 
+                  //  Header
                   _DetailHeader(
                     report: report,
                     lang: lang,
@@ -2097,23 +2386,23 @@ class _ReportDetailSheetState extends State<_ReportDetailSheet> {
                   _InferenceEvidencePanel(report: report, lang: lang),
                   const SizedBox(height: 20),
 
-                  //  Pending review notice 
-                  if (isPending && !isHealthy)
-                    _PendingReviewNotice(lang: lang),
+                  //  Pending review notice
+                  if (isPending && !isHealthy) _PendingReviewNotice(lang: lang),
 
-                  //  Healthy notice 
-                  if (isHealthy)
-                    _HealthyNotice(lang: lang),
+                  //  Healthy notice
+                  if (isHealthy) _HealthyNotice(lang: lang),
 
-                  //  Rejected notice 
-                  if (isRejected)
-                    _RejectedNotice(report: report, lang: lang),
+                  //  Rejected notice
+                  if (isRejected) _RejectedNotice(report: report, lang: lang),
 
-                  //  Expert review summary 
-                  if (!isPending && !isRejected && !isHealthy && report.reviewedAt != null)
+                  //  Expert review summary
+                  if (!isPending &&
+                      !isRejected &&
+                      !isHealthy &&
+                      report.reviewedAt != null)
                     _ReviewSummary(report: report, lang: lang),
 
-                  //  Treatment section 
+                  //  Treatment section
                   if (!isPending && !isRejected && !isHealthy) ...[
                     if (_loadingGuidance)
                       const Padding(
@@ -2121,12 +2410,17 @@ class _ReportDetailSheetState extends State<_ReportDetailSheet> {
                         child: Center(child: CircularProgressIndicator()),
                       )
                     else if (guidance != null)
-                      _TreatmentSection(guidance: guidance, isOffline: !showServerTreatment, lang: lang)
+                      _TreatmentSection(
+                        guidance: guidance,
+                        isOffline: !showServerTreatment,
+                        lang: lang,
+                      )
                     else
                       _NoTreatmentYet(lang: lang),
                   ],
 
-                  if (primaryImage != null) _CasePhotoSection(image: primaryImage),
+                  if (primaryImage != null)
+                    _CasePhotoSection(image: primaryImage),
                 ],
               ),
             ),
@@ -2151,10 +2445,7 @@ class _InferenceEvidencePanel extends StatelessWidget {
   final DiseaseReportModel report;
   final String lang;
 
-  const _InferenceEvidencePanel({
-    required this.report,
-    required this.lang,
-  });
+  const _InferenceEvidencePanel({required this.report, required this.lang});
 
   @override
   Widget build(BuildContext context) {
@@ -2174,6 +2465,10 @@ class _InferenceEvidencePanel extends StatelessWidget {
       report.verifiedDiseaseName,
       report.verifiedCanonicalDiseaseName,
     );
+    final resolvedExpertName =
+        expertName.isNotEmpty || !report.isConfirmedWorkflowState
+        ? expertName
+        : _resolvedFindingDisplayName(report, lang);
 
     return Container(
       width: double.infinity,
@@ -2188,7 +2483,11 @@ class _InferenceEvidencePanel extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.route_outlined, size: 18, color: Colors.green.shade800),
+              Icon(
+                Icons.route_outlined,
+                size: 18,
+                color: Colors.green.shade800,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -2206,7 +2505,9 @@ class _InferenceEvidencePanel extends StatelessWidget {
             icon: Icons.phone_android_outlined,
             color: Colors.orange.shade800,
             label: _dh(lang, 'offline_result_label'),
-            value: offlineName.isEmpty ? _dh(lang, 'not_available') : offlineName,
+            value: offlineName.isEmpty
+                ? _dh(lang, 'not_available')
+                : offlineName,
             supportingText: _dh(lang, 'source_on_device'),
           ),
           const SizedBox(height: 10),
@@ -2214,22 +2515,34 @@ class _InferenceEvidencePanel extends StatelessWidget {
             icon: Icons.cloud_done_outlined,
             color: Colors.blue.shade700,
             label: _dh(lang, 'server_result_label'),
-            value: serverName.isEmpty ? _dh(lang, 'no_server_ai_yet') : serverName,
+            value: serverName.isEmpty
+                ? _dh(lang, 'no_server_ai_yet')
+                : serverName,
             supportingText: report.confidenceScore == null
                 ? _dh(lang, 'source_server_ai')
-                : _dh(lang, 'ai_confidence', params: {
-                    'value': (report.confidenceScore! * 100).toStringAsFixed(0),
-                  }),
+                : _dh(
+                    lang,
+                    'ai_confidence',
+                    params: {
+                      'value': (report.confidenceScore! * 100).toStringAsFixed(
+                        0,
+                      ),
+                    },
+                  ),
           ),
           const SizedBox(height: 10),
           _InferenceDecisionRow(
             icon: Icons.verified_user_outlined,
             color: Colors.green.shade800,
             label: _dh(lang, 'expert_result_label'),
-            value: expertName.isEmpty ? _dh(lang, 'no_expert_decision_yet') : expertName,
+            value: resolvedExpertName.isEmpty
+                ? _dh(lang, 'no_expert_decision_yet')
+                : resolvedExpertName,
             supportingText: report.reviewedAt == null
                 ? _dh(lang, 'source_expert')
-                : DateFormat('dd MMM yyyy, HH:mm').format(report.reviewedAt!.toLocal()),
+                : DateFormat(
+                    'dd MMM yyyy, HH:mm',
+                  ).format(report.reviewedAt!.toLocal()),
           ),
         ],
       ),
@@ -2291,7 +2604,9 @@ class _InferenceDecisionRow extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 supportingText,
-                style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: Colors.grey.shade600,
+                ),
               ),
             ],
           ),
@@ -2301,9 +2616,9 @@ class _InferenceDecisionRow extends StatelessWidget {
   }
 }
 
-// 
+//
 // Detail header
-// 
+//
 
 class _DetailHeader extends StatelessWidget {
   final DiseaseReportModel report;
@@ -2326,8 +2641,8 @@ class _DetailHeader extends StatelessWidget {
     final nameColor = isHealthy
         ? Colors.green.shade800
         : isConfirmed
-            ? Colors.red.shade800
-            : Colors.grey.shade800;
+        ? Colors.red.shade800
+        : Colors.grey.shade800;
     final imageUrl = primaryImage?.url.trim();
     final hasImage = imageUrl != null && imageUrl.isNotEmpty;
 
@@ -2339,7 +2654,7 @@ class _DetailHeader extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 6),
             child: Text(
-              'Expert confirmed diagnosis',
+              _dh(lang, 'expert_confirmed_diagnosis'),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: Colors.red.shade700,
                 fontWeight: FontWeight.w700,
@@ -2351,7 +2666,7 @@ class _DetailHeader extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 6),
             child: Text(
-              'AI provisional  awaiting expert confirmation',
+              _dh(lang, 'ai_provisional_awaiting_expert'),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: Colors.amber.shade800,
                 fontWeight: FontWeight.w600,
@@ -2388,17 +2703,25 @@ class _DetailHeader extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 6,
                     children: [
-                      if (report.severity.isNotEmpty) _SeverityChip(severity: report.severity),
+                      if (report.severity.isNotEmpty)
+                        _SeverityChip(severity: report.severity),
                       if (report.confidenceScore != null)
                         _MetaChip(
                           icon: Icons.analytics_outlined,
-                          label: _dh(lang, 'ai_confidence', params: {
-                            'value': (report.confidenceScore! * 100).toStringAsFixed(0),
-                          }),
+                          label: _dh(
+                            lang,
+                            'ai_confidence',
+                            params: {
+                              'value': (report.confidenceScore! * 100)
+                                  .toStringAsFixed(0),
+                            },
+                          ),
                         ),
                       _MetaChip(
                         icon: Icons.calendar_today_outlined,
-                        label: DateFormat('dd MMM yyyy').format(report.reportedAt.toLocal()),
+                        label: DateFormat(
+                          'dd MMM yyyy',
+                        ).format(report.reportedAt.toLocal()),
                       ),
                     ],
                   ),
@@ -2440,10 +2763,7 @@ class _CaseImagePreview {
   final String url;
   final String title;
 
-  const _CaseImagePreview({
-    required this.url,
-    required this.title,
-  });
+  const _CaseImagePreview({required this.url, required this.title});
 }
 
 _CaseImagePreview? _primaryCaseImage(DiseaseReportModel report, String lang) {
@@ -2497,10 +2817,8 @@ class _ZoomableProtectedImage extends StatelessWidget {
           : () {
               showDialog<void>(
                 context: context,
-                builder: (dialogContext) => _ZoomableImageDialog(
-                  title: heroLabel,
-                  url: raw,
-                ),
+                builder: (dialogContext) =>
+                    _ZoomableImageDialog(title: heroLabel, url: raw),
               );
             },
       child: _ProtectedImageBox(
@@ -2726,16 +3044,23 @@ class _MetaChip extends StatelessWidget {
         children: [
           Icon(icon, size: 13, color: Colors.grey.shade600),
           const SizedBox(width: 5),
-          Text(label, style: TextStyle(fontSize: 12, color: Colors.grey.shade700, fontWeight: FontWeight.w500)),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey.shade700,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-// 
+//
 // Notices
-// 
+//
 
 class _PendingReviewNotice extends StatelessWidget {
   final String lang;
@@ -2806,7 +3131,12 @@ class _NoticeBox extends StatelessWidget {
   final IconData icon;
   final String title;
   final String body;
-  const _NoticeBox({required this.color, required this.icon, required this.title, required this.body});
+  const _NoticeBox({
+    required this.color,
+    required this.icon,
+    required this.title,
+    required this.body,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -2828,9 +3158,21 @@ class _NoticeBox extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700, color: color)),
+                Text(
+                  title,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: color,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text(body, style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey.shade800, height: 1.45)),
+                Text(
+                  body,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey.shade800,
+                    height: 1.45,
+                  ),
+                ),
               ],
             ),
           ),
@@ -2840,9 +3182,9 @@ class _NoticeBox extends StatelessWidget {
   }
 }
 
-// 
+//
 // Review summary (expert decision)
-// 
+//
 
 class _ReviewSummary extends StatelessWidget {
   final DiseaseReportModel report;
@@ -2865,27 +3207,45 @@ class _ReviewSummary extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.verified_user_outlined, size: 18, color: Colors.green.shade700),
+              Icon(
+                Icons.verified_user_outlined,
+                size: 18,
+                color: Colors.green.shade700,
+              ),
               const SizedBox(width: 8),
-              Text(L.t(lang, 'disease_review_summary'),
-                  style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+              Text(
+                L.t(lang, 'disease_review_summary'),
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 10),
           if (report.reviewedAt != null)
             _ReviewRow(
               label: L.t(lang, 'disease_reviewed_at'),
-              value: DateFormat('dd MMM yyyy, HH:mm').format(report.reviewedAt!.toLocal()),
+              value: DateFormat(
+                'dd MMM yyyy, HH:mm',
+              ).format(report.reviewedAt!.toLocal()),
             ),
           if (report.verifiedAt != null)
             _ReviewRow(
               label: L.t(lang, 'disease_verified_at'),
-              value: DateFormat('dd MMM yyyy, HH:mm').format(report.verifiedAt!.toLocal()),
+              value: DateFormat(
+                'dd MMM yyyy, HH:mm',
+              ).format(report.verifiedAt!.toLocal()),
             ),
           if (report.decisionReasonCode?.isNotEmpty == true)
-            _ReviewRow(label: L.t(lang, 'disease_review_reason'), value: report.decisionReasonCode!),
+            _ReviewRow(
+              label: L.t(lang, 'disease_review_reason'),
+              value: report.decisionReasonCode!,
+            ),
           if (report.decisionComment?.isNotEmpty == true)
-            _ReviewRow(label: L.t(lang, 'disease_review_note'), value: report.decisionComment!),
+            _ReviewRow(
+              label: L.t(lang, 'disease_review_note'),
+              value: report.decisionComment!,
+            ),
         ],
       ),
     );
@@ -2907,24 +3267,41 @@ class _ReviewRow extends StatelessWidget {
         children: [
           SizedBox(
             width: 120,
-            child: Text(label, style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey.shade600, fontWeight: FontWeight.w600)),
+            child: Text(
+              label,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: Colors.grey.shade600,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
-          Expanded(child: Text(value, style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey.shade900))),
+          Expanded(
+            child: Text(
+              value,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: Colors.grey.shade900,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-// 
+//
 // Treatment section   the core farmer-facing content
-// 
+//
 
 class _TreatmentSection extends StatelessWidget {
   final DiseaseTreatmentGuidance guidance;
   final bool isOffline;
   final String lang;
-  const _TreatmentSection({required this.guidance, required this.isOffline, required this.lang});
+  const _TreatmentSection({
+    required this.guidance,
+    required this.isOffline,
+    required this.lang,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -2941,17 +3318,30 @@ class _TreatmentSection extends StatelessWidget {
                 color: Colors.green.shade50,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(Icons.medical_services_outlined, color: Colors.green.shade700, size: 20),
+              child: Icon(
+                Icons.medical_services_outlined,
+                color: Colors.green.shade700,
+                size: 20,
+              ),
             ),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(L.t(lang, 'treatment_plan'), style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                  Text(
+                    L.t(lang, 'treatment_plan'),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                   if (isOffline)
-                    Text(L.t(lang, 'offline_guidance_verify'),
-                        style: theme.textTheme.bodySmall?.copyWith(color: Colors.orange.shade700)),
+                    Text(
+                      L.t(lang, 'offline_guidance_verify'),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: Colors.orange.shade700,
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -3036,13 +3426,17 @@ class _TreatmentSection extends StatelessWidget {
           const SizedBox(height: 14),
         ],
 
-        //  Chemical inputs 
+        //  Chemical inputs
         if (guidance.activeIngredient?.isNotEmpty == true ||
             guidance.dosage?.isNotEmpty == true ||
             guidance.ppe?.isNotEmpty == true ||
             guidance.preHarvestInterval?.isNotEmpty == true ||
             guidance.reEntryInterval?.isNotEmpty == true) ...[
-          _TreatmentGroupHeader(icon: Icons.science_outlined, label: L.t(lang, 'chemical_inputs'), color: Colors.red.shade700),
+          _TreatmentGroupHeader(
+            icon: Icons.science_outlined,
+            label: L.t(lang, 'chemical_inputs'),
+            color: Colors.red.shade700,
+          ),
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
@@ -3053,34 +3447,34 @@ class _TreatmentSection extends StatelessWidget {
             child: Column(
               children: [
                 if (guidance.activeIngredient?.isNotEmpty == true)
-                    _ChemicalRow(
+                  _ChemicalRow(
                     icon: Icons.biotech_outlined,
                     label: _dh(lang, 'active_ingredient'),
                     value: guidance.activeIngredient!,
                     highlight: true,
                   ),
                 if (guidance.dosage?.isNotEmpty == true)
-                    _ChemicalRow(
+                  _ChemicalRow(
                     icon: Icons.water_drop_outlined,
                     label: _dh(lang, 'dosage'),
                     value: guidance.dosage!,
                   ),
                 if (guidance.ppe?.isNotEmpty == true)
-                    _ChemicalRow(
+                  _ChemicalRow(
                     icon: Icons.security_outlined,
                     label: _dh(lang, 'protective_equipment'),
                     value: guidance.ppe!,
                     isWarning: true,
                   ),
                 if (guidance.preHarvestInterval?.isNotEmpty == true)
-                    _ChemicalRow(
+                  _ChemicalRow(
                     icon: Icons.event_available_outlined,
                     label: _dh(lang, 'pre_harvest_interval'),
                     value: guidance.preHarvestInterval!,
                     isWarning: true,
                   ),
                 if (guidance.reEntryInterval?.isNotEmpty == true)
-                    _ChemicalRow(
+                  _ChemicalRow(
                     icon: Icons.timer_outlined,
                     label: _dh(lang, 're_entry_interval'),
                     value: guidance.reEntryInterval!,
@@ -3092,33 +3486,55 @@ class _TreatmentSection extends StatelessWidget {
           const SizedBox(height: 16),
         ],
 
-        //  Actions 
+        //  Actions
         if (guidance.actions.isNotEmpty) ...[
-          _TreatmentGroupHeader(icon: Icons.checklist_outlined, label: _dh(lang, 'what_to_do_now'), color: Colors.blue.shade700),
+          _TreatmentGroupHeader(
+            icon: Icons.checklist_outlined,
+            label: _dh(lang, 'what_to_do_now'),
+            color: Colors.blue.shade700,
+          ),
           const SizedBox(height: 8),
-          ...guidance.actions.map((a) => _BulletItem(text: a, color: Colors.blue.shade700)),
+          ...guidance.actions.map(
+            (a) => _BulletItem(text: a, color: Colors.blue.shade700),
+          ),
           const SizedBox(height: 14),
         ],
 
-        //  Monitoring 
+        //  Monitoring
         if (guidance.monitoring.isNotEmpty) ...[
-          _TreatmentGroupHeader(icon: Icons.visibility_outlined, label: _dh(lang, 'what_to_watch_for'), color: Colors.teal.shade700),
+          _TreatmentGroupHeader(
+            icon: Icons.visibility_outlined,
+            label: _dh(lang, 'what_to_watch_for'),
+            color: Colors.teal.shade700,
+          ),
           const SizedBox(height: 8),
-          ...guidance.monitoring.map((m) => _BulletItem(text: m, color: Colors.teal.shade700)),
+          ...guidance.monitoring.map(
+            (m) => _BulletItem(text: m, color: Colors.teal.shade700),
+          ),
           const SizedBox(height: 14),
         ],
 
-        //  Prevention 
+        //  Prevention
         if (guidance.prevention.isNotEmpty) ...[
-          _TreatmentGroupHeader(icon: Icons.shield_outlined, label: _dh(lang, 'prevention_next_season'), color: Colors.green.shade700),
+          _TreatmentGroupHeader(
+            icon: Icons.shield_outlined,
+            label: _dh(lang, 'prevention_next_season'),
+            color: Colors.green.shade700,
+          ),
           const SizedBox(height: 8),
-          ...guidance.prevention.map((p) => _BulletItem(text: p, color: Colors.green.shade700)),
+          ...guidance.prevention.map(
+            (p) => _BulletItem(text: p, color: Colors.green.shade700),
+          ),
           const SizedBox(height: 14),
         ],
 
-        //  Escalate if 
+        //  Escalate if
         if (guidance.escalateIf.isNotEmpty) ...[
-          _TreatmentGroupHeader(icon: Icons.warning_amber_rounded, label: _dh(lang, 'call_for_help_if'), color: Colors.orange.shade800),
+          _TreatmentGroupHeader(
+            icon: Icons.warning_amber_rounded,
+            label: _dh(lang, 'call_for_help_if'),
+            color: Colors.orange.shade800,
+          ),
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.all(12),
@@ -3129,18 +3545,26 @@ class _TreatmentSection extends StatelessWidget {
             ),
             child: Column(
               children: guidance.escalateIf
-                  .map((e) => _BulletItem(text: e, color: Colors.orange.shade800))
+                  .map(
+                    (e) => _BulletItem(text: e, color: Colors.orange.shade800),
+                  )
                   .toList(),
             ),
           ),
           const SizedBox(height: 14),
         ],
 
-        //  Notes 
+        //  Notes
         if (guidance.notes.isNotEmpty) ...[
-          _TreatmentGroupHeader(icon: Icons.info_outline, label: _dh(lang, 'important_notes'), color: Colors.grey.shade700),
+          _TreatmentGroupHeader(
+            icon: Icons.info_outline,
+            label: _dh(lang, 'important_notes'),
+            color: Colors.grey.shade700,
+          ),
           const SizedBox(height: 8),
-          ...guidance.notes.map((n) => _BulletItem(text: n, color: Colors.grey.shade700)),
+          ...guidance.notes.map(
+            (n) => _BulletItem(text: n, color: Colors.grey.shade700),
+          ),
           const SizedBox(height: 14),
         ],
 
@@ -3158,15 +3582,33 @@ class _TreatmentSection extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.arrow_forward_rounded, color: Colors.indigo.shade700, size: 18),
+                Icon(
+                  Icons.arrow_forward_rounded,
+                  color: Colors.indigo.shade700,
+                  size: 18,
+                ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(_dh(lang, 'next_step'), style: TextStyle(fontWeight: FontWeight.w700, color: Colors.indigo.shade700, fontSize: 13)),
+                      Text(
+                        _dh(lang, 'next_step'),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.indigo.shade700,
+                          fontSize: 13,
+                        ),
+                      ),
                       const SizedBox(height: 3),
-                      Text(guidance.nextStep, style: TextStyle(color: Colors.indigo.shade900, fontSize: 14, height: 1.4)),
+                      Text(
+                        guidance.nextStep,
+                        style: TextStyle(
+                          color: Colors.indigo.shade900,
+                          fontSize: 14,
+                          height: 1.4,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -3187,7 +3629,9 @@ class _TreatmentOptionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final title = option.title.isNotEmpty ? option.title : _dh(lang, 'treatment_options');
+    final title = option.title.isNotEmpty
+        ? option.title
+        : _dh(lang, 'treatment_options');
 
     return Container(
       width: double.infinity,
@@ -3216,7 +3660,11 @@ class _TreatmentOptionCard extends StatelessWidget {
                   color: Colors.green.shade50,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(Icons.eco_outlined, color: Colors.green.shade800, size: 18),
+                child: Icon(
+                  Icons.eco_outlined,
+                  color: Colors.green.shade800,
+                  size: 18,
+                ),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -3255,13 +3703,22 @@ class _TreatmentOptionCard extends StatelessWidget {
               color: Colors.blue.shade700,
             ),
           if (option.productName?.isNotEmpty == true)
-            _OptionFact(label: _dh(lang, 'product'), value: option.productName!),
+            _OptionFact(
+              label: _dh(lang, 'product'),
+              value: option.productName!,
+            ),
           if (option.activeIngredient?.isNotEmpty == true)
-            _OptionFact(label: _dh(lang, 'active_ingredient'), value: option.activeIngredient!),
+            _OptionFact(
+              label: _dh(lang, 'active_ingredient'),
+              value: option.activeIngredient!,
+            ),
           if (option.dosage?.isNotEmpty == true)
             _OptionFact(label: _dh(lang, 'dosage'), value: option.dosage!),
           if (option.applicationTiming?.isNotEmpty == true)
-            _OptionFact(label: _dh(lang, 'application_timing'), value: option.applicationTiming!),
+            _OptionFact(
+              label: _dh(lang, 'application_timing'),
+              value: option.applicationTiming!,
+            ),
           if (option.preHarvestIntervalDays != null)
             _OptionFact(
               label: _dh(lang, 'pre_harvest_interval'),
@@ -3278,7 +3735,10 @@ class _TreatmentOptionCard extends StatelessWidget {
               value: option.maxApplications.toString(),
             ),
           if (option.ppe?.isNotEmpty == true)
-            _OptionFact(label: _dh(lang, 'protective_equipment'), value: option.ppe!),
+            _OptionFact(
+              label: _dh(lang, 'protective_equipment'),
+              value: option.ppe!,
+            ),
           if (option.restrictions?.isNotEmpty == true)
             _OptionBlock(
               icon: Icons.warning_amber_rounded,
@@ -3393,7 +3853,11 @@ class _TreatmentGroupHeader extends StatelessWidget {
   final IconData icon;
   final String label;
   final Color color;
-  const _TreatmentGroupHeader({required this.icon, required this.label, required this.color});
+  const _TreatmentGroupHeader({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -3401,7 +3865,14 @@ class _TreatmentGroupHeader extends StatelessWidget {
       children: [
         Icon(icon, size: 16, color: color),
         const SizedBox(width: 6),
-        Text(label, style: TextStyle(fontWeight: FontWeight.w700, color: color, fontSize: 14)),
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            color: color,
+            fontSize: 14,
+          ),
+        ),
       ],
     );
   }
@@ -3424,7 +3895,9 @@ class _ChemicalRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final labelColor = isWarning ? Colors.orange.shade800 : Colors.grey.shade700;
+    final labelColor = isWarning
+        ? Colors.orange.shade800
+        : Colors.grey.shade700;
     final valueColor = highlight ? Colors.red.shade900 : Colors.grey.shade900;
 
     return Padding(
@@ -3438,9 +3911,21 @@ class _ChemicalRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: theme.textTheme.bodySmall?.copyWith(color: labelColor, fontWeight: FontWeight.w600)),
+                Text(
+                  label,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: labelColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text(value, style: theme.textTheme.bodyMedium?.copyWith(color: valueColor, fontWeight: highlight ? FontWeight.w700 : FontWeight.w500)),
+                Text(
+                  value,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: valueColor,
+                    fontWeight: highlight ? FontWeight.w700 : FontWeight.w500,
+                  ),
+                ),
               ],
             ),
           ),
@@ -3464,10 +3949,23 @@ class _BulletItem extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 6),
-            child: Container(width: 6, height: 6, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+            child: Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            ),
           ),
           const SizedBox(width: 10),
-          Expanded(child: Text(text, style: TextStyle(fontSize: 14, color: Colors.grey.shade800, height: 1.45))),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.shade800,
+                height: 1.45,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -3488,11 +3986,17 @@ class _CasePhotoSection extends StatelessWidget {
         const SizedBox(height: 20),
         Row(
           children: [
-            Icon(Icons.photo_camera_back_outlined, size: 18, color: Colors.grey.shade700),
+            Icon(
+              Icons.photo_camera_back_outlined,
+              size: 18,
+              color: Colors.grey.shade700,
+            ),
             const SizedBox(width: 8),
             Text(
               image.title,
-              style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ],
         ),
@@ -3515,10 +4019,7 @@ class _ZoomableImageDialog extends StatelessWidget {
   final String title;
   final String url;
 
-  const _ZoomableImageDialog({
-    required this.title,
-    required this.url,
-  });
+  const _ZoomableImageDialog({required this.title, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -3610,10 +4111,8 @@ class _ZoomableLocalFileImage extends StatelessWidget {
           : () {
               showDialog<void>(
                 context: context,
-                builder: (dialogContext) => _ZoomableLocalImageDialog(
-                  title: title,
-                  file: file,
-                ),
+                builder: (dialogContext) =>
+                    _ZoomableLocalImageDialog(title: title, file: file),
               );
             },
       child: exists
@@ -3649,10 +4148,7 @@ class _ZoomableLocalImageDialog extends StatelessWidget {
   final String title;
   final File file;
 
-  const _ZoomableLocalImageDialog({
-    required this.title,
-    required this.file,
-  });
+  const _ZoomableLocalImageDialog({required this.title, required this.file});
 
   @override
   Widget build(BuildContext context) {
@@ -3718,17 +4214,15 @@ class _ZoomableLocalImageDialog extends StatelessWidget {
   }
 }
 
-// 
+//
 // Treatment section  shown only when expert confirmed
-// 
+//
 
-
-
-// 
+//
 // Offline pending detail sheet
 // Shows the on-device TFLite result + bundled treatment guidance
 // before the scan is uploaded to the server.
-// 
+//
 
 class _OfflinePendingDetailSheet extends StatefulWidget {
   final PendingScanQueueEntry entry;
@@ -3736,18 +4230,25 @@ class _OfflinePendingDetailSheet extends StatefulWidget {
   const _OfflinePendingDetailSheet({required this.entry, required this.lang});
 
   @override
-  State<_OfflinePendingDetailSheet> createState() => _OfflinePendingDetailSheetState();
+  State<_OfflinePendingDetailSheet> createState() =>
+      _OfflinePendingDetailSheetState();
 }
 
-class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> {
+class _OfflinePendingDetailSheetState
+    extends State<_OfflinePendingDetailSheet> {
   DiseaseTreatmentGuidance? _guidance;
   bool _loadingGuidance = true;
 
-  String? get _rawName =>
-      widget.entry.scanMetadata?['offline_local_disease_name']?.toString().trim();
+  String? get _rawName => widget
+      .entry
+      .scanMetadata?['offline_local_disease_name']
+      ?.toString()
+      .trim();
   String? get _canonicalKey =>
-      widget.entry.scanMetadata?['offline_local_disease_key']?.toString().trim()
-      ?? normalizeDiseaseKey(_rawName ?? '');
+      widget.entry.scanMetadata?['offline_local_disease_key']
+          ?.toString()
+          .trim() ??
+      normalizeDiseaseKey(_rawName ?? '');
   String? get _severity =>
       widget.entry.scanMetadata?['offline_local_severity']?.toString().trim();
   double? get _confidence {
@@ -3761,7 +4262,9 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
     if (raw is! List) return const <Map<String, dynamic>>[];
     return raw
         .whereType<Map>()
-        .map((item) => item.map((key, value) => MapEntry(key.toString(), value)))
+        .map(
+          (item) => item.map((key, value) => MapEntry(key.toString(), value)),
+        )
         .toList(growable: false);
   }
 
@@ -3780,7 +4283,11 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
     try {
       final g = await OfflineTreatmentGuidanceService.instance
           .guidanceForDiseaseLabel(key, cropName: key.split('_').first);
-      if (mounted) setState(() { _guidance = g; _loadingGuidance = false; });
+      if (mounted)
+        setState(() {
+          _guidance = g;
+          _loadingGuidance = false;
+        });
     } catch (_) {
       if (mounted) setState(() => _loadingGuidance = false);
     }
@@ -3798,8 +4305,8 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
     final displayName = localizedName.isNotEmpty
         ? localizedName
         : displayDiseaseLabel(canonicalKey).isNotEmpty
-            ? displayDiseaseLabel(canonicalKey)
-            : (_rawName ?? 'Unknown');
+        ? displayDiseaseLabel(canonicalKey)
+        : (_rawName ?? 'Unknown');
 
     final imageFile = File(widget.entry.imagePath);
     final hasImage = imageFile.existsSync();
@@ -3817,8 +4324,12 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
           Center(
             child: Container(
               margin: const EdgeInsets.only(top: 10, bottom: 4),
-              width: 40, height: 4,
-              decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(2)),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
           Expanded(
@@ -3827,9 +4338,12 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //  On-device result badge 
+                  //  On-device result badge
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade50,
                       borderRadius: BorderRadius.circular(20),
@@ -3838,23 +4352,33 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.offline_bolt_rounded, size: 14, color: Colors.blue.shade700),
+                        Icon(
+                          Icons.offline_bolt_rounded,
+                          size: 14,
+                          color: Colors.blue.shade700,
+                        ),
                         const SizedBox(width: 6),
                         Text(
                           _dh(lang, 'on_device_ai_result'),
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.blue.shade700),
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.blue.shade700,
+                          ),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 14),
 
-                  //  Disease name 
+                  //  Disease name
                   Text(
                     displayName,
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.w800,
-                      color: isHealthy ? Colors.green.shade800 : Colors.grey.shade900,
+                      color: isHealthy
+                          ? Colors.green.shade800
+                          : Colors.grey.shade900,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -3862,10 +4386,14 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
                     spacing: 8,
                     runSpacing: 6,
                     children: [
-                      if (severity.isNotEmpty) _SeverityChip(severity: severity),
+                      if (severity.isNotEmpty)
+                        _SeverityChip(severity: severity),
                       if (confidence != null)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.grey.shade100,
                             borderRadius: BorderRadius.circular(20),
@@ -3873,13 +4401,27 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.analytics_outlined, size: 13, color: Colors.grey.shade600),
+                              Icon(
+                                Icons.analytics_outlined,
+                                size: 13,
+                                color: Colors.grey.shade600,
+                              ),
                               const SizedBox(width: 5),
                               Text(
-                                _dh(lang, 'confidence_percent', params: {
-                                  'value': (confidence * 100).toStringAsFixed(0),
-                                }),
-                                style: TextStyle(fontSize: 12, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
+                                _dh(
+                                  lang,
+                                  'confidence_percent',
+                                  params: {
+                                    'value': (confidence * 100).toStringAsFixed(
+                                      0,
+                                    ),
+                                  },
+                                ),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey.shade700,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ],
                           ),
@@ -3900,7 +4442,7 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
                       final score = item['score'] is num
                           ? (item['score'] as num).toDouble()
                           : double.tryParse(item['score']?.toString() ?? '') ??
-                              0.0;
+                                0.0;
                       return Text(
                         '- ${displayDiseaseLabel(label).isNotEmpty ? displayDiseaseLabel(label) : label}: ${(score * 100).toStringAsFixed(1)}%',
                         style: theme.textTheme.bodySmall,
@@ -3909,7 +4451,7 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
                   ],
                   const SizedBox(height: 16),
 
-                  //  Provisional notice 
+                  //  Provisional notice
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
@@ -3920,7 +4462,11 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.amber.shade800, size: 20),
+                        Icon(
+                          Icons.info_outline,
+                          color: Colors.amber.shade800,
+                          size: 20,
+                        ),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Column(
@@ -3949,20 +4495,27 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
                   ),
                   const SizedBox(height: 20),
 
-                  //  Healthy notice 
+                  //  Healthy notice
                   if (isHealthy) ...[
                     _HealthyNotice(lang: lang),
                   ] else ...[
-                    //  Offline treatment guidance 
+                    //  Offline treatment guidance
                     if (_loadingGuidance)
-                      const Center(child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: CircularProgressIndicator(),
-                      ))
-                    else if (_guidance != null && _guidance!.canShowTreatmentDetails) ...[
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    else if (_guidance != null &&
+                        _guidance!.canShowTreatmentDetails) ...[
                       Row(
                         children: [
-                          Icon(Icons.medical_services_outlined, color: Colors.green.shade700, size: 18),
+                          Icon(
+                            Icons.medical_services_outlined,
+                            color: Colors.green.shade700,
+                            size: 18,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             _dh(lang, 'offline_treatment_guide'),
@@ -3973,18 +4526,32 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
                           ),
                           const SizedBox(width: 8),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 7,
+                              vertical: 3,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.blue.shade50,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(color: Colors.blue.shade200),
                             ),
-                            child: Text(_dh(lang, 'bundled_guide'), style: TextStyle(fontSize: 10, color: Colors.blue.shade700, fontWeight: FontWeight.w600)),
+                            child: Text(
+                              _dh(lang, 'bundled_guide'),
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.blue.shade700,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 12),
-                      _TreatmentSection(guidance: _guidance!, isOffline: true, lang: lang),
+                      _TreatmentSection(
+                        guidance: _guidance!,
+                        isOffline: true,
+                        lang: lang,
+                      ),
                     ] else if (_guidance != null) ...[
                       // Guidance exists but not treatment-ready  show actions/monitoring
                       if (_guidance!.headline.isNotEmpty)
@@ -4035,14 +4602,23 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
                       ),
                   ],
 
-                  //  Scan photo 
+                  //  Scan photo
                   if (hasImage) ...[
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(Icons.camera_alt_outlined, size: 18, color: Colors.grey.shade700),
+                        Icon(
+                          Icons.camera_alt_outlined,
+                          size: 18,
+                          color: Colors.grey.shade700,
+                        ),
                         const SizedBox(width: 8),
-                        Text(L.t(lang, 'captured_photo'), style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                        Text(
+                          L.t(lang, 'captured_photo'),
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 10),
@@ -4065,10 +4641,9 @@ class _OfflinePendingDetailSheetState extends State<_OfflinePendingDetailSheet> 
   }
 }
 
-
-// 
+//
 // Inline step group  used in offline pending detail sheet
-// 
+//
 
 class _InlineStepGroup extends StatelessWidget {
   final IconData icon;
@@ -4119,8 +4694,12 @@ class _InlineStepGroup extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: Container(
-                      width: 6, height: 6,
-                      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: color,
+                        shape: BoxShape.circle,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
