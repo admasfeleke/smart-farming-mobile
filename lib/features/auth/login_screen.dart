@@ -318,6 +318,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final confirmController = TextEditingController();
     final regionOptions = ReferenceData.regions
         .where((item) => (item['is_active'] as int? ?? 1) == 1)
+        .where((item) {
+          final level = item['level']?.toString().trim().toLowerCase();
+          return level == 'woreda' || level == 'kebele';
+        })
         .map(
           (item) => MapEntry<int, String>(
             item['id'] as int,
@@ -325,7 +329,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         )
         .toList(growable: false);
-    var selectedRegionId = 3001;
+    int? selectedRegionId;
     var obscurePassword = true;
     var dialogError = '';
 
@@ -347,7 +351,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   normalizedPhone.isEmpty ||
                   password.isEmpty ||
                   confirm.isEmpty ||
-                  selectedRegionId <= 0) {
+                  selectedRegionId == null ||
+                  selectedRegionId! <= 0) {
                 setDialogState(() {
                   dialogError = _t('local_account_required');
                 });
@@ -385,7 +390,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 phone: normalizedPhone,
                 password: password,
                 email: email.isEmpty ? null : email,
-                regionId: selectedRegionId,
+                regionId: selectedRegionId!,
               );
               await _prepareFarmerSession(normalizedPhone);
               await AuthSession.saveOfflineLoginProof(
