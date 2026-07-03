@@ -45,6 +45,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   String? _error;
   Map<String, dynamic> _summary = <String, dynamic>{};
   Map<String, dynamic> _analysis = <String, dynamic>{};
+  List<Map<String, dynamic>> _sourceBreakdown = <Map<String, dynamic>>[];
   List<Map<String, dynamic>> _records = <Map<String, dynamic>>[];
   DateTime? _cachedUpdatedAt;
 
@@ -81,7 +82,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
       const perPage = 50;
 
       while (page <= 2) {
-        final result = await ApiClient.getWeatherDataPage(page: page, perPage: perPage);
+        final result = await ApiClient.getWeatherDataPage(
+          page: page,
+          perPage: perPage,
+        );
         records.addAll(result.items);
         if (!result.pagination.hasMore || result.items.length < perPage) {
           break;
@@ -90,7 +94,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
       }
 
       if (!mounted) return;
-      await LocalCacheStore.instance.write(_weatherSummaryCacheKey, _summaryPayload(summaryResponse));
+      await LocalCacheStore.instance.write(
+        _weatherSummaryCacheKey,
+        _summaryPayload(summaryResponse),
+      );
       await LocalCacheStore.instance.write(_weatherRecordsCacheKey, records);
       setState(() {
         _summary = summaryResponse['summary'] is Map<String, dynamic>
@@ -99,6 +106,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
         _analysis = summaryResponse['analysis'] is Map<String, dynamic>
             ? summaryResponse['analysis'] as Map<String, dynamic>
             : <String, dynamic>{};
+        _sourceBreakdown = _sourceBreakdownFromResponse(summaryResponse);
         _records = records;
         _cachedUpdatedAt = DateTime.now();
         _loading = false;
@@ -122,18 +130,31 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   Future<void> _loadCached() async {
-    final summaryEntry = await LocalCacheStore.instance.read(_weatherSummaryCacheKey);
-    final records = await LocalCacheStore.instance.readList(_weatherRecordsCacheKey);
+    final summaryEntry = await LocalCacheStore.instance.read(
+      _weatherSummaryCacheKey,
+    );
+    final records = await LocalCacheStore.instance.readList(
+      _weatherRecordsCacheKey,
+    );
     final payload = summaryEntry?.payload;
     final summary = payload is Map<String, dynamic>
         ? payload
-        : (payload is Map ? payload.cast<String, dynamic>() : <String, dynamic>{});
+        : (payload is Map
+              ? payload.cast<String, dynamic>()
+              : <String, dynamic>{});
     final summaryMap = summary['summary'] is Map<String, dynamic>
         ? summary['summary'] as Map<String, dynamic>
         : <String, dynamic>{};
     final analysisMap = summary['analysis'] is Map<String, dynamic>
         ? summary['analysis'] as Map<String, dynamic>
         : <String, dynamic>{};
+    final sourceBreakdown = summary['source_breakdown'];
+    final sourceItems = sourceBreakdown is List
+        ? sourceBreakdown
+              .whereType<Map>()
+              .map((item) => item.cast<String, dynamic>())
+              .toList()
+        : <Map<String, dynamic>>[];
     final recordItems = (records ?? const <dynamic>[])
         .whereType<Map>()
         .map((item) => item.cast<String, dynamic>())
@@ -143,6 +164,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       setState(() {
         _summary = summaryMap;
         _analysis = analysisMap;
+        _sourceBreakdown = sourceItems;
         _records = recordItems;
         _cachedUpdatedAt = summaryEntry?.updatedAt;
       });
@@ -157,13 +179,32 @@ class _WeatherScreenState extends State<WeatherScreen> {
       'analysis': response['analysis'] is Map<String, dynamic>
           ? response['analysis'] as Map<String, dynamic>
           : <String, dynamic>{},
+      'source_breakdown': response['source_breakdown'] is List
+          ? response['source_breakdown']
+          : <dynamic>[],
     };
+  }
+
+  List<Map<String, dynamic>> _sourceBreakdownFromResponse(
+    Map<String, dynamic> response,
+  ) {
+    final sourceBreakdown = response['source_breakdown'];
+    if (sourceBreakdown is! List) {
+      return <Map<String, dynamic>>[];
+    }
+
+    return sourceBreakdown
+        .whereType<Map>()
+        .map((item) => item.cast<String, dynamic>())
+        .toList();
   }
 
   String _metric(dynamic value, {String suffix = '', int decimals = 1}) {
     if (value == null) return '--';
     if (value is num) {
-      final normalized = decimals == 0 ? value.toStringAsFixed(0) : value.toStringAsFixed(decimals);
+      final normalized = decimals == 0
+          ? value.toStringAsFixed(0)
+          : value.toStringAsFixed(decimals);
       return '$normalized$suffix';
     }
     final text = value.toString().trim();
@@ -172,7 +213,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   String _recordedAt(dynamic value) {
     final raw = value?.toString().trim() ?? '';
-    if (raw.isEmpty) return L.t(LanguageStore.notifier.value, 'weather_unknown_time');
+    if (raw.isEmpty)
+      return L.t(LanguageStore.notifier.value, 'weather_unknown_time');
     final parsed = DateTime.tryParse(raw);
     if (parsed == null) return raw;
     return DateFormat('MMM dd, yyyy HH:mm').format(parsed.toLocal());
@@ -180,22 +222,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   String _analysisText(String lang, String key) {
     const values = <String, Map<String, String>>{
-      'en': {
-        'watch_items': 'Watch items',
-        'actions': 'Recommended actions',
-      },
-      'am': {
-        'watch_items': 'የሚታዩ ነገሮች',
-        'actions': 'የሚመከሩ እርምጃዎች',
-      },
+      'en': {'watch_items': 'Watch items', 'actions': 'Recommended actions'},
+      'am': {'watch_items': 'የሚታዩ ነገሮች', 'actions': 'የሚመከሩ እርምጃዎች'},
       'om': {
         'watch_items': 'Wantoota hordofuu',
         'actions': 'Tarkaanfiiwwan gorfaman',
       },
-      'ti': {
-        'watch_items': 'ዝከታተሉ ነገራት',
-        'actions': 'ዝምከሩ ስጉምትታት',
-      },
+      'ti': {'watch_items': 'ዝከታተሉ ነገራት', 'actions': 'ዝምከሩ ስጉምትታት'},
     };
     return values[lang]?[key] ?? values['en']![key]!;
   }
@@ -206,221 +239,381 @@ class _WeatherScreenState extends State<WeatherScreen> {
       valueListenable: LanguageStore.notifier,
       builder: (context, lang, _) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text(L.t(lang, 'weatherStation')),
-          ),
+          appBar: AppBar(title: Text(L.t(lang, 'weatherStation'))),
           body: FarmSurface(
             padding: EdgeInsets.zero,
             child: RefreshIndicator(
               onRefresh: _load,
               child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                if (widget.snapshot != null) _CurrentWeatherCard(snapshot: widget.snapshot!, lang: lang),
-                if (widget.snapshot != null) const SizedBox(height: 16),
-                if (_error != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      L.t(lang, 'weather_refresh_failed', params: {'error': _error!}),
-                      style: TextStyle(color: Theme.of(context).colorScheme.error),
-                    ),
-                  ),
-                if (_cachedUpdatedAt != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      L.t(
-                        lang,
-                        'weather_saved_updated_at',
-                        params: {'time': DateFormat('MMM dd, HH:mm').format(_cachedUpdatedAt!)},
+                padding: const EdgeInsets.all(16),
+                children: [
+                  if (widget.snapshot != null)
+                    _CurrentWeatherCard(snapshot: widget.snapshot!, lang: lang),
+                  if (widget.snapshot != null) const SizedBox(height: 16),
+                  if (_error != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Text(
+                        L.t(
+                          lang,
+                          'weather_refresh_failed',
+                          params: {'error': _error!},
+                        ),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                       ),
-                      style: Theme.of(context).textTheme.bodySmall,
                     ),
-                  ),
-                if (_loading)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24),
-                    child: Center(child: CircularProgressIndicator()),
-                  )
-                else ...[
-                  FarmPanel(
-                    color: const Color(0xFFFFFDF5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                  if (_cachedUpdatedAt != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Text(
+                        L.t(
+                          lang,
+                          'weather_saved_updated_at',
+                          params: {
+                            'time': DateFormat(
+                              'MMM dd, HH:mm',
+                            ).format(_cachedUpdatedAt!),
+                          },
+                        ),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                  if (_loading)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  else ...[
+                    if (_sourceBreakdown.isNotEmpty) ...[
+                      FarmPanel(
+                        color: const Color(0xFFF7FAEE),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              width: 44,
-                              height: 44,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF4F7D12).withValues(alpha: 0.13),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: const Icon(
-                                Icons.monitor_heart_outlined,
-                                color: Color(0xFF4F7D12),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                L.t(lang, 'weather_monitoring_title'),
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                  color: const Color(0xFF1E2A12),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.data_usage_rounded,
+                                  color: Colors.green.shade800,
                                 ),
-                              ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    L.t(lang, 'weather_sources'),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(fontWeight: FontWeight.w900),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: _sourceBreakdown.map((item) {
+                                final source =
+                                    (item['data_source'] ?? 'unknown')
+                                        .toString();
+                                final records = (item['records'] ?? 0)
+                                    .toString();
+                                final latest = _recordedAt(
+                                  item['latest_recorded_at'],
+                                );
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 10,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                      color: Colors.green.shade100,
+                                    ),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        source,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w900,
+                                              color: const Color(0xFF294B14),
+                                            ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '$records ${L.t(lang, "weather_records_label")}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                              color: Colors.grey.shade700,
+                                            ),
+                                      ),
+                                      if (latest.trim().isNotEmpty) ...[
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          latest,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                color: Colors.grey.shade600,
+                                              ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        Text(
-                          (_analysis['headline']?.toString().trim().isNotEmpty ?? false)
-                              ? _analysis['headline'].toString()
-                              : L.t(lang, 'weather_monitoring_stable'),
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: Colors.grey.shade800,
-                          ),
-                        ),
-                        if (_analysis['actions'] is List &&
-                            (_analysis['actions'] as List).isNotEmpty) ...[
-                          const SizedBox(height: 14),
-                          Text(
-                            _analysisText(lang, 'actions'),
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          ...(_analysis['actions'] as List<dynamic>).take(2).map(
-                            (item) => _WeatherActionRow(text: item.toString()),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  FarmSectionTitle(
-                    icon: Icons.insights_rounded,
-                    title: L.t(lang, 'weather_summary_title'),
-                    subtitle: L.t(lang, 'weatherMonitoringSubtitle'),
-                  ),
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: [
-                      _WeatherMetricCard(
-                        icon: Icons.thermostat_rounded,
-                        color: Colors.orange.shade700,
-                        label: L.t(lang, 'weather_avg_temp'),
-                        value: _metric(_summary['avg_temperature'], suffix: ' C'),
                       ),
-                      _WeatherMetricCard(
-                        icon: Icons.water_drop_outlined,
-                        color: Colors.blue.shade700,
-                        label: L.t(lang, 'weather_avg_humidity'),
-                        value: _metric(_summary['avg_humidity'], suffix: '%'),
-                      ),
-                      _WeatherMetricCard(
-                        icon: Icons.grain_rounded,
-                        color: Colors.indigo.shade700,
-                        label: L.t(lang, 'weather_total_rain'),
-                        value: _metric(_summary['total_precipitation'], suffix: ' mm'),
-                      ),
-                      _WeatherMetricCard(
-                        icon: Icons.air_rounded,
-                        color: Colors.teal.shade700,
-                        label: L.t(lang, 'weather_avg_wind'),
-                        value: _metric(_summary['avg_wind_speed'], suffix: ' km/h'),
-                      ),
-                      _WeatherMetricCard(
-                        icon: Icons.opacity_rounded,
-                        color: Colors.green.shade700,
-                        label: L.t(lang, 'weather_soil_moisture'),
-                        value: _metric(_summary['avg_soil_moisture'], suffix: '%'),
-                      ),
-                      _WeatherMetricCard(
-                        icon: Icons.storage_outlined,
-                        color: Colors.brown.shade700,
-                        label: L.t(lang, 'weather_records_label'),
-                        value: _metric(_summary['total_records'], decimals: 0),
-                      ),
+                      const SizedBox(height: 16),
                     ],
-                  ),
-                  if (_analysis['watch_items'] is List &&
-                      (_analysis['watch_items'] as List).isNotEmpty) ...[
-                    const SizedBox(height: 16),
                     FarmPanel(
-                      color: const Color(0xFFF8FBEC),
+                      color: const Color(0xFFFFFDF5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.visibility_outlined, color: Colors.amber.shade900),
-                              const SizedBox(width: 8),
+                              Container(
+                                width: 44,
+                                height: 44,
+                                decoration: BoxDecoration(
+                                  color: const Color(
+                                    0xFF4F7D12,
+                                  ).withValues(alpha: 0.13),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: const Icon(
+                                  Icons.monitor_heart_outlined,
+                                  color: Color(0xFF4F7D12),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
-                                  _analysisText(lang, 'watch_items'),
-                                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.w900,
-                                  ),
+                                  L.t(lang, 'weather_monitoring_title'),
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w900,
+                                        color: const Color(0xFF1E2A12),
+                                      ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
-                          ...(_analysis['watch_items'] as List<dynamic>).map(
-                            (item) => _WeatherActionRow(text: item.toString()),
+                          const SizedBox(height: 12),
+                          Text(
+                            (_analysis['headline']
+                                        ?.toString()
+                                        .trim()
+                                        .isNotEmpty ??
+                                    false)
+                                ? _analysis['headline'].toString()
+                                : L.t(lang, 'weather_monitoring_stable'),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.grey.shade800,
+                                ),
                           ),
+                          if (_analysis['actions'] is List &&
+                              (_analysis['actions'] as List).isNotEmpty) ...[
+                            const SizedBox(height: 14),
+                            Text(
+                              _analysisText(lang, 'actions'),
+                              style: Theme.of(context).textTheme.titleSmall
+                                  ?.copyWith(fontWeight: FontWeight.w900),
+                            ),
+                            const SizedBox(height: 8),
+                            ...(_analysis['actions'] as List<dynamic>)
+                                .take(2)
+                                .map(
+                                  (item) =>
+                                      _WeatherActionRow(text: item.toString()),
+                                ),
+                          ],
                         ],
                       ),
                     ),
-                  ],
-                  const SizedBox(height: 20),
-                  FarmSectionTitle(
-                    icon: Icons.history_rounded,
-                    title: L.t(lang, 'weather_recent_records_title'),
-                  ),
-                  if (_records.isEmpty)
-                    FarmPanel(
-                      child: Row(
-                        children: [
-                          const Icon(Icons.cloud_off_outlined),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(L.t(lang, 'weather_no_server_records_title')),
-                                Text(L.t(lang, 'weather_no_server_records_subtitle')),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  else
-                    for (final record in _records)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: FarmPanel(
-                          child: _WeatherRecordRow(
-                            lang: lang,
-                            recordedAt: _recordedAt(record['recorded_at']),
-                            temperature: _metric(record['temperature'], suffix: ' C'),
-                            humidity: _metric(record['humidity'], suffix: '%'),
-                            precipitation: _metric(record['precipitation'], suffix: ' mm'),
-                            wind: _metric(record['wind_speed'], suffix: ' km/h'),
-                            source: (record['data_source'] ?? L.t(lang, 'weather_source_unknown')).toString(),
+                    const SizedBox(height: 16),
+                    FarmSectionTitle(
+                      icon: Icons.insights_rounded,
+                      title: L.t(lang, 'weather_summary_title'),
+                      subtitle: L.t(lang, 'weatherMonitoringSubtitle'),
+                    ),
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: [
+                        _WeatherMetricCard(
+                          icon: Icons.thermostat_rounded,
+                          color: Colors.orange.shade700,
+                          label: L.t(lang, 'weather_avg_temp'),
+                          value: _metric(
+                            _summary['avg_temperature'],
+                            suffix: ' C',
                           ),
                         ),
+                        _WeatherMetricCard(
+                          icon: Icons.water_drop_outlined,
+                          color: Colors.blue.shade700,
+                          label: L.t(lang, 'weather_avg_humidity'),
+                          value: _metric(_summary['avg_humidity'], suffix: '%'),
+                        ),
+                        _WeatherMetricCard(
+                          icon: Icons.grain_rounded,
+                          color: Colors.indigo.shade700,
+                          label: L.t(lang, 'weather_total_rain'),
+                          value: _metric(
+                            _summary['total_precipitation'],
+                            suffix: ' mm',
+                          ),
+                        ),
+                        _WeatherMetricCard(
+                          icon: Icons.air_rounded,
+                          color: Colors.teal.shade700,
+                          label: L.t(lang, 'weather_avg_wind'),
+                          value: _metric(
+                            _summary['avg_wind_speed'],
+                            suffix: ' km/h',
+                          ),
+                        ),
+                        _WeatherMetricCard(
+                          icon: Icons.opacity_rounded,
+                          color: Colors.green.shade700,
+                          label: L.t(lang, 'weather_soil_moisture'),
+                          value: _metric(
+                            _summary['avg_soil_moisture'],
+                            suffix: '%',
+                          ),
+                        ),
+                        _WeatherMetricCard(
+                          icon: Icons.storage_outlined,
+                          color: Colors.brown.shade700,
+                          label: L.t(lang, 'weather_records_label'),
+                          value: _metric(
+                            _summary['total_records'],
+                            decimals: 0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (_analysis['watch_items'] is List &&
+                        (_analysis['watch_items'] as List).isNotEmpty) ...[
+                      const SizedBox(height: 16),
+                      FarmPanel(
+                        color: const Color(0xFFF8FBEC),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.visibility_outlined,
+                                  color: Colors.amber.shade900,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    _analysisText(lang, 'watch_items'),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(fontWeight: FontWeight.w900),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            ...(_analysis['watch_items'] as List<dynamic>).map(
+                              (item) =>
+                                  _WeatherActionRow(text: item.toString()),
+                            ),
+                          ],
+                        ),
                       ),
+                    ],
+                    const SizedBox(height: 20),
+                    FarmSectionTitle(
+                      icon: Icons.history_rounded,
+                      title: L.t(lang, 'weather_recent_records_title'),
+                    ),
+                    if (_records.isEmpty)
+                      FarmPanel(
+                        child: Row(
+                          children: [
+                            const Icon(Icons.cloud_off_outlined),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    L.t(
+                                      lang,
+                                      'weather_no_server_records_title',
+                                    ),
+                                  ),
+                                  Text(
+                                    L.t(
+                                      lang,
+                                      'weather_no_server_records_subtitle',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      for (final record in _records)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: FarmPanel(
+                            child: _WeatherRecordRow(
+                              lang: lang,
+                              recordedAt: _recordedAt(record['recorded_at']),
+                              temperature: _metric(
+                                record['temperature'],
+                                suffix: ' C',
+                              ),
+                              humidity: _metric(
+                                record['humidity'],
+                                suffix: '%',
+                              ),
+                              precipitation: _metric(
+                                record['precipitation'],
+                                suffix: ' mm',
+                              ),
+                              wind: _metric(
+                                record['wind_speed'],
+                                suffix: ' km/h',
+                              ),
+                              source:
+                                  (record['data_source'] ??
+                                          L.t(lang, 'weather_source_unknown'))
+                                      .toString(),
+                            ),
+                          ),
+                        ),
+                  ],
                 ],
-              ],
               ),
             ),
           ),
@@ -434,10 +627,7 @@ class _CurrentWeatherCard extends StatelessWidget {
   final WeatherOverviewSnapshot snapshot;
   final String lang;
 
-  const _CurrentWeatherCard({
-    required this.snapshot,
-    required this.lang,
-  });
+  const _CurrentWeatherCard({required this.snapshot, required this.lang});
 
   @override
   Widget build(BuildContext context) {
@@ -447,7 +637,9 @@ class _CurrentWeatherCard extends StatelessWidget {
             lang,
             'updated_at',
             params: {
-              'time': DateFormat('HH:mm').format(snapshot.lastUpdated!.toLocal()),
+              'time': DateFormat(
+                'HH:mm',
+              ).format(snapshot.lastUpdated!.toLocal()),
             },
           );
 
@@ -461,7 +653,8 @@ class _CurrentWeatherCard extends StatelessWidget {
               child: Image.asset(
                 'assets/images/home/field_weather.jpg',
                 fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => const ColoredBox(color: Color(0xFF294B14)),
+                errorBuilder: (_, _, _) =>
+                    const ColoredBox(color: Color(0xFF294B14)),
               ),
             ),
             Positioned.fill(
@@ -489,9 +682,15 @@ class _CurrentWeatherCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.20),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.24)),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.24),
+                      ),
                     ),
-                    child: const Icon(Icons.wb_sunny_rounded, color: Colors.white, size: 31),
+                    child: const Icon(
+                      Icons.wb_sunny_rounded,
+                      color: Colors.white,
+                      size: 31,
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -500,20 +699,27 @@ class _CurrentWeatherCard extends StatelessWidget {
                       children: [
                         Text(
                           '${L.t(lang, 'farm_location')}: ${snapshot.locationText ?? L.t(lang, 'getting_location')}',
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                         if ((snapshot.regionText ?? '').trim().isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Text(
                             '${L.t(lang, 'region')}: ${snapshot.regionText}',
-                            style: TextStyle(color: Colors.white.withValues(alpha: 0.88)),
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.88),
+                            ),
                           ),
                         ],
                         if ((snapshot.latLonText ?? '').trim().isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Text(
                             '${L.t(lang, 'lat_lon')}: ${snapshot.latLonText}',
-                            style: TextStyle(color: Colors.white.withValues(alpha: 0.84)),
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.84),
+                            ),
                           ),
                         ],
                         const SizedBox(height: 4),
@@ -528,30 +734,39 @@ class _CurrentWeatherCard extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             snapshot.detailText.trim(),
-                            style: TextStyle(color: Colors.white.withValues(alpha: 0.84)),
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.84),
+                            ),
                           ),
                         ],
                         const SizedBox(height: 6),
                         Text(
                           updatedText,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.76),
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Colors.white.withValues(alpha: 0.76),
+                              ),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(width: 12),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.22),
+                      ),
                     ),
                     child: Text(
                       snapshot.tempText,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
                             fontWeight: FontWeight.w900,
                             color: Colors.white,
                           ),
@@ -587,34 +802,34 @@ class _WeatherMetricCard extends StatelessWidget {
       child: FarmPanel(
         padding: const EdgeInsets.all(14),
         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(icon, color: color, size: 21),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(14),
               ),
-              const SizedBox(height: 10),
-              Text(
-                label,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.grey.shade700,
-                  fontWeight: FontWeight.w700,
-                ),
+              child: Icon(icon, color: color, size: 21),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Colors.grey.shade700,
+                fontWeight: FontWeight.w700,
               ),
-              const SizedBox(height: 8),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  color: const Color(0xFF1E2A12),
-                ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w900,
+                color: const Color(0xFF1E2A12),
               ),
-            ],
+            ),
+          ],
         ),
       ),
     );
@@ -647,10 +862,10 @@ class _WeatherActionRow extends StatelessWidget {
             child: Text(
               text,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey.shade800,
-                    fontWeight: FontWeight.w600,
-                    height: 1.35,
-                  ),
+                color: Colors.grey.shade800,
+                fontWeight: FontWeight.w600,
+                height: 1.35,
+              ),
             ),
           ),
         ],
@@ -691,7 +906,9 @@ class _WeatherRecordRow extends StatelessWidget {
             Expanded(
               child: Text(
                 recordedAt,
-                style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w900),
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
               ),
             ),
             Text(
@@ -708,10 +925,19 @@ class _WeatherRecordRow extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            _WeatherMiniChip(label: L.t(lang, 'temperature'), value: temperature),
+            _WeatherMiniChip(
+              label: L.t(lang, 'temperature'),
+              value: temperature,
+            ),
             _WeatherMiniChip(label: L.t(lang, 'humidity'), value: humidity),
-            _WeatherMiniChip(label: L.t(lang, 'precipitation'), value: precipitation),
-            _WeatherMiniChip(label: L.t(lang, 'weather_source_unknown'), value: source),
+            _WeatherMiniChip(
+              label: L.t(lang, 'precipitation'),
+              value: precipitation,
+            ),
+            _WeatherMiniChip(
+              label: L.t(lang, 'weather_source_unknown'),
+              value: source,
+            ),
           ],
         ),
       ],
@@ -736,9 +962,9 @@ class _WeatherMiniChip extends StatelessWidget {
       child: Text(
         '$label: $value',
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: const Color(0xFF3C640B),
-              fontWeight: FontWeight.w900,
-            ),
+          color: const Color(0xFF3C640B),
+          fontWeight: FontWeight.w900,
+        ),
       ),
     );
   }

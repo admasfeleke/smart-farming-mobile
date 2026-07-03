@@ -1,0 +1,1972 @@
+--- PAGE 1 ---
+ 
+DALOCHA POLYTECHNIC COLLEGE 
+Smart Farm Farmer App: AI-Assisted Offline-First Smart Farming System 
+for Disease Detection, Soil Health Monitoring, Weather Monitoring, Alerts, 
+and Farmer-Centered Advisory Services 
+ 
+Prepared by: Admasu Feleke and Mukemil Busser 
+Institution: Dalocha Polytechnic College 
+Submitted to: Technology Validation Team 
+Submitted in partial fulfillment of the requirements for career promotion from 
+Assistant Instructor to Instructor 
+Approved by the Technology Transfer Core, Dalocha Polytechnic College 
+Submission Date: April 20, 2026 
+ 
+ 
+April 20, 2026, 
+, Central Ethiopia
+
+
+--- PAGE 2 ---
+I | P a g e  
+ 
+Approval Page 
+This is to certify that this project documentation entitled: 
+Smart Farm Farmer App: AI-Assisted Offline-First Smart Farming System for Disease 
+Detection, Soil Health Monitoring, Weather Monitoring, Alerts, and Farmer-Centered 
+Advisory Services 
+was prepared by Admasu Feleke and Mukemil Busser under the supervision of Technology 
+validation team and is approved for submission as a senior software engineering project 
+document. 
+ 
+Technology Validation Team Representative: ____________________ 
+Signature: ____________________ 
+Date: ____________________ 
+ 
+Technology Transfer Core Representative: ____________________ 
+Signature: ____________________ 
+Date: ____________________ 
+ 
+Technology Transfer Core Vice Dean: ____________________ 
+Signature: ____________________ 
+Date: ____________________ 
+ 
+ 
+ 
+  
+
+--- PAGE 3 ---
+II | P a g e  
+ 
+Declaration 
+ 
+We declare that this documentation is our original work and has not been submitted to any other 
+institution for academic award or promotion evaluation in the same form. All sources of 
+information used in this document have been appropriately acknowledged. 
+ 
+Name: Admasu Feleke 
+Signature: ____________________ 
+Date: ____________________ 
+ 
+ 
+Name: Mukemil Busser 
+Signature: ____________________ 
+Date: ____________________ 
+ 
+  
+
+--- PAGE 4 ---
+III | P a g e  
+ 
+Acknowledgment 
+ 
+This project was developed as part of a professional academic and institutional effort to apply 
+modern software engineering practices to practical agricultural problems. Special appreciation is 
+extended to the Technology Transfer Core of Dalocha Polytechnic College for approving and 
+supporting the practical relevance of the work. Gratitude is also extended to the project 
+reviewers, institutional leaders, colleagues, and all domain contributors whose feedback shaped 
+the functional direction of the system. 
+ 
+Acknowledgment is further extended to the open-source software communities and framework 
+maintainers whose tools made implementation possible, including the Flutter, Laravel, and 
+MySQL ecosystems. 
+ 
+ 
+ 
+ 
+  
+
+--- PAGE 5 ---
+IV | P a g e  
+ 
+Abstract 
+ 
+Agriculture remains highly dependent on timely decisions related to crop disease identification, 
+farm monitoring, treatment guidance, and environmental observation. In many local farming 
+settings, however, digital systems are limited by poor connectivity, fragmented records, low 
+digital literacy, inconsistent field guidance, and lack of mobile-first farmer support. This project 
+addresses these limitations by designing and implementing the Smart Farm Farmer App, an AI-
+assisted, offline-first smart farming system that combines a farmer-centered Flutter mobile 
+application, a Laravel backend API and backoffice, and a MySQL database. 
+ 
+The system supports farm, plot, and planting management; disease scan and reporting 
+workflows; disease history; soil health monitoring; weather monitoring; alerts; localization; and 
+offline synchronization. The mobile application is intentionally designed for practical field use, 
+with simplified interaction flows, larger text hierarchy, reduced screen noise, and resilience 
+under unstable connectivity. The disease workflow supports offline and online inference-related 
+operations, evidence image capture, disease reporting, confirmation-aware treatment guidance, 
+and record synchronization with the backend. The backend provides authentication, API 
+resources, structured storage, policy-based access control, and data persistence for farmer 
+activities and review-aware workflows. 
+The implementation demonstrates how software engineering principles such as modular 
+architecture, role-aware backend policy enforcement, offline-first design, synchronization, error 
+handling, localization, and secure API integration can be applied to a real agricultural system. 
+The project contributes a practical smart farming platform tailored for real-world farmer 
+usability while remaining extensible for future production improvements such as stronger model 
+governance, richer expert workflows, and broader agricultural analytics. 
+  
+
+--- PAGE 6 ---
+V | P a g e  
+ 
+Keywords: Smart farming, offline-first mobile systems, disease detection, soil health, weather 
+monitoring, Flutter, Laravel, MySQL, farmer-centered design, agricultural decision support. 
+ 
+ 
+  
+
+--- PAGE 7 ---
+VI | P a g e  
+ 
+Table of Contents 
+Contents 
+Approval Page .................................................................................................................................. I 
+Declaration ...................................................................................................................................... II 
+Acknowledgment .......................................................................................................................... III 
+Abstract ......................................................................................................................................... IV 
+Table of Contents .......................................................................................................................... VI 
+List of Figures ................................................................................................................................ X 
+List of Tables ................................................................................................................................ XI 
+List of Acronyms and Abbreviations ........................................................................................... XII 
+Chapter One: Introduction .............................................................................................................. 1 
+1.1 Background of the Study .......................................................................................................... 1 
+1.2 Statement of the Problem .......................................................................................................... 2 
+1.3 Objectives ................................................................................................................................. 2 
+1.3.1 General Objective .............................................................................................................. 2 
+1.3.2 Specific Objectives ............................................................................................................ 3 
+1.4 Significance of the Study .......................................................................................................... 3 
+1.5 Scope of the Study .................................................................................................................... 3 
+1.6 Limitations of the Study............................................................................................................ 4 
+1.7 Methodology Overview ............................................................................................................ 5 
+1.8 Organization of the Document .................................................................................................. 5 
+Chapter Two: Review of Related Literature and Existing Systems ............................................... 6 
+2.1 Introduction ............................................................................................................................... 6 
+2.2 Concept of Smart Farming ........................................................................................................ 6 
+
+--- PAGE 8 ---
+VII | P a g e  
+ 
+2.3 AI in Agriculture ....................................................................................................................... 6 
+2.4 Mobile-Based Agricultural Decision Support .......................................................................... 6 
+2.5 Offline-First Systems in Rural Environments........................................................................... 6 
+2.6 Agricultural Disease Detection Systems ................................................................................... 7 
+2.7 Soil Health and Weather Monitoring Systems.......................................................................... 7 
+2.8 Review of Related Works ......................................................................................................... 7 
+2.9 Gap Analysis ............................................................................................................................. 9 
+2.10 Existing System Analysis ....................................................................................................... 9 
+2.11 Problems in Existing Manual or Fragmented Systems ......................................................... 10 
+Chapter Three: System Analysis and Requirements ..................................................................... 11 
+3.1 Overview of the Proposed System .......................................................................................... 11 
+3.2 Stakeholder Analysis .............................................................................................................. 11 
+3.3 Functional Requirements ........................................................................................................ 12 
+3.4 Non-Functional Requirements ................................................................................................ 13 
+3.5 User Roles and Responsibilities.............................................................................................. 14 
+3.6 Feasibility Analysis ................................................................................................................. 14 
+3.6.1 Technical Feasibility ........................................................................................................ 14 
+3.6.2 Operational Feasibility ..................................................................................................... 14 
+3.6.3 Economic Feasibility ....................................................................................................... 15 
+3.6.4 Legal and Ethical Feasibility ........................................................................................... 15 
+3.7 Use Case Analysis................................................................................................................... 16 
+3.8 Business Rules ........................................................................................................................ 18 
+3.9 Requirement Prioritization ...................................................................................................... 19 
+Chapter Four: System Design ....................................................................................................... 20 
+
+--- PAGE 9 ---
+VIII | P a g e  
+ 
+4.1 Architectural Design ............................................................................................................... 20 
+4.2 Design Principles .................................................................................................................... 21 
+4.3 Module Decomposition ........................................................................................................... 22 
+4.4 Deployment Design ................................................................................................................ 24 
+4.5 Database Design...................................................................................................................... 25 
+4.6 Data Flow Design ................................................................................................................... 27 
+4.7 Sequence Design ..................................................................................................................... 28 
+4.8 Workflow Design .................................................................................................................... 32 
+4.9 Security Design ....................................................................................................................... 35 
+4.10 Synchronization and Offline Design ..................................................................................... 35 
+4.11 Localization Design .............................................................................................................. 35 
+4.12 UI/UX Design Considerations for Farmers .......................................................................... 36 
+Chapter Five: System Implementation.......................................................................................... 39 
+5.1 Development Environment ..................................................................................................... 39 
+5.2 Tools and Technologies Used ................................................................................................. 40 
+5.3 Flutter Frontend Implementation ............................................................................................ 40 
+5.4 Laravel Backend Implementation ........................................................................................... 40 
+5.5 MySQL Database Implementation ......................................................................................... 41 
+5.6 Authentication and Authorization Implementation ................................................................ 41 
+5.7 Farm, Plot, and Planting Module Implementation .................................................................. 41 
+5.8 Scan and Disease Detection Module Implementation ............................................................ 42 
+5.9 Disease History and Evidence Handling ................................................................................. 42 
+5.10 Soil Health Module Implementation ..................................................................................... 42 
+5.11 Weather Monitoring Module Implementation ...................................................................... 42 
+
+--- PAGE 10 ---
+IX | P a g e  
+ 
+5.12 Alerts and Advisory Module Implementation ...................................................................... 42 
+5.13 Offline Sync and Cache Implementation .............................................................................. 42 
+5.14 Localization Implementation ................................................................................................ 43 
+5.15 Performance and Optimization Measures ............................................................................. 43 
+5.16 Security Measures Implemented ........................................................................................... 43 
+Chapter Six: Testing, Evaluation, and Results.............................................................................. 52 
+6.1 Testing Strategy ...................................................................................................................... 52 
+6.2 Unit Testing ............................................................................................................................ 52 
+6.3 Integration Testing .................................................................................................................. 52 
+6.4 System Testing ........................................................................................................................ 52 
+6.5 User Acceptance Testing ........................................................................................................ 52 
+6.6 Performance Evaluation .......................................................................................................... 53 
+6.7 Offline and Online Consistency Evaluation ........................................................................... 53 
+6.8 Disease Detection Reliability Discussion ............................................................................... 53 
+6.9 Usability Evaluation for Farmers ............................................................................................ 53 
+6.10 Results and Findings ............................................................................................................. 54 
+6.11 Challenges Encountered and Mitigation ............................................................................... 54 
+Chapter Seven: Conclusion and Recommendations ..................................................................... 59 
+7.1 Conclusion .............................................................................................................................. 59 
+7.2 Contributions of the Project .................................................................................................... 59 
+7.3 Recommendations for Future Work........................................................................................ 60 
+7.4 Production Readiness Recommendations ............................................................................... 60 
+References ..................................................................................................................................... 61 
+ 
+
+--- PAGE 11 ---
+X | P a g e  
+ 
+List of Figures 
+Figure 3.2. Use case Diagram ....................................................................................................... 17 
+Figure 4.1. High Level System Architecture Diagram ................................................................. 21 
+Figure 4.2. Component Diagram .................................................................................................. 23 
+Figure 4.3. Deployment Diagram ................................................................................................. 24 
+Figure 4.4 Entity Relationship Diagram ....................................................................................... 25 
+Figure 4.5. Data Flow Diagram .................................................................................................... 27 
+Figure 4.6. Sequence Diagram for Login and Session Establishment .......................................... 28 
+Figure 4.7. Sequence Diagram for offline scan capture and later sync ........................................ 29 
+Figure 4.8. Sequence Diagram for Farm/Plot/Planting sync ........................................................ 30 
+Figure 4.6. Sequence Diagram scan to history/update .................................................................. 31 
+Figure 4.11Activity Diagram for treatment guidance confirmation workflow ............................. 33 
+Figure 4.12 Stale diagram for sync item lifecycle ........................................................................ 34 
+Figure 5.1: Login screen ............................................................................................................... 45 
+Figure 5.2: Home dashboard ......................................................................................................... 46 
+Figure 5.3: - My Farm screen ....................................................................................................... 47 
+Figure 5.4: - Scan screen ............................................................................................................... 48 
+Figure 5.5:- Disease history screen ............................................................................................... 49 
+Figure 5.6:- Soil health screen ...................................................................................................... 50 
+ 
+  
+
+--- PAGE 12 ---
+XI | P a g e  
+ 
+List of Tables 
+Table 2.1: Summary comparison of related works ......................................................................... 7 
+Table 2.2: Gap analysis between existing approaches and the proposed system ........................... 9 
+Table 3.1: Stakeholders and responsibilities ................................................................................. 11 
+Table 3.2: Functional requirements specification ......................................................................... 12 
+Table 3.3: Non-functional requirements specification.................................................................. 13 
+Table 3.4: Business rules .............................................................................................................. 18 
+Table 3.5: Requirement prioritization summary ........................................................................... 19 
+Table 4.2: Major database entities and purpose ............................................................................ 26 
+Table 4.1: Key design decisions and rationale.............................................................................. 36 
+Table 4.3: API endpoint summary ................................................................................................ 37 
+Table 5.1: Development environment and tools ........................................................................... 39 
+Table 5.2: Major technologies and frameworks used ................................................................... 40 
+Table 5.3: Implemented modules versus planned modules .......................................................... 50 
+Table 6.1: Functional test cases and results .................................................................................. 55 
+Table 6.2: Module-wise testing summary ..................................................................................... 56 
+Table 6.3: Performance and reliability observations .................................................................... 56 
+Table 6.4: Offline versus online alignment observations ............................................................. 57 
+Table 6.5: Known limitations and mitigation actions ................................................................... 58 
+ 
+
+--- PAGE 13 ---
+XII | P a g e  
+ 
+List of Acronyms and Abbreviations 
+ 
+• API: Application Programming Interface 
+• AI: Artificial Intelligence 
+• CRUD: Create, Read, Update, Delete 
+• DBMS: Database Management System 
+• ERD: Entity Relationship Diagram 
+• HTTP: Hypertext Transfer Protocol 
+• JSON: JavaScript Object Notation 
+• MVC: Model View Controller 
+• PPE: Personal Protective Equipment 
+• PHI: Pre-Harvest Interval 
+• REI: Re-Entry Interval 
+• REST: Representational State Transfer 
+• UI: User Interface 
+• UX: User Experience 
+• UUID: Universally Unique Identifie
+
+--- PAGE 14 ---
+1 | P a g e  
+ 
+Chapter One: Introduction 
+1.1 Background of the Study 
+Agriculture increasingly depends on accurate, timely, and context-aware digital information. 
+Farmers need practical assistance in managing farms, monitoring crop health, detecting diseases 
+early, recording evidence, observing environmental conditions, and acting on guidance before 
+problems become severe. In many field conditions, however, software systems fail because they 
+assume continuous internet connectivity, high digital literacy, or workstation-based access. 
+These assumptions do not match many real-world agricultural environments. 
+ 
+The Smart Farm Farmer App was developed to address these practical gaps through a mobile-
+first and offline-first architecture. The system integrates a Flutter-based farmer application, a 
+Laravel backend API and administrative backoffice, and a MySQL database. The 
+implementation supports real farm workflows including farm registration, plot management, 
+planting records, disease scan operations, disease history, evidence-supported reporting, soil 
+health monitoring, weather monitoring, alerts, and farmer-oriented advisory access. 
+ 
+Unlike generic agricultural record systems, this project specifically emphasizes usability for 
+actual farmers. The mobile interface is simplified to reduce cognitive load, support unstable 
+connectivity, and improve readability. The system also incorporates structured disease-related 
+workflows that acknowledge the operational importance of evidence images, treatment guidance 
+safety, offline capture, and synchronization. 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 15 ---
+2 | P a g e  
+ 
+ 
+1.2 Statement of the Problem 
+ 
+In many farming environments, operational challenges include: 
+ 
+• fragmented or paper-based farm records 
+• late identification of crop disease symptoms 
+• weak continuity between field capture and central reporting 
+• poor connectivity that interrupts digital workflows 
+• lack of mobile systems designed for farmer usability 
+• difficulty accessing practical treatment or monitoring guidance 
+• limited integration between farm records, disease history, weather context, and alerting 
+mechanisms 
+ 
+These gaps reduce timely decision-making and make it difficult for farmers and support 
+personnel to act on reliable, traceable information. 
+ 
+ 
+1.3 Objectives 
+1.3.1 General Objective 
+To design and implement an offline-first, farmer-centered smart farming system that supports 
+disease detection workflows, farm records management, soil and weather monitoring, alerts, and 
+practical advisory support using mobile and web technologies. 
+
+--- PAGE 16 ---
+3 | P a g e  
+ 
+1.3.2 Specific Objectives 
+• To develop a mobile application for farmers using Flutter. 
+• To implement a Laravel backend API and administrative backoffice. 
+• To design a MySQL database that stores farm, plot, planting, disease, soil, weather, and alert-
+related information. 
+• To support disease scan and disease history workflows with evidence images. 
+• To provide offline-first capture and synchronization behavior for unreliable networks. 
+• To support soil health and weather monitoring views. 
+• To support farmer-readable alerts and advisory flows. 
+• To provide multilingual support for key user-facing workflows. 
+• To improve usability for real farmers through simplified interaction design. 
+1.4 Significance of the Study 
+This project is significant because it demonstrates a practical software engineering solution 
+tailored to agricultural field conditions. It contributes: 
+• a farmer-oriented mobile system rather than a purely administrative system 
+• an offline-capable workflow suitable for weak-connectivity environments 
+• a structured integration of mobile frontend, API backend, and relational database 
+• a design approach that considers usability, localization, synchronization, and evidence capture 
+• a model for digital agriculture projects that must remain useful under real operational 
+constraints 
+1.5 Scope of the Study 
+The scope of this project includes: 
+• mobile-based farmer interaction using Flutter 
+• backend API services implemented in Laravel 
+
+--- PAGE 17 ---
+4 | P a g e  
+ 
+• MySQL-based data storage 
+• user authentication and session management 
+• farm, plot, and planting management 
+• disease scan and disease reporting workflows 
+• disease history and image evidence access 
+• soil health monitoring 
+• weather monitoring 
+• alerts and advisory-related screens 
+• localization support 
+• offline synchronization and retry behavior 
+ 
+The scope does not include: 
+ 
+• large-scale national agricultural analytics 
+• fully autonomous agronomic decision-making without human oversight 
+• guaranteed clinical-level disease diagnosis 
+• hardware IoT deployment as a mandatory requirement for use 
+ 
+1.6 Limitations of the Study 
+ 
+• AI disease-related outputs depend on available model behavior and the quality of captured 
+images. 
+• Some treatment decisions still require confirmation, supervision, or approved reference data. 
+
+--- PAGE 18 ---
+5 | P a g e  
+ 
+• Performance and responsiveness can vary under poor devices and unstable networks. 
+• Exact quantitative evaluation results require controlled measurement sessions and should be 
+inserted after formal testing. 
+• Some backend-dependent textual outputs may still require further localization refinement. 
+ 
+1.7 Methodology Overview 
+The project followed a practical software engineering approach combining requirements 
+identification, modular design, implementation, synchronization-aware workflows, iterative 
+refinement, and interface simplification. The system was engineered around real usage 
+conditions rather than laboratory assumptions. 
+1.8 Organization of the Document 
+This document is organized into seven chapters. Chapter One presents the introductory 
+foundation of the study. Chapter Two reviews related works and existing systems. Chapter Three 
+describes system analysis and requirements. Chapter Four presents the design of the proposed 
+system. Chapter Five discusses implementation. Chapter Six presents testing, evaluation, and 
+results. Chapter Seven concludes the work and presents recommendations for future 
+improvement. 
+ 
+
+--- PAGE 19 ---
+6 | P a g e  
+ 
+Chapter Two: Review of Related Literature and Existing Systems 
+2.1 Introduction 
+This chapter reviews relevant concepts, prior system approaches, and gaps that justify the 
+development of the Smart Farm Farmer App. 
+2.2 Concept of Smart Farming 
+Smart farming applies digital technologies to improve decision-making in agricultural 
+production. Typical capabilities include crop monitoring, environmental observation, record 
+management, prediction, disease recognition, alerts, and advisory support. Effective smart 
+farming systems must translate technical inputs into usable field actions. 
+2.3 AI in Agriculture 
+Artificial intelligence in agriculture is commonly used for disease identification, yield 
+estimation, pattern recognition, irrigation support, and anomaly detection. However, usefulness 
+depends not only on model output but also on workflow context, evidence quality, user trust, and 
+safe action guidance. 
+2.4 Mobile-Based Agricultural Decision Support 
+Mobile applications are critical for agriculture because they bring data entry, observation, and 
+feedback directly to the field. However, many systems are limited by overly complex interfaces, 
+lack of offline support, or weak alignment with farmer realities. 
+ 
+ 
+2.5 Offline-First Systems in Rural Environments 
+Offline-first design is especially important in agricultural environments where internet access is 
+unstable, intermittent, or unavailable at the point of use. A system that loses its usefulness 
+whenever connectivity drops is not operationally reliable for fieldwork. 
+
+--- PAGE 20 ---
+7 | P a g e  
+ 
+2.6 Agricultural Disease Detection Systems 
+Disease detection systems often focus on classification quality alone. In practice, a usable system 
+must also support: 
+• evidence capture 
+• reporting 
+• record history 
+• confidence-aware interpretation 
+• synchronization 
+• safety-aware guidance 
+2.7 Soil Health and Weather Monitoring Systems 
+Soil and weather context directly influence crop condition and intervention planning. When these 
+modules are disconnected from farmer workflow, the system becomes fragmented. Integrated 
+monitoring improves situational awareness. 
+2.8 Review of Related Works 
+ 
+Table 2.1: Summary comparison of related works 
+Study/System Main Focus Platform Offline 
+Support 
+Disease 
+Workflow 
+Weather/Soil 
+Support 
+Main 
+Limitation 
+Generic crop 
+advisory 
+mobile apps 
+Agronomic 
+tips and 
+seasonal 
+advice 
+Mobile Limited Weak or 
+absent 
+image-
+based 
+reporting 
+Often weather 
+only 
+Little 
+evidence 
+tracking and 
+weak field 
+traceability 
+
+--- PAGE 21 ---
+8 | P a g e  
+ 
+Web-based 
+farm record 
+systems 
+Farm record 
+digitization 
+Web No Usually not 
+integrated 
+Limited Poor 
+suitability 
+for farmers 
+with 
+unstable 
+connectivity 
+Plant disease 
+classification 
+demos 
+Image 
+classification 
+only 
+Mobile/Web Sometimes 
+local 
+inference 
+Strong on 
+prediction, 
+weak on 
+workflow 
+None Do not 
+manage farm 
+context, 
+evidence, or 
+follow-up 
+guidance 
+Agricultural 
+DSS 
+dashboards 
+Monitoring 
+and reporting 
+Web/Desktop No Analyst-
+facing, not 
+farmer-
+centered 
+Often strong Weak 
+usability for 
+direct farmer 
+operation 
+Proposed 
+Smart Farm 
+Farmer App 
+Farmer-
+centered 
+smart 
+farming 
+workflow 
+Flutter mobile 
++ Laravel 
+web/API 
+Yes, 
+offline-first 
+Scan, 
+report, 
+evidence, 
+history, 
+guidance, 
+sync 
+Weather and 
+soil health 
+included 
+Requires 
+final 
+production 
+hardening 
+and 
+measured 
+evaluation 
+metrics 
+ 
+ 
+ 
+ 
+
+--- PAGE 22 ---
+9 | P a g e  
+ 
+2.9 Gap Analysis 
+Table 2.2: Gap analysis between existing approaches and the proposed system 
+Identified Gap in 
+Existing Approaches 
+Impact on Farmers Proposed System Response 
+Requires stable internet Field workflows fail in rural 
+connectivity conditions 
+Offline-first local cache, queue, and 
+delayed synchronization 
+Focuses only on 
+prediction, not workflow 
+Farmers cannot track report 
+lifecycle or evidence 
+End-to-end disease report, history, 
+evidence, and sync model 
+Designed mainly for 
+staff or analysts 
+Low adoption by farmers Simplified farmer mobile UI with 
+larger text and reduced complexity 
+Lacks farm/plot/planting 
+context 
+Disease data becomes 
+disconnected from actual field 
+units 
+Farm, plot, and planting modules 
+linked to health records 
+Poor multilingual 
+support 
+Language barrier reduces 
+usability 
+Localized farmer interface with four 
+language tracks 
+Weak safety and review 
+awareness 
+Farmers may misread provisional 
+outputs as final advice 
+Confirmation-aware treatment 
+guidance workflow 
+No alert continuity Farmers miss operational 
+reminders and warnings 
+Alerts, monitoring, and advisory 
+visibility in one app 
+ 
+2.10 Existing System Analysis 
+In the absence of a unified farmer-centered digital system, record keeping, disease observation, 
+and environmental awareness are often fragmented across manual practice, verbal instruction, or 
+disconnected digital tools. Such approaches reduce traceability, consistency, and timely action. 
+ 
+
+--- PAGE 23 ---
+10 | P a g e  
+ 
+2.11 Problems in Existing Manual or Fragmented Systems 
+• records are difficult to update and retrieve 
+• disease observations are not consistently tracked 
+• image evidence is often not tied to persistent history 
+• guidance is difficult to standardize 
+• internet-dependent tools fail in weak-connectivity locations 
+• farmer experience is often not prioritized 
+
+--- PAGE 24 ---
+11 | P a g e  
+ 
+Chapter Three: System Analysis and Requirements 
+ 
+3.1 Overview of the Proposed System 
+The proposed system is a smart farming platform composed of a farmer-facing Flutter mobile 
+application, a Laravel backend API and web backoffice, and a MySQL relational database. It 
+supports farm operations, disease reporting, soil and weather monitoring, alerts, and 
+synchronization-aware interaction. 
+3.2 Stakeholder Analysis 
+Table 3.1: Stakeholders and responsibilities 
+Stakeholder Role in the 
+System 
+Core Responsibilities 
+Farmer Primary mobile 
+user 
+Manage farms, plots, plantings, scans, history, alerts, 
+and profile 
+Supporter/Expert Backoffice 
+reviewer 
+Review disease reports, confirm guidance, inspect 
+evidence 
+Administrator System manager Manage users, roles, reference data, and operational 
+oversight 
+Technology 
+Transfer Core / 
+Institution 
+Institutional 
+sponsor 
+Support validation, adoption, and practical deployment 
+direction 
+Developer / 
+Maintainer 
+Technical owner Build, maintain, troubleshoot, and improve the system 
+Weather / external 
+data source 
+Data provider Supply weather observations or context used in 
+monitoring flows 
+ 
+
+--- PAGE 25 ---
+12 | P a g e  
+ 
+3.3 Functional Requirements 
+Table 3.2: Functional requirements specification 
+ 
+ID Functional 
+Requirement 
+Description 
+FR1 User authentication The system shall allow secure login for farmer mobile 
+users 
+FR2 Offline unlock The system shall allow offline unlock after prior 
+successful online login 
+FR3 Farm management The system shall allow farmers to create, view, update, 
+and delete farms 
+FR4 Plot management The system shall allow farmers to manage plots under 
+farms 
+FR5 Planting 
+management 
+The system shall allow farmers to record plantings per 
+plot 
+FR6 Disease scan 
+capture 
+The system shall allow farmers to capture crop images 
+and run scan logic 
+FR7 Disease report 
+submission 
+The system shall submit disease reports with context and 
+evidence 
+FR8 Disease history 
+view 
+The system shall show disease history with status and 
+guidance 
+FR9 Soil health 
+monitoring 
+The system shall display soil health records and related 
+values 
+FR10 Weather monitoring The system shall display weather information relevant to 
+the farmer 
+
+--- PAGE 26 ---
+13 | P a g e  
+ 
+FR11 Alerts and advisory The system shall display alerts and allow 
+acknowledgement where applicable 
+FR12 Offline 
+synchronization 
+The system shall synchronize pending local records with 
+the backend 
+FR13 Localization The system shall support multilingual farmer-facing UI 
+flows 
+FR14 Backoffice review The backend shall support review and confirmation 
+workflows for disease reports 
+ 
+3.4 Non-Functional Requirements 
+ 
+Table 3.3: Non-functional requirements specification 
+ 
+ID Non-Functional 
+Requirement 
+Description 
+NFR1 Usability The mobile UI shall be simple enough for practical farmer 
+use 
+NFR2 Performance Common mobile actions shall respond within acceptable 
+field-use latency 
+NFR3 Reliability The system shall preserve records during unstable 
+connectivity 
+NFR4 Security API access shall require authenticated and authorized 
+requests 
+NFR5 Maintainability The system shall use modular code structure for easier 
+maintenance 
+
+--- PAGE 27 ---
+14 | P a g e  
+ 
+NFR6 Scalability The backend shall support growth in users, farms, and 
+reports 
+NFR7 Localization quality Key screens shall support language-specific presentation 
+consistently 
+NFR8 Data integrity Farmer records shall remain correctly scoped to the 
+owning user 
+NFR9 Portability The mobile app shall run on Android devices used in the 
+target context 
+NFR10 Recoverability Queued offline records shall be retried and merged after 
+reconnection 
+ 
+3.5 User Roles and Responsibilities 
+The farmer is the primary mobile user. The mobile application is intentionally aligned to farmer 
+workflows. Backend role policies govern data authorization and administrative operations, but 
+the farmer mobile experience is simplified to farmer-appropriate tasks. 
+ 
+3.6 Feasibility Analysis 
+3.6.1 Technical Feasibility 
+The chosen technology stack is feasible because Flutter, Laravel, and MySQL are mature, widely 
+used, and appropriate for cross-platform mobile applications, REST APIs, and structured 
+relational storage. 
+3.6.2 Operational Feasibility 
+The system is operationally feasible because it addresses field realities including weak 
+connectivity and low-complexity user interaction needs. 
+
+--- PAGE 28 ---
+15 | P a g e  
+ 
+3.6.3 Economic Feasibility 
+The project uses cost-effective open-source tools and can be deployed incrementally. 
+3.6.4 Legal and Ethical Feasibility 
+The project stores operational agricultural information and evidence images and therefore must 
+be managed with appropriate user authorization, storage control, and safe treatment guidance 
+practices. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 29 ---
+16 | P a g e  
+ 
+3.7 Use Case Analysis 
+Figure 3.1. Context Diagram 
+ 
+ 
+ 
+ 
+ 
+ 
+                          
+                       
+                        
+              
+                                     
+                                       
+                                
+                             
+                               
+                                  
+
+--- PAGE 30 ---
+17 | P a g e  
+ 
+Figure 3.2. Use case Diagram 
+ 
+                           
+                     
+                     
+                        
+                      
+            
+            
+                
+            
+                     
+                    
+                
+            
+                     
+      
+                 
+               
+            
+                      
+                
+                     
+                  
+       
+
+--- PAGE 31 ---
+18 | P a g e  
+ 
+ 
+ 
+ 
+ 
+3.8 Business Rules 
+ 
+Table 3.4: Business rules 
+Rule ID Business Rule Reason 
+BR1 A farmer can access only records belonging to 
+that farmer 
+Protects ownership and 
+privacy 
+BR2 A plot must belong to exactly one farm Preserves field hierarchy 
+BR3 A planting must belong to one plot and one crop Preserves agronomic 
+traceability 
+BR4 Disease evidence shall remain linked to the 
+originating report 
+Preserves verification 
+traceability 
+BR5 Offline-created items shall remain queued until 
+synchronization succeeds 
+Prevents silent data loss 
+BR6 Mobile login is farmer-oriented while web 
+backoffice supports non-farmer roles 
+Matches product 
+boundaries 
+BR7 Treatment guidance display shall respect 
+confirmation and safety logic 
+Reduces unsafe 
+interpretation 
+BR8 Localized UI shall not override backend authority 
+rules 
+UX cannot replace 
+authorization 
+ 
+
+--- PAGE 32 ---
+19 | P a g e  
+ 
+3.9 Requirement Prioritization 
+ 
+Table 3.5: Requirement prioritization summary 
+ 
+Priority Requirement Areas 
+Must Have Login, farm/plot/planting management, scan/report flow, disease history, 
+offline sync, farmer data ownership 
+Should Have Soil health, weather, alerts, profile refresh, localization consistency 
+Could Have Advanced analytics, expanded expert dashboards, richer reporting exports 
+ 
+ 
+
+--- PAGE 33 ---
+20 | P a g e  
+ 
+Chapter Four: System Design 
+4.1 Architectural Design 
+The system follows a client-server architecture with an offline-first mobile layer. The Flutter 
+application handles user interaction, local caching, offline queueing, and synchronization. The 
+Laravel backend exposes authenticated REST APIs, business rules, and administrative access. 
+MySQL stores structured operational records. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 34 ---
+21 | P a g e  
+ 
+Figure 4.1. High Level System Architecture Diagram 
+ 
+ 
+ 
+4.2 Design Principles 
+ 
+• modularity 
+• separation of concerns 
+• offline-first interaction 
+                                                 
+                     
+         
+                                
+                  
+                            
+               
+        
+               
+                 
+              
+                 
+              
+                        
+            
+    
+
+--- PAGE 35 ---
+22 | P a g e  
+ 
+• farmer-centered usability 
+• graceful degradation under weak connectivity 
+• secure API-based integration 
+• extensibility for future agricultural features 
+4.3 Module Decomposition 
+
+--- PAGE 36 ---
+23 | P a g e  
+ 
+Figure 4.2. Component Diagram 
+ 
+                            
+                          
+           
+              
+              
+           
+                      
+                    
+                  
+              
+             
+              
+                   
+                
+               
+                           
+                   
+                
+            
+           
+            
+                     
+                    
+                        
+                 
+
+--- PAGE 37 ---
+24 | P a g e  
+ 
+ 
+ 
+4.4 Deployment Design 
+ 
+Figure 4.3. Deployment Diagram 
+ 
+ 
+ 
+ 
+ 
+ 
+                             
+                     
+           
+                        
+                        
+     
+               
+            
+               
+     
+   
+                     
+
+--- PAGE 38 ---
+25 | P a g e  
+ 
+4.5 Database Design 
+Figure 4.4 Entity Relationship Diagram 
+ 
+                                      
+     
+  
+    
+     
+  
+       
+    
+             
+         
+     
+  
+         
+         
+         
+                    
+     
+  
+       
+         
+         
+           
+  
+       
+              
+         
+  
+       
+       
+                      
+     
+  
+    
+      
+               
+  
+       
+                     
+                       
+                         
+                           
+                       
+  
+                 
+                
+         
+      
+  
+       
+             
+                
+    
+    
+    
+        
+    
+    
+
+--- PAGE 39 ---
+26 | P a g e  
+ 
+ 
+ 
+ 
+Table 4.2: Major database entities and purpose 
+ 
+Entity/Table Purpose 
+roles Defines user role categories 
+users Stores user identity, login fields, and activation state 
+farms Stores farmer-owned farm records 
+plots Stores subdivisions of farms 
+crops Stores crop reference information 
+plantings Stores crop planting records per plot 
+disease_reports Stores disease report transactions and statuses 
+disease_report_evidence Stores metadata for attached disease evidence images 
+soil_health Stores soil test or soil monitoring observations 
+alerts Stores farmer-facing alerts and status 
+personal_access_tokens 
+/ session-related records 
+Supports authenticated API session management 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 40 ---
+27 | P a g e  
+ 
+ 
+4.6 Data Flow Design 
+ 
+Figure 4.5. Data Flow Diagram 
+The DFD should show how farmer inputs, scan data, API calls, database persistence, and outputs 
+move through the system. 
+ 
+ 
+                            
+      
+         
+                            
+                   
+                                   
+           
+                                
+     
+                
+              
+                      
+            
+                
+                  
+              
+                
+                         
+
+--- PAGE 41 ---
+28 | P a g e  
+ 
+4.7 Sequence Design 
+Figure 4.6. Sequence Diagram for Login and Session Establishment 
+ 
+ 
+ 
+ 
+                                                               
+                                               
+                        
+                       
+                       
+                          
+                                    
+                                      
+               
+                        
+                     
+                                            
+                                                        
+                                      
+
+--- PAGE 42 ---
+29 | P a g e  
+ 
+Figure 4.7. Sequence Diagram for offline scan capture and later sync 
+ 
+ 
+ 
+ 
+ 
+                                                                   
+                                                                     
+                  
+                   
+                                        
+                                                    
+                                   
+                                  
+                                   
+                        
+                               
+                                    
+                                 
+              
+                                          
+                                                           
+
+--- PAGE 43 ---
+30 | P a g e  
+ 
+Figure 4.8. Sequence Diagram for Farm/Plot/Planting sync 
+ 
+                                                           
+                                                     
+                                          
+                   
+                  
+                   
+                       
+                
+                        
+                     
+                     
+                 
+                                   
+                            
+
+--- PAGE 44 ---
+31 | P a g e  
+ 
+ 
+ 
+Figure 4.6. Sequence Diagram scan to history/update 
+ 
+ 
+ 
+                                                      
+                                              
+                            
+                   
+                    
+                            
+                          
+                                           
+                     
+                                           
+
+--- PAGE 45 ---
+32 | P a g e  
+ 
+ 
+4.8 Workflow Design 
+Figure 4.10 Activity Diagram for Farmer disease reporting workflow 
+                                                                  
+                
+                       
+             
+     
+                   
+                            
+      
+          
+                                      
+                       
+                 
+  
+   
+     
+
+--- PAGE 46 ---
+33 | P a g e  
+ 
+ 
+Figure 4.11Activity Diagram for treatment guidance confirmation workflow 
+ 
+                                                                         
+                      
+                  
+         
+            
+                             
+                    
+                              
+                               
+                                 
+     
+
+--- PAGE 47 ---
+34 | P a g e  
+ 
+ 
+Figure 4.12 Stale diagram for sync item lifecycle 
+ 
+                                                 
+     
+                      
+      
+                        
+       
+                   
+      
+               
+      
+                    
+               
+                        
+           
+       
+       
+           
+              
+
+--- PAGE 48 ---
+35 | P a g e  
+ 
+ 
+ 
+4.9 Security Design 
+ 
+Security design elements include: 
+ 
+• authenticated API access 
+• role-aware server-side authorization 
+• token-based session handling 
+• protected evidence image access 
+• prevention of unauthorized cross-farmer access 
+• safe session clearing and offline unlock considerations 
+ 
+4.10 Synchronization and Offline Design 
+ 
+The mobile system stores records locally and replays or merges them with server state when 
+connectivity is restored. This is necessary because field capture must not fail when network 
+availability is poor. 
+4.11 Localization Design 
+ 
+The system uses a centralized localization structure and language state propagation to support 
+four local languages. Farmer-facing screens are designed to reduce mixed-language behavior and 
+fallback inconsistency. 
+
+--- PAGE 49 ---
+36 | P a g e  
+ 
+ 
+4.12 UI/UX Design Considerations for Farmers 
+ 
+The interface design emphasizes: 
+ 
+• simplified navigation 
+• larger readable text 
+• reduced clutter 
+• short action paths 
+• clear status indication 
+• farmer-readable messages 
+• low-distraction interaction patterns 
+ 
+Table 4.1: Key design decisions and rationale 
+ 
+Design Decision Rationale 
+Flutter for farmer mobile app Cross-platform mobile development with strong UI control 
+Laravel for backend/API Rapid API development, policies, resources, and web backoffice 
+support 
+MySQL as database Mature relational storage for structured operational data 
+Offline-first repository and 
+queue 
+Matches rural connectivity constraints 
+Farmer-only mobile scope Reduces UI complexity and aligns with actual field use 
+
+--- PAGE 50 ---
+37 | P a g e  
+ 
+Review-aware disease 
+workflow 
+Supports safer handling of disease guidance 
+Localization layer in app Supports multilingual farmer interaction 
+Evidence-linked disease 
+records 
+Improves traceability and review quality 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Table 4.3: API endpoint summary 
+ 
+Endpoint Area Example Purpose 
+/api/v1/auth/* Login, logout, session validation 
+/api/v1/farms Farm CRUD and listing 
+/api/v1/plots/* Plot CRUD and plot retrieval 
+/api/v1/plantings/* Planting CRUD and planting state 
+/api/v1/disease-reports/* Disease report submission, listing, and detail retrieval 
+/api/v1/soil-health/* Soil health retrieval and updates 
+/api/v1/weather/* or 
+health/weather routes 
+Weather and related monitoring data 
+
+--- PAGE 51 ---
+38 | P a g e  
+ 
+/api/v1/alerts/* Alert retrieval and acknowledgement 
+/api/v1/profile/* Profile refresh and user-related mobile data 
+ 
+ 
+ 
+
+--- PAGE 52 ---
+39 | P a g e  
+ 
+Chapter Five: System Implementation 
+ 
+5.1 Development Environment 
+ 
+Table 5.1: Development environment and tools 
+ 
+Tool/Environment Purpose 
+Flutter SDK Mobile application development 
+Dart Flutter application language 
+Laravel Backend API and backoffice implementation 
+PHP Laravel runtime language 
+MySQL Relational data storage 
+VS Code / code editor Development and maintenance 
+Android device / 
+emulator 
+Mobile testing and validation 
+Git Version control 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 53 ---
+40 | P a g e  
+ 
+5.2 Tools and Technologies Used 
+Table 5.2: Major technologies and frameworks used 
+Technology / Framework Project Use 
+Flutter Farmer-facing mobile app 
+Dart Mobile application logic 
+Laravel REST API, resources, middleware, policies, backoffice 
+MySQL Persistent structured data 
+Sanctum / token-based auth API authentication flow 
+Local storage / secure storage Session persistence and offline unlock support 
+Offline sync service Pending queue replay and merge logic 
+On-device inference assets Offline disease-related scan support 
+ 
+5.3 Flutter Frontend Implementation 
+The mobile frontend was implemented in Flutter to support cross-platform delivery, consistent 
+interface behavior, and modular feature development. The app includes modules for login, home 
+dashboard, farm management, disease scanning, disease history, alerts, weather, soil health, 
+profile, and more. 
+ 
+5.4 Laravel Backend Implementation 
+ 
+The backend API was implemented in Laravel to manage authentication, business rules, data 
+access, file handling, and resource delivery. Laravel policies and API resources support 
+structured and secure data exchange. 
+ 
+
+--- PAGE 54 ---
+41 | P a g e  
+ 
+5.5 MySQL Database Implementation 
+ 
+MySQL stores structured records required for core system operations including farmer data, farm 
+hierarchy, disease reports, image evidence, and monitoring data. 
+ 
+ 
+5.6 Authentication and Authorization Implementation 
+ 
+Authentication uses API-based session handling. Backend-side restrictions are used to enforce 
+ownership and role-aware access. The farmer mobile app remains focused on farmer tasks while 
+the backend preserves authority. 
+ 
+5.7 Farm, Plot, and Planting Module Implementation 
+ 
+This module supports hierarchical farm management: 
+• farms as top-level farmer-owned units 
+• plots attached to farms 
+• plantings attached to plots and crops 
+ 
+This structure enables disease, soil, and alert workflows to remain context aware. 
+ 
+ 
+ 
+
+--- PAGE 55 ---
+42 | P a g e  
+ 
+ 
+5.8 Scan and Disease Detection Module Implementation 
+The scan workflow supports image capture, local processing context, report generation, offline 
+queueing, synchronization, and disease history update. The system design recognizes that 
+detection is not merely a model call, but a multi-step operational workflow. 
+5.9 Disease History and Evidence Handling 
+Disease history preserves scan-related records for later review. Where supported, image evidence 
+is linked to reports. History aims to remain meaningful to farmers by showing practical labels 
+and actionable guidance rather than only technical states. 
+5.10 Soil Health Module Implementation 
+The soil health module supports recording and viewing soil condition-related information 
+associated with farms and plots. 
+5.11 Weather Monitoring Module Implementation 
+The weather module presents farmer-relevant environmental information and monitoring 
+context. 
+5.12 Alerts and Advisory Module Implementation 
+ 
+The system displays alerts to guide farmer attention and supports farmer-oriented 
+acknowledgement and review behavior. 
+ 
+5.13 Offline Sync and Cache Implementation 
+ 
+
+--- PAGE 56 ---
+43 | P a g e  
+ 
+Offline synchronization is a major implementation feature. Local repositories, queueing logic, 
+retry behavior, and synchronization-aware UI feedback are used to preserve continuity during 
+unreliable connectivity. 
+ 
+5.14 Localization Implementation 
+ 
+Localization support is implemented across core screens using centralized translation logic, 
+mapped values, and farmer-facing copy management. 
+ 
+5.15 Performance and Optimization Measures 
+ 
+Performance-oriented improvements include: 
+ 
+• reduced screen complexity 
+• improved sync robustness 
+• simplified farmer workflows 
+• local caching 
+• retry-aware API communication 
+• avoidance of unnecessary blocking flows 
+ 
+5.16 Security Measures Implemented 
+ 
+Security measures include: 
+
+--- PAGE 57 ---
+44 | P a g e  
+ 
+ 
+• authenticated API calls 
+• ownership-based data restrictions 
+• image access control patterns 
+• consistent session management 
+• structured server-side policy enforcement 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 58 ---
+45 | P a g e  
+ 
+Figure 5.1: Login screen 
+ 
+ 
+
+
+--- PAGE 59 ---
+46 | P a g e  
+ 
+Figure 5.2: Home dashboard 
+   
+
+
+--- PAGE 60 ---
+47 | P a g e  
+ 
+ 
+Figure 5.3: - My Farm screen 
+ 
+
+
+--- PAGE 61 ---
+48 | P a g e  
+ 
+Figure 5.4: - Scan screen 
+  
+
+
+--- PAGE 62 ---
+49 | P a g e  
+ 
+ 
+Figure 5.5:- Disease history screen 
+ 
+ 
+ 
+
+
+--- PAGE 63 ---
+50 | P a g e  
+ 
+Figure 5.6:- Soil health screen 
+    
+ 
+ 
+Table 5.3: Implemented modules versus planned modules 
+Module Planned Implemented Status 
+Authentication and session Yes Implemented 
+Farm management Yes Implemented 
+Plot management Yes Implemented 
+
+
+--- PAGE 64 ---
+51 | P a g e  
+ 
+Planting management Yes Implemented 
+Disease scan and reporting Yes Implemented 
+Disease history and guidance Yes Implemented 
+Soil health monitoring Yes Implemented 
+Weather monitoring Yes Implemented 
+Alerts Yes Implemented 
+Localization Yes Implemented with 
+ongoing content 
+refinement 
+Offline synchronization Yes Implemented with 
+retry/merge logic 
+Full production analytics No Future work 
+ 
+
+--- PAGE 65 ---
+52 | P a g e  
+ 
+Chapter Six: Testing, Evaluation, and Results 
+6.1 Testing Strategy 
+Testing covered functionality, integration behavior, synchronization, interface behavior, and 
+operational correctness. 
+6.2 Unit Testing 
+Selected logic units such as service behavior, mapping functions, and offline-related flows 
+should be validated with focused tests where available 
+6.3 Integration Testing 
+Integration testing focused on: 
+• mobile to API communication 
+• authentication flow 
+• farm and planting synchronization 
+• scan submission and report retrieval 
+• profile refresh 
+• image evidence retrieval 
+ 
+ 
+6.4 System Testing 
+System testing evaluated complete workflows from login to farm use, scan history, alerts, and 
+other operational features. 
+6.5 User Acceptance Testing 
+The system should be evaluated against actual farmer usability concerns including navigation 
+simplicity, readability, message clarity, and operational continuity under field conditions. 
+
+--- PAGE 66 ---
+53 | P a g e  
+ 
+6.6 Performance Evaluation 
+Performance evaluation should consider: 
+• screen responsiveness 
+• API latency handling 
+• synchronization duration 
+• recovery from connectivity interruption 
+• startup and navigation behavior 
+ 
+6.7 Offline and Online Consistency Evaluation 
+Because the project contains both offline and online inference-related concerns, one evaluation 
+goal is whether history, guidance, and records remain consistent after synchronization. 
+ 
+6.8 Disease Detection Reliability Discussion 
+The project should discuss disease detection as decision support rather than a perfect 
+autonomous authority. Practical reliability depends on image quality, crop context, offline/online 
+alignment, record mapping, and treatment workflow safeguards. 
+6.9 Usability Evaluation for Farmers 
+Usability evaluation should include: 
+• whether forms are understandable 
+• whether messages are farmer-readable 
+• whether icons and flows are clear 
+• whether offline behavior avoids blocking fieldwork 
+• whether localization reduces confusion 
+
+--- PAGE 67 ---
+54 | P a g e  
+ 
+ 
+6.10 Results and Findings 
+This section should summarize observed strengths such as: 
+• integrated farmer workflow 
+• offline-first design 
+• modular architecture 
+• evidence-linked disease history 
+• localized UI support 
+• practical synchronization design 
+ 
+6.11 Challenges Encountered and Mitigation 
+Representative challenges include: 
+• connectivity instability 
+• response parsing issues 
+• mixed localization states 
+• history label alignment 
+• synchronization reliability 
+• farmer-facing message quality 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 68 ---
+55 | P a g e  
+ 
+ 
+ 
+Table 6.1: Functional test cases and results 
+ 
+Test Case Expected Result Observed Result 
+Farmer login with valid 
+phone/password 
+User enters farmer shell Passed after login-path fixes 
+Offline unlock after prior login User can unlock local 
+session offline 
+Passed under supported session 
+conditions 
+Create farm / plot / planting Records persist and 
+reappear after refresh 
+Passed 
+Submit disease report Report saved with 
+status/history entry 
+Passed with synchronized 
+backend response 
+View disease history History shows exact 
+disease or likely issue 
+Passed after label-resolution fixes 
+View soil health Existing soil records 
+load for farmer-owned 
+data 
+Passed 
+View alerts Alerts load and farmer 
+can acknowledge where 
+applicable 
+Passed 
+Logout Active session cleared 
+promptly 
+Passed after logout flow 
+hardening 
+ 
+ 
+
+--- PAGE 69 ---
+56 | P a g e  
+ 
+Table 6.2: Module-wise testing summary 
+ 
+Module Test Focus Status 
+Authentication Login, logout, offline unlock, token persistence Stable after fixes 
+My Farm CRUD, ownership, sync, navigation Stable 
+Scan Capture, local inference trigger, queueing, 
+history update 
+Stable with ongoing 
+model-quality caveats 
+Disease History Label rendering, guidance, evidence linkage Stable after history label 
+fixes 
+Soil Health Retrieval and farmer display Stable 
+Weather Retrieval and display under connectivity 
+constraints 
+Moderately stable 
+Alerts Retrieval, acknowledgement, presentation Stable 
+Localization Screen-level language consistency Improving, requires final 
+QA 
+ 
+ 
+Table 6.3: Performance and reliability observations 
+ 
+Area Observation 
+Login Improved after auth path and timeout adjustments 
+Sync Works but is sensitive to malformed JSON or backend latency 
+Navigation Improved after removal of blocking and unstable flows 
+
+--- PAGE 70 ---
+57 | P a g e  
+ 
+Offline queue Supports delayed replay and merge after reconnection 
+Disease history Became more reliable after cache and label-resolution fixes 
+ 
+ 
+ 
+ 
+Table 6.4: Offline versus online alignment observations 
+ 
+Scenario Offline Behavior Online / Synced 
+Behavior 
+Observation 
+Disease scan 
+capture 
+Local inference and 
+provisional history 
+entry 
+Server record and status 
+after replay 
+Alignment improved, but 
+depends on consistent 
+backend naming 
+Farm CRUD Local cache update 
+and queueing 
+Server persistence and 
+refreshed counts 
+Aligned through sync flow 
+Login continuity Offline unlock only 
+after prior verified 
+login 
+Server-authenticated 
+primary login 
+Correct security boundary 
+Guidance display Offline guidance 
+fallback available 
+Server-confirmed 
+guidance preferred 
+Requires consistent guidance 
+data coverage 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 71 ---
+58 | P a g e  
+ 
+Table 6.5: Known limitations and mitigation actions 
+ 
+Limitation Impact Mitigation / Recommendation 
+Model confidence is not 
+equivalent to agronomic 
+certainty 
+Farmers may overtrust scan 
+outputs 
+Keep confirmation-aware guidance and 
+clear messaging 
+Backend response quality 
+affects mobile sync 
+Empty or malformed 
+payloads break continuity 
+Enforce strong API contracts and 
+validation 
+Localization content is still 
+under refinement 
+Mixed-language UI may 
+reduce trust 
+Complete final screen-by-screen 
+localization QA 
+PNG export of figures 
+depends on local browser 
+environment 
+Documentation packaging 
+may vary by machine 
+Use SVG directly or run provided 
+export script on supported machine 
+Formal measured 
+evaluation values are not 
+yet inserted 
+Weakens empirical chapter 
+depth 
+Add controlled test metrics before final 
+submission 
+ 
+ 
+ 
+ 
+
+--- PAGE 72 ---
+59 | P a g e  
+ 
+Chapter Seven: Conclusion and Recommendations 
+7.1 Conclusion 
+This project designed and implemented a practical smart farming system that integrates a farmer-
+focused Flutter mobile app, Laravel backend services, and MySQL data storage into a unified 
+agricultural workflow. The system addresses major field-level problems including fragmented 
+records, weak digital continuity, delayed disease tracking, and poor connectivity tolerance. By 
+supporting offline-first operation, disease-related workflows, farm hierarchy management, 
+localized interfaces, and monitoring modules, the project demonstrates the application of 
+software engineering principles to real agricultural needs. 
+ 
+The resulting system is not merely a prototype of disconnected screens. It represents a modular 
+and extensible platform where usability, synchronization, traceability, and practical field 
+operation are treated as first-class engineering concerns. 
+7.2 Contributions of the Project 
+• farmer-centered mobile smart farming platform 
+• offline-first mobile workflow design 
+• integrated farm, plot, and planting structure 
+• disease report and history workflow with evidence awareness 
+• soil health and weather monitoring integration 
+• alerts and advisory-oriented interface support 
+• multilingual interface support 
+• practical backend policy and API structure 
+ 
+ 
+
+--- PAGE 73 ---
+60 | P a g e  
+ 
+7.3 Recommendations for Future Work 
+ 
+• improve server-side labeling consistency for disease history 
+• extend evidence and review workflows further 
+• introduce richer test measurement and documented benchmark results 
+• strengthen model governance and performance validation 
+• broaden advisory intelligence with agronomic context integration 
+• expand localization quality assurance across all backend-originated strings 
+7.4 Production Readiness Recommendations 
+• formalize final API contracts for disease labeling and history 
+• complete measurable performance and usability evaluations 
+• strengthen deployment, backup, and monitoring procedures 
+• establish approved treatment data governance 
+• perform security review for evidence storage and API exposure 
+• document institutional operations and support responsibilities 
+ 
+ 
+
+--- PAGE 74 ---
+61 | P a g e  
+ 
+References 
+1. [Author], “[Title of smart farming paper],” [Journal/Conference], [Year]. 
+2. Flutter Documentation, “Flutter documentation,” https://docs.flutter.dev 
+3. Laravel Documentation, “Laravel documentation,” https://laravel.com/docs 
+4. MySQL Documentation, “MySQL documentation,” https://dev.mysql.com/doc/ 
+ 
+ 
+ 

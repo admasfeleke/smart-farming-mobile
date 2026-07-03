@@ -80,11 +80,13 @@ class L {
       'later': 'በኋላ',
       'continue_label': 'ቀጥል',
       'permissions_first_use_title': 'የመተግበሪያ ፈቃዶችን አዘጋጅ',
-      'permissions_first_use_body': 'መተግበሪያው በመስክ ላይ በትክክል እንዲሰራ የካሜራ እና የአካባቢ ፈቃድ ያስፈልገዋል።',
+      'permissions_first_use_body':
+          'መተግበሪያው በመስክ ላይ በትክክል እንዲሰራ የካሜራ እና የአካባቢ ፈቃድ ያስፈልገዋል።',
       'permissions_camera_title': 'ካሜራ',
       'permissions_camera_body': 'ለበሽታ ምርመራ የቅጠል ፎቶ ለማንሳት ያስፈልጋል።',
       'permissions_location_title': 'አካባቢ',
-      'permissions_location_body': 'የእርሻ አካባቢ፣ የአየር ሁኔታ እና የመስክ መመሪያን ለማበጀት ይረዳል።',
+      'permissions_location_body':
+          'የእርሻ አካባቢ፣ የአየር ሁኔታ እና የመስክ መመሪያን ለማበጀት ይረዳል።',
       'permissions_first_use_note': 'እነዚህን ፈቃዶች በኋላ በመሣሪያው ቅንብር ውስጥ መቀየር ይችላሉ።',
       'language': 'ቋንቋ',
       'about': 'ስለ መተግበሪያው',
@@ -99,12 +101,10 @@ class L {
 
       'my_farm_context_hint': 'የማሳ ቦታዎችንና ተከላዎችን ለማስተዳደር የእርሻ ቦታ ይምረጡ።',
       'my_farm_add_farm': 'እርሻ ጨምር',
-      'my_farm_empty_farms_help':
-          'መጀመሪያ የመጀመሪያዎን የእርሻ ቦታ ከክልልና ኮርዲኔት ጋር ያክሉ።',
+      'my_farm_empty_farms_help': 'መጀመሪያ የመጀመሪያዎን የእርሻ ቦታ ከክልልና ኮርዲኔት ጋር ያክሉ።',
       'my_farm_plot_header_sub': 'በዚህ እርሻ ያሉ የማሳ ክፍሎች',
       'my_farm_add_plot': 'ማሳ ጨምር',
-      'my_farm_empty_plots_help':
-          'የአፈር አይነትና ንቁ ተከላዎችን ለመከታተል የማሳ ክፍሎችን ያክሉ።',
+      'my_farm_empty_plots_help': 'የአፈር አይነትና ንቁ ተከላዎችን ለመከታተል የማሳ ክፍሎችን ያክሉ።',
       'my_farm_soil_unknown': 'ያልታወቀ',
       'my_farm_planting_header_sub': 'በዚህ ማሳ ያሉ የተከላ መዝገቦች',
       'my_farm_add_planting': 'ተከላ ጨምር',
@@ -148,8 +148,7 @@ class L {
       'my_farm_error_crop_required': 'የሰብል መለያ ያስፈልጋል',
       'my_farm_error_planting_date_required': 'የተከላ ቀን ያስፈልጋል',
       'my_farm_error_invalid_date': 'የቀን ቅርጸት ልክ አይደለም (YYYY-MM-DD)',
-      'my_farm_error_expected_after_planting':
-          'የመከር ቀን ከተከላ ቀን በኋላ መሆን አለበት',
+      'my_farm_error_expected_after_planting': 'የመከር ቀን ከተከላ ቀን በኋላ መሆን አለበት',
       'technical_details': 'ቴክኒካዊ ዝርዝሮች',
       'rescan': 'እንደገና ስካን',
       'close': 'ዝጋ',
@@ -163,8 +162,7 @@ class L {
       'scan_analyzing_image': 'ምስል በመተንተን ላይ...',
       'scan_prediction_mismatch_review':
           'የትንበያ ቤተሰብ አለመስማማት ተገኝቷል። በእጅ ማረጋገጫ ያስፈልጋል።',
-      'scan_saved_offline_retry':
-          'በዚህ መሣሪያ ላይ ተቀምጧል። ግንኙነት ሲሰራ ይላካል።',
+      'scan_saved_offline_retry': 'በዚህ መሣሪያ ላይ ተቀምጧል። ግንኙነት ሲሰራ ይላካል።',
       'scan_submit_failed': 'የበሽታ ሪፖርት መላክ አልተሳካም።',
       'disease_reports_load_failed': 'የበሽታ ሪፖርቶችን መጫን አልተሳካም',
       'crop_health_load_failed': 'የዕፅዋት ጤና መረጃ መጫን አልተሳካም',
@@ -174,8 +172,7 @@ class L {
       'alerts_resolve_forbidden': 'ይህን ማስጠንቀቂያ ለመፍታት ፍቃድ የለዎትም።',
       'alerts_resolve_failed': 'ማስጠንቀቂያውን መፍታት አልተሳካም።',
       'alerts_next_resolved': 'ቀጣይ እርምጃ፦ ማስጠንቀቂያው ተፈትቷል። ክትትልን ይቀጥሉ።',
-      'alerts_next_acknowledged':
-          'ቀጣይ እርምጃ፦ ማረጋገጫውን ጨርሱ እና እርምጃው ሲጠናቀቅ ይፍቱት።',
+      'alerts_next_acknowledged': 'ቀጣይ እርምጃ፦ ማረጋገጫውን ጨርሱ እና እርምጃው ሲጠናቀቅ ይፍቱት።',
       'alerts_next_open': 'ቀጣይ እርምጃ፦ ይህን ማስጠንቀቂያ ፈጥነው ይቀበሉና ያረጋግጡ።',
       'alerts_overview_title': 'የማስጠንቀቂያ የሥራ ጫና',
       'alerts_overview_subtitle':
@@ -184,13 +181,13 @@ class L {
       'alerts_overview_acknowledged': 'የተቀበሉ {count}',
       'alerts_overview_resolved': 'የተፈቱ {count}',
       'alerts_section_open': 'አሁን ትኩረት የሚፈልጉ',
-      'alerts_section_open_subtitle': 'እነዚህ ማስጠንቀቂያዎች አሁንም የገበሬ ወይም የሰራተኛ እርምጃ ይፈልጋሉ።',
+      'alerts_section_open_subtitle':
+          'እነዚህ ማስጠንቀቂያዎች አሁንም የገበሬ ወይም የሰራተኛ እርምጃ ይፈልጋሉ።',
       'alerts_section_acknowledged': 'በሂደት ላይ',
       'alerts_section_acknowledged_subtitle':
           'እነዚህ ማስጠንቀቂያዎች ታይተዋል ግን አሁንም ተከታታይ እርምጃ ይፈልጋሉ።',
       'alerts_section_resolved': 'የተፈቱ ታሪኮች',
-      'alerts_section_resolved_subtitle':
-          'የተጠናቀቁ ማስጠንቀቂያዎች ለክትትልና ለግምገማ ይቆያሉ።',
+      'alerts_section_resolved_subtitle': 'የተጠናቀቁ ማስጠንቀቂያዎች ለክትትልና ለግምገማ ይቆያሉ።',
       'alerts_type_preventive': 'የመከላከያ አደጋ',
       'alerts_type_confirmed_disease': 'የተረጋገጠ በሽታ',
       'alerts_risk_level': 'አደጋ {value}',
@@ -243,7 +240,8 @@ class L {
       'disease_review_status_label': 'ውሳኔ',
       'disease_review_mark_confirmed': 'የተረጋገጠ ምልክት አድርግ',
       'disease_review_mark_rejected': 'ውድቅ ምልክት አድርግ',
-      'disease_review_reason_hint': 'ለምሳሌ፦ expert_confirmed ወይም insufficient_evidence',
+      'disease_review_reason_hint':
+          'ለምሳሌ፦ expert_confirmed ወይም insufficient_evidence',
       'disease_review_comment_hint': 'ምን እንዳዩና ለምን እንደወሰኑ ያክሉ።',
       'disease_review_evidence_optional': 'ካስፈለገ የማስረጃ ፎቶ ያክሉ።',
       'disease_review_add_camera': 'ካሜራ ተጠቀም',
@@ -461,11 +459,9 @@ class L {
           'አዲስ ትንበያ በሰርቨር ይታሰባል። የተቀመጡ ውጤቶች በኦፍላይን ይኖራሉ።',
       'dashboard_today_title': 'ዛሬ በእርሻዎ',
       'dashboard_quick_actions_title': 'ፈጣን እርምጃዎች',
-      'dashboard_quick_actions_subtitle':
-          'በየቀኑ የሚያስፈልጉ ዋና ተግባራትን በፍጥነት ይድረሱ።',
+      'dashboard_quick_actions_subtitle': 'በየቀኑ የሚያስፈልጉ ዋና ተግባራትን በፍጥነት ይድረሱ።',
       'dashboard_field_guidance_title': 'የማሳ መመሪያ',
-      'dashboard_field_guidance_subtitle':
-          'የአሁኑን የእርሻ ሁኔታ መሠረት ያደረጉ መመሪያዎች።',
+      'dashboard_field_guidance_subtitle': 'የአሁኑን የእርሻ ሁኔታ መሠረት ያደረጉ መመሪያዎች።',
       'dashboard_open_scanner_subtitle': 'ስካነሩን ይክፈቱ።',
       'dashboard_manage_farm_subtitle': 'እርሻዎችንና ማሳዎችን ያስተዳድሩ።',
       'dashboard_open_guidance_subtitle': 'መመሪያና ምክር ይክፈቱ።',
@@ -492,8 +488,10 @@ class L {
       'dashboard_sync_backlog_label': 'የሲንክ ተጠባባቂ',
       'dashboard_records_available_one': '1 መዝገብ ዝግጁ ነው',
       'dashboard_records_available_many': '{count} መዝገቦች ዝግጁ ናቸው',
-      'dashboard_attention_conflict': 'አንዳንድ መረጃዎች ግጭት ሊኖራቸው ይችላል። የሲንክ ሁኔታውን ይመልከቱ።',
-      'dashboard_attention_offline_mode': 'ኦፍላይን ሁኔታ ንቁ ነው። የተቀመጠው መረጃ እየታየ ነው።',
+      'dashboard_attention_conflict':
+          'አንዳንድ መረጃዎች ግጭት ሊኖራቸው ይችላል። የሲንክ ሁኔታውን ይመልከቱ።',
+      'dashboard_attention_offline_mode':
+          'ኦፍላይን ሁኔታ ንቁ ነው። የተቀመጠው መረጃ እየታየ ነው።',
       'dashboard_attention_online_sign_in_required':
           'ሰርቨሩ ተደራሽ ነው። የተቀመጠ ውሂብን ለማመሳሰል በመስመር ላይ እንደገና ይግቡ።',
       'advisory_no_soil_records': 'የአፈር መዝገቦች እስካሁን የሉም',
@@ -509,8 +507,7 @@ class L {
       'crop_health_monitoring_subtitle':
           'የቅርብ ጊዜ ምልክቶችን በመመርኮዝ በዚህ ጊዜ የሚጠየቀው ትኩረት።',
       'crop_health_timeline_title': 'የክትትል የጊዜ መስመር',
-      'crop_health_timeline_subtitle':
-          'የቅርብ ጊዜ ሪፖርቶችንና ለውጦችን በቅደም ተከተል ይመልከቱ።',
+      'crop_health_timeline_subtitle': 'የቅርብ ጊዜ ሪፖርቶችንና ለውጦችን በቅደም ተከተል ይመልከቱ።',
       'crop_health_low_count': 'የተረጋጋ {count}',
       'crop_health_medium_count': 'ክትትል {count}',
       'crop_health_high_count': 'ትኩረት {count}',
@@ -518,25 +515,27 @@ class L {
       'crop_health_open_disease_history': 'የበሽታ ታሪክን ክፈት',
       'alerts_offline_saved': 'የኢንተርኔት ግንኙነት የለም። የተቀመጡ ማስጠንቀቂያዎች እየታዩ ነው።',
       'alerts_offline_none': 'የኢንተርኔት ግንኙነት የለም።',
-      'alerts_api_unreachable_saved':
-          'API አልተደረሰበትም። የተቀመጡ ማስጠንቀቂያዎች እየታዩ ነው።',
+      'alerts_api_unreachable_saved': 'API አልተደረሰበትም። የተቀመጡ ማስጠንቀቂያዎች እየታዩ ነው።',
       'alerts_api_unreachable': 'API አልተደረሰበትም።',
       'alerts_server_required': 'ማስጠንቀቂያዎችን ለማዘመን የሰርቨር ግንኙነት ያስፈልጋል።',
       'alerts_action_acknowledged_success': 'ማስጠንቀቂያው በተሳካ ሁኔታ ተቀባይነት አግኝቷል።',
       'alerts_action_resolved_success': 'ማስጠንቀቂያው በተሳካ ሁኔታ ተፈትቷል።',
       'alerts_severity_label': 'ክብደት',
       'alerts_triggered_at_label': 'የተነሳበት ጊዜ',
-      'action_next_alert_acknowledged': 'ቀጣይ፦ የተቀበሉትን ማስጠንቀቂያ እስኪጠናቀቅ ድረስ ይከታተሉ።',
+      'action_next_alert_acknowledged':
+          'ቀጣይ፦ የተቀበሉትን ማስጠንቀቂያ እስኪጠናቀቅ ድረስ ይከታተሉ።',
       'action_next_alert_resolved': 'ቀጣይ፦ ተፈትቷል። መደበኛ ክትትልን ይቀጥሉ።',
       'action_next_farm_added': 'ቀጣይ፦ ለዚህ እርሻ ማሳዎችን ያክሉ።',
       'action_next_farm_deleted': 'ቀጣይ፦ ከተያያዙ መዝገቦች ጋር ሲንክ መሆኑን ያረጋግጡ።',
-      'action_next_farm_updated': 'ቀጣይ፦ ማሳዎችና ተከላዎች የተዘመነውን የእርሻ መረጃ እየጠቀሙ መሆኑን ያረጋግጡ።',
+      'action_next_farm_updated':
+          'ቀጣይ፦ ማሳዎችና ተከላዎች የተዘመነውን የእርሻ መረጃ እየጠቀሙ መሆኑን ያረጋግጡ።',
       'action_next_plot_added': 'ቀጣይ፦ በዚህ ማሳ ላይ ተከላ ያክሉ።',
       'action_next_plot_deleted': 'ቀጣይ፦ ከተያያዙ ተከላዎችና መዝገቦች ጋር ሲንክ ይፈትሹ።',
       'action_next_plot_updated': 'ቀጣይ፦ የማሳውን አውድ በስካንና በአፈር መዝገቦች ላይ ያረጋግጡ።',
       'action_next_planting_added': 'ቀጣይ፦ የሰብል ሁኔታን ይከታተሉ እና ስካን ለመጀመር ይጠቀሙ።',
       'action_next_planting_deleted': 'ቀጣይ፦ ተያያዥ ትንበያዎችና መዝገቦች እንዲዘምኑ ያረጋግጡ።',
-      'action_next_planting_updated': 'ቀጣይ፦ የማሳ እና የበሽታ አውድ ከአዲሱ ሁኔታ ጋር እንዲስማማ ያረጋግጡ።',
+      'action_next_planting_updated':
+          'ቀጣይ፦ የማሳ እና የበሽታ አውድ ከአዲሱ ሁኔታ ጋር እንዲስማማ ያረጋግጡ።',
       'action_next_scan_queued': 'ቀጣይ፦ ግንኙነት ሲኖር ይህን ስካን ወደ ሰርቨር ይላኩ።',
       'action_next_soil_added': 'ቀጣይ፦ የአፈር መመሪያውን ይመልከቱ እና ካስፈለገ ድጋፍ ይጠይቁ።',
       'action_next_soil_deleted': 'ቀጣይ፦ የተያያዙ ሪፖርቶችን እና ሲንክን ያረጋግጡ።',
@@ -590,9 +589,11 @@ class L {
       'yield_outlook': 'የምርት ትንበያ እይታ',
       'my_farm_error_crop_out_of_scope': 'ይህ ሰብል በተመረጠው የእርሻ አውድ ውስጥ አይገኝም',
       'disease_history_pending_title': 'በመጠበቅ ላይ ያሉ ሪፖርቶች',
-      'disease_history_pending_subtitle': 'እነዚህ ሪፖርቶች ገና ወደ ሰርቨር አልተላኩም ወይም ግምገማ በመጠበቅ ላይ ናቸው።',
+      'disease_history_pending_subtitle':
+          'እነዚህ ሪፖርቶች ገና ወደ ሰርቨር አልተላኩም ወይም ግምገማ በመጠበቅ ላይ ናቸው።',
       'disease_history_pending_badge': 'በመጠበቅ ላይ',
-      'disease_pending_scan_delete_confirm': 'ይህን በመሣሪያው ላይ የተጠበቀ ስካን ማስወገድ ይፈልጋሉ?',
+      'disease_pending_scan_delete_confirm':
+          'ይህን በመሣሪያው ላይ የተጠበቀ ስካን ማስወገድ ይፈልጋሉ?',
       'disease_pending_scan_removed': 'የተጠባባቂ ስካን ከዚህ መሣሪያ ተወግዷል።',
       'disease_pending_scan_remove_failed': 'የተጠባባቂ ስካን ማስወገድ አልተሳካም።',
       'disease_history_showing_saved_history': 'የተቀመጠ የበሽታ ታሪክ እየታየ ነው።',
@@ -611,7 +612,8 @@ class L {
       'disease_prevention_analyze_field_risk': 'የማሳ አደጋን ተንትን',
       'disease_prevention_analysis_completed': 'የመከላከያ ትንተና ተጠናቋል።',
       'disease_prevention_analysis_failed': 'የመከላከያ ትንተና አልተሳካም።',
-      'disease_prevention_analysis_server_required': 'የመከላከያ ትንተና ለመከናወን የሰርቨር ግንኙነት ያስፈልጋል።',
+      'disease_prevention_analysis_server_required':
+          'የመከላከያ ትንተና ለመከናወን የሰርቨር ግንኙነት ያስፈልጋል።',
       'disease_prevention_saved_crop_list': 'የተቀመጠ የሰብል ዝርዝር እየተጠቀመ ነው።',
       'disease_prevention_saved_guidance': 'የተቀመጠ የመከላከያ መመሪያ እየታየ ነው።',
       'disease_prevention_saved_guidance_at': 'የተቀመጠ የመከላከያ መመሪያ ተዘምኗል {time}',
@@ -793,7 +795,8 @@ class L {
           'ያልተመሳሰሉ ማዘመኛዎች አሉ እና ሰርቨሩም ተደራሽ ነው። የአካባቢ ለውጦችን ወዲያውኑ ለማስላክ አሁን ሲንክ ያድርጉ።',
       'sync_detail_pending_offline':
           'ያልተመሳሰሉ ማዘመኛዎች በአካባቢ ተቀምጠዋል። ኤፒአይ እስኪደረስ ድረስ ደህና ይቆያሉ።',
-      'sync_detail_ready_online': 'የአካባቢ ውሂብ በጥሩ ሁኔታ ላይ ነው እና ለመደበኛ ኦንላይን አጠቃቀም ዝግጁ ነው።',
+      'sync_detail_ready_online':
+          'የአካባቢ ውሂብ በጥሩ ሁኔታ ላይ ነው እና ለመደበኛ ኦንላይን አጠቃቀም ዝግጁ ነው።',
       'sync_detail_limited_connectivity':
           'አሁን ያልተጠበቁ የአካባቢ ለውጦች የሉም፣ ግን መተግበሪያው አሁንም በተገደበ ግንኙነት ላይ ነው።',
       'sync_diagnostics_title': 'የሲንክ ምርመራ',
@@ -805,7 +808,8 @@ class L {
       'sync_operational_guidance_title': 'የአሰራር መመሪያ',
       'sync_guidance_pending': 'በመጠበቅ ላይ፦ የአካባቢ ለውጦች ለኤፒአይ መላክ እየተጠበቁ ናቸው።',
       'sync_guidance_failed': 'አልተሳካም፦ የመላክ ሙከራዎች አልተሳኩም እና በኋላ እንደገና ይሞከራሉ።',
-      'sync_guidance_conflict': 'ግጭት፦ የአካባቢና የሰርቨር ስሪቶች ተለያይተዋል እና ግምገማ ያስፈልጋቸዋል።',
+      'sync_guidance_conflict':
+          'ግጭት፦ የአካባቢና የሰርቨር ስሪቶች ተለያይተዋል እና ግምገማ ያስፈልጋቸዋል።',
       'sync_guidance_deleted': 'ተሰርዟል፦ የአካባቢ ስረዛ ለሰርቨር ሲንክ በወረፋ ላይ ነው።',
       'sync_overview_conflicts': 'የሲንክ ግጭቶች ግምገማ ይፈልጋሉ',
       'sync_overview_failed': 'አንዳንድ የሲንክ ተግባራት አልተሳኩም',
@@ -852,13 +856,16 @@ class L {
       'sync_conflict_reason': 'ምክንያት: {value}',
       'sync_conflict_error': 'የመጨረሻ ስህተት: {value}',
       'sync_conflict_updated_at': 'ተዘምኗል {time}',
-      'sync_conflict_review_hint_farms': 'የእርሻ ስም፣ ክልል እና ኮርዲኔቶች በሁለቱም ወገኖች ተቀይረው ሊሆኑ ይችላሉ።',
-      'sync_conflict_review_hint_plots': 'የማሳ ስም፣ ስፋት ወይም የአፈር አይነት ግጭት ሊኖርበት ይችላል።',
-      'sync_conflict_review_hint_plantings': 'የተከላ ቀን፣ ሁኔታ ወይም የሰብል አውድ ተለያይቶ ሊኖር ይችላል።',
-      'sync_conflict_review_hint_soil_health': 'የአፈር እሴቶች፣ የግምገማ ሁኔታ ወይም ማስረጃ መረጃ ግጭት ሊኖረው ይችላል።',
+      'sync_conflict_review_hint_farms':
+          'የእርሻ ስም፣ ክልል እና ኮርዲኔቶች በሁለቱም ወገኖች ተቀይረው ሊሆኑ ይችላሉ።',
+      'sync_conflict_review_hint_plots':
+          'የማሳ ስም፣ ስፋት ወይም የአፈር አይነት ግጭት ሊኖርበት ይችላል።',
+      'sync_conflict_review_hint_plantings':
+          'የተከላ ቀን፣ ሁኔታ ወይም የሰብል አውድ ተለያይቶ ሊኖር ይችላል።',
+      'sync_conflict_review_hint_soil_health':
+          'የአፈር እሴቶች፣ የግምገማ ሁኔታ ወይም ማስረጃ መረጃ ግጭት ሊኖረው ይችላል።',
       'scan_choose_context_for_crop': '{crop} ያለበትን እርሻና ማሳ ይምረጡ',
-      'scan_context_picker_hint':
-          'ከስካን በፊት ለዚህ ሰብል እርሻና ማሳ ይምረጡ።',
+      'scan_context_picker_hint': 'ከስካን በፊት ለዚህ ሰብል እርሻና ማሳ ይምረጡ።',
       'scan_contexts_count': '{count} የእርሻ/ማሳ አማራጮች',
       'scan_growth_stage': 'የእድገት ደረጃ',
       'scan_symptom_days_optional': 'ምልክቱ የታየባቸው ቀናት (አማራጭ)',
@@ -875,8 +882,7 @@ class L {
       'scan_other_active_crops_hint':
           'የእርሻ ወይም የማሳ አውድ ለመቀየር ከፈለጉ ብቻ ሌላ ሰብል ይምረጡ።',
       'scan_group_active_crop_count': '{count} ንቁ ሰብሎች',
-      'scan_crop_scope_hint':
-          'በእርሻዎ ውስጥ የተመዘገቡና በሞዴሉ የሚደገፉ ሰብሎች ብቻ ይታያሉ።',
+      'scan_crop_scope_hint': 'በእርሻዎ ውስጥ የተመዘገቡና በሞዴሉ የሚደገፉ ሰብሎች ብቻ ይታያሉ።',
       'scan_exec_title': 'የስካን ሁኔታ',
       'scan_exec_auto': 'ራስ-ሰር',
       'scan_exec_prefer_offline': 'ኦፍላይን ቅድሚያ',
@@ -972,17 +978,22 @@ class L {
       'guidelines_sub': 'Hojmaata qonnaa ammayyaa',
       'admin_contact': 'Quunnamtii bulchiinsa',
       'admin_contact_sub': 'Garee deeggarsa naannoo',
-      'admin_contact_body': 'Yeroo deeggarsa naannoo yookaan gargaarsa sirnaa barbaaddan quunnamtii kana fayyadamaa.',
+      'admin_contact_body':
+          'Yeroo deeggarsa naannoo yookaan gargaarsa sirnaa barbaaddan quunnamtii kana fayyadamaa.',
       'name': 'Maqaa',
       'later': 'Booda',
       'continue_label': 'Itti fufi',
       'permissions_first_use_title': 'Hayyama appii qopheessi',
-      'permissions_first_use_body': 'Appiin kun dirree keessatti sirnaan hojjechuuf hayyama kaameraa fi bakka isin jirtanii barbaada.',
+      'permissions_first_use_body':
+          'Appiin kun dirree keessatti sirnaan hojjechuuf hayyama kaameraa fi bakka isin jirtanii barbaada.',
       'permissions_camera_title': 'Kaameraa',
-      'permissions_camera_body': 'Suuraa baala midhaanii kaasuun qorannoo dhukkubaa gochuuf barbaachisa.',
+      'permissions_camera_body':
+          'Suuraa baala midhaanii kaasuun qorannoo dhukkubaa gochuuf barbaachisa.',
       'permissions_location_title': 'Bakka',
-      'permissions_location_body': 'Bakka qonnaa, haala qilleensaa fi gorsa dirree sirreessuuf gargaara.',
-      'permissions_first_use_note': 'Hayyamoota kana booda qindaa\'ina bilbilaa keessatti jijjiiruu dandeessu.',
+      'permissions_location_body':
+          'Bakka qonnaa, haala qilleensaa fi gorsa dirree sirreessuuf gargaara.',
+      'permissions_first_use_note':
+          'Hayyamoota kana booda qindaa\'ina bilbilaa keessatti jijjiiruu dandeessu.',
       'language': 'Afaan',
       'about': 'Waa\'ee',
       'about_sub': 'Waa\'ee qonnaa ammayyaa baradhu',
@@ -1019,7 +1030,8 @@ class L {
       'my_farm_farm_name_help':
           'Maqaa gabaabaa qonnaan bultoonni salphaatti beekan fayyadami.',
       'my_farm_region_help': 'Naannoo bulchiinsa qonnaa kanaa filadhu.',
-      'my_farm_region_id_help': 'ID naannoo qindaaʼina bulchiinsaa irraa galchi.',
+      'my_farm_region_id_help':
+          'ID naannoo qindaaʼina bulchiinsaa irraa galchi.',
       'my_farm_area_hint': 'Fkn. 5.50',
       'my_farm_area_help': 'Balʼina qonnaa hektaaraan (ha).',
       'my_farm_farm_type_help': 'Gosa oomisha ijoo filadhu.',
@@ -1031,8 +1043,10 @@ class L {
       'my_farm_soil_help': 'Gosti biyyee gorsa fi yaala qonnaa ni gargaara.',
       'my_farm_crop_help': 'Galmee dhaabbii kanaaf midhaan filadhu.',
       'my_farm_crop_id_help': 'ID midhaanii tarree midhaanii irraa galchi.',
-      'my_farm_planting_date_help': 'Guyyaa dhugaa facaasa ykn dhaabbii fayyadami.',
-      'my_farm_expected_date_help': 'Filannoo dha. Yoo hin beekamne duwwaa dhiisi.',
+      'my_farm_planting_date_help':
+          'Guyyaa dhugaa facaasa ykn dhaabbii fayyadami.',
+      'my_farm_expected_date_help':
+          'Filannoo dha. Yoo hin beekamne duwwaa dhiisi.',
       'my_farm_status_help': 'Haala midhaanii marsaa dhaabbii kana keessatti.',
       'my_farm_success_farm_added': 'Qonnaan milkaaʼinaan dabalame.',
       'my_farm_success_farm_updated': 'Qonnaan milkaaʼinaan haaromfame.',
@@ -1062,30 +1076,43 @@ class L {
       'scan_state_result_ready': 'Bu\'aan qophaa\'eera',
       'scan_state_failed': 'Sakatta\'insi hin milkoofne',
       'scan_analyzing_image': 'Suuraa xiinxalaa jira...',
-      'scan_prediction_mismatch_review': 'Bu\'aan AI fi midhaan filatame wal hin simne. Gamaaggamni namaa barbaachisa.',
-      'scan_saved_offline_retry': 'Meeshaa kana irratti kuufameera. Walqunnamtiin yommuu deebi\'u ni ergama.',
+      'scan_prediction_mismatch_review':
+          'Bu\'aan AI fi midhaan filatame wal hin simne. Gamaaggamni namaa barbaachisa.',
+      'scan_saved_offline_retry':
+          'Meeshaa kana irratti kuufameera. Walqunnamtiin yommuu deebi\'u ni ergama.',
       'scan_submit_failed': 'Gabaasa dhukkubaa erguun hin milkoofne.',
-      'disease_reports_load_failed': 'Gabaasota dhukkubaa fe\'uun hin milkoofne',
-      'crop_health_load_failed': 'Odeeffannoo fayyaa midhaanii fe\'uun hin milkoofne',
+      'disease_reports_load_failed':
+          'Gabaasota dhukkubaa fe\'uun hin milkoofne',
+      'crop_health_load_failed':
+          'Odeeffannoo fayyaa midhaanii fe\'uun hin milkoofne',
       'alerts_access_denied': 'Gahee kanaaf hayyamni hin jiru.',
       'alerts_load_failed': 'Akeekkachiisota fe\'uun hin milkoofne',
       'alerts_ack_forbidden': 'Akeekkachiisa kana fudhachuuf hin hayyamamne.',
       'alerts_ack_failed': 'Akeekkachiisa fudhachuun hin milkoofne.',
       'alerts_resolve_forbidden': 'Akeekkachiisa kana xumuruuf hin hayyamamne.',
       'alerts_resolve_failed': 'Akeekkachiisa xumuruun hin milkoofne.',
-      'alerts_next_resolved': 'Itti aanu: akeekkachiisni xumurameera. Hordoffii itti fufi.',
-      'alerts_next_acknowledged': 'Itti aanu: mirkaneessa xumuri; hojii raawwatame yoo ta\'e xumuri.',
-      'alerts_next_open': 'Itti aanu: akeekkachiisa kana dafii fudhadhu fi mirkaneessi.',
-      'scan_permission_settings_required': 'Eeyyamni kaameraa dhaabbataan dhorkameera. Qindaa\'ina appii baniitii kaameraa hayyami.',
+      'alerts_next_resolved':
+          'Itti aanu: akeekkachiisni xumurameera. Hordoffii itti fufi.',
+      'alerts_next_acknowledged':
+          'Itti aanu: mirkaneessa xumuri; hojii raawwatame yoo ta\'e xumuri.',
+      'alerts_next_open':
+          'Itti aanu: akeekkachiisa kana dafii fudhadhu fi mirkaneessi.',
+      'scan_permission_settings_required':
+          'Eeyyamni kaameraa dhaabbataan dhorkameera. Qindaa\'ina appii baniitii kaameraa hayyami.',
       'scan_quality_retake_title': 'Suuraa irra deebi\'ii kaasi',
-      'scan_quality_insufficient': 'Qulqullinni suuraa dhukkuba amanamummaadhaan adda baasuuf gahaa miti:',
+      'scan_quality_insufficient':
+          'Qulqullinni suuraa dhukkuba amanamummaadhaan adda baasuuf gahaa miti:',
       'scan_quality_checklist': 'Qajeelfama suuraa:',
-      'scan_quality_step_hold_steady': 'Osoo hin kaasin bilbila sekondii 1 tasgabbeessi.',
-      'scan_quality_step_fill_guide': 'Baala miidhame sanduuqa qajeelfamaa keessatti guuti.',
-      'scan_quality_step_avoid_glare': 'Ifa aduu cimaa fi gaaddisa ulfaataa irraa fagaadhu.',
+      'scan_quality_step_hold_steady':
+          'Osoo hin kaasin bilbila sekondii 1 tasgabbeessi.',
+      'scan_quality_step_fill_guide':
+          'Baala miidhame sanduuqa qajeelfamaa keessatti guuti.',
+      'scan_quality_step_avoid_glare':
+          'Ifa aduu cimaa fi gaaddisa ulfaataa irraa fagaadhu.',
       'scan_use_anyway': 'Akka kanaatti fayyadami',
       'retake': 'Irra deebi\'ii kaasi',
-      'scan_loading_registered_crops': 'Midhaan galmaa\'ee fi moodeelli leenjifame fe\'aa jira...',
+      'scan_loading_registered_crops':
+          'Midhaan galmaa\'ee fi moodeelli leenjifame fe\'aa jira...',
       'scan_retry_loading_crops': 'Midhaan irra deebi\'ii fe\'i',
       'scan_open_camera': 'Kaameraa bani',
       'scan_reload_camera': 'Kaameraa irra deebi\'ii fe\'i',
@@ -1093,15 +1120,20 @@ class L {
       'scan_no_crop_selected': 'Midhaan hin filatamne.',
       'scan_selected_context': 'Filatame: {crop} - {farm} / {plot}',
       'scan_change_crop': 'Midhaan jijjiiri',
-      'scan_confirm_selected_crop': 'Baalli kun kan {crop} ta\'uu isaa nan mirkaneessa',
-      'scan_confirm_before_scanning': 'Osoo hin sakatta\'in midhaan filatame mirkaneessi.',
+      'scan_confirm_selected_crop':
+          'Baalli kun kan {crop} ta\'uu isaa nan mirkaneessa',
+      'scan_confirm_before_scanning':
+          'Osoo hin sakatta\'in midhaan filatame mirkaneessi.',
       'scan_manual_capture_mode': 'Haala suuraa harkaan kaasuu',
       'scan_guidance_title': 'Sakatta\'insa dura',
-      'scan_guidance_step1': '1. Baala miidhame tokko sanduuqa qajeelfamaa gidduutti kaa\'i.',
-      'scan_guidance_step2': '2. Suuraa dukkanaa\'aa, socho\'aa, yookaan ifa aduu cimaa irraa fagaadhu.',
+      'scan_guidance_step1':
+          '1. Baala miidhame tokko sanduuqa qajeelfamaa gidduutti kaa\'i.',
+      'scan_guidance_step2':
+          '2. Suuraa dukkanaa\'aa, socho\'aa, yookaan ifa aduu cimaa irraa fagaadhu.',
       'scan_guidance_step3': '3. Yaala gochuu dura mirkaneessa eegi.',
       'scan_retry': 'Irra deebi\'ii yaali',
-      'scan_no_trained_crops': 'Midhaan moodeelli deeggaru galmee dhaabbii qonnaa kee keessatti hin argamne.',
+      'scan_no_trained_crops':
+          'Midhaan moodeelli deeggaru galmee dhaabbii qonnaa kee keessatti hin argamne.',
       'scan_choose_crop': 'Midhaan fi lafa sakatta\'u filadhu',
       'disease_review_summary': 'Review summary',
       'disease_original_photo': 'Original report photo',
@@ -1118,7 +1150,8 @@ class L {
       'disease_review_status_label': 'Decision',
       'disease_review_mark_confirmed': 'Mark confirmed',
       'disease_review_mark_rejected': 'Mark rejected',
-      'disease_review_reason_hint': 'Example: expert_confirmed or insufficient_evidence',
+      'disease_review_reason_hint':
+          'Example: expert_confirmed or insufficient_evidence',
       'disease_review_comment_hint': 'Add what you observed and why.',
       'disease_review_evidence_optional': 'Attach an evidence photo if needed.',
       'disease_review_add_camera': 'Use camera',
@@ -1134,35 +1167,47 @@ class L {
       'disease_name': 'Disease name',
       'description': 'Description',
       'scan_choose_context_for_crop': 'Qonnaa fi lafa {crop} filadhu',
-      'scan_context_picker_hint': 'Osoo hin sakatta\'in qonnaa fi lafa sirrii midhaan kanaa filadhu.',
+      'scan_context_picker_hint':
+          'Osoo hin sakatta\'in qonnaa fi lafa sirrii midhaan kanaa filadhu.',
       'scan_contexts_count': '{count} filannoo qonnaa/lafaa',
       'scan_growth_stage': 'Sadarkaa guddinaa',
       'scan_symptom_days_optional': 'Guyyoota mallattoon mul\'ate (filannoo)',
       'scan_field_notes_optional': 'Yaadannoo dirree (filannoo)',
       'scan_protocol_complete': 'Adeemsi suuraa xumurameera. Erguuf qophaa\'e.',
-      'scan_capture_remaining_angles': 'Erguu dura kallattii baalaa dabalataa {count} kaasi.',
-      'scan_structured_capture_count': 'Suuraa qindaa\'aa: {collected}/{required}',
+      'scan_capture_remaining_angles':
+          'Erguu dura kallattii baalaa dabalataa {count} kaasi.',
+      'scan_structured_capture_count':
+          'Suuraa qindaa\'aa: {collected}/{required}',
       'scan_continue_last_crop': 'Midhaan duraanii itti fufi',
       'scan_recommended_crop': 'Midhaan gorfame',
       'scan_last_used_badge': 'Dhumarratti kan fayyadamte',
       'scan_recommended_badge': 'Gorfame',
       'scan_other_active_crops': 'Midhaan hojii irra jiran biroo',
-      'scan_other_active_crops_hint': 'Qonnaa yookaan lafa jijjiiruu yoo barbaadde qofa midhaan biraa filadhu.',
+      'scan_other_active_crops_hint':
+          'Qonnaa yookaan lafa jijjiiruu yoo barbaadde qofa midhaan biraa filadhu.',
       'scan_group_active_crop_count': 'Midhaan hojii irra jiran {count}',
-      'scan_crop_scope_hint': 'Midhaan qonnaa kee keessatti galmaa\'ee fi moodeelli AI deeggaru qofa agarsiifama. Sana booda qonnaa fi lafa sirrii filadhu.',
+      'scan_crop_scope_hint':
+          'Midhaan qonnaa kee keessatti galmaa\'ee fi moodeelli AI deeggaru qofa agarsiifama. Sana booda qonnaa fi lafa sirrii filadhu.',
       'scan_exec_title': 'Haala sakatta\'insaa',
       'scan_exec_auto': 'Ofumaan',
       'scan_exec_prefer_offline': 'Offline dursi',
       'scan_exec_prefer_online': 'Online dursi',
       'scan_exec_offline_only': 'Offline qofa',
-      'scan_exec_auto_desc': 'Kan gorfamu. API yoo argame xiinxala sarvarii fayyadami; yoo hin argamne offline sakatta\'i fi tarree sync keessa kaa\'i.',
-      'scan_exec_prefer_offline_desc': 'Jalqaba offline sakatta\'i; boodarra yoo danda\'ame sarvarii waliin sync godhi.',
-      'scan_exec_prefer_online_desc': 'Jalqaba sarvarii yaali; intarneetiin yoo cite offline itti deebi\'i.',
-      'scan_exec_offline_only_desc': 'Yeroo suuraa kaasuu APItti hin ergin. Naannoo irratti kuusi; boodarra sync godhi.',
-      'scan_exec_prefer_offline_queue': 'Jalqaba meeshaa kana irratti kuufameera. Walqunnamtiin yoo jiraate sync ni ta\'a.',
-      'scan_exec_offline_only_queue': 'Meeshaa kana irratti kuufameera. Hanga walqunnamtiin deebi\'utti ni eega.',
+      'scan_exec_auto_desc':
+          'Kan gorfamu. API yoo argame xiinxala sarvarii fayyadami; yoo hin argamne offline sakatta\'i fi tarree sync keessa kaa\'i.',
+      'scan_exec_prefer_offline_desc':
+          'Jalqaba offline sakatta\'i; boodarra yoo danda\'ame sarvarii waliin sync godhi.',
+      'scan_exec_prefer_online_desc':
+          'Jalqaba sarvarii yaali; intarneetiin yoo cite offline itti deebi\'i.',
+      'scan_exec_offline_only_desc':
+          'Yeroo suuraa kaasuu APItti hin ergin. Naannoo irratti kuusi; boodarra sync godhi.',
+      'scan_exec_prefer_offline_queue':
+          'Jalqaba meeshaa kana irratti kuufameera. Walqunnamtiin yoo jiraate sync ni ta\'a.',
+      'scan_exec_offline_only_queue':
+          'Meeshaa kana irratti kuufameera. Hanga walqunnamtiin deebi\'utti ni eega.',
       'profile_refresh_tooltip': 'Profaayila haaromsi',
-      'profile_showing_saved_details': 'Faayila kuufame agarsiisaa jira. {error}',
+      'profile_showing_saved_details':
+          'Faayila kuufame agarsiisaa jira. {error}',
       'profile_refresh_failed_saved':
           'Haaromsuu hin milkoofne. Faayila kuufame agarsiisaa jira.\n{error}',
       'profile_saved_updated_at': 'Faayila kuufame haaromfame {time}',
@@ -1236,7 +1281,8 @@ class L {
       'advisory_add_planting_for_yield':
           'Yeroo omisha tilmaamuuf dhaabbii hojii irratti dabal-i',
       'advisory_estimate_yield': 'Omisha tilmaami',
-      'advisory_no_active_planting_selected': 'Dhaabbii hojiirratti hin filatamne',
+      'advisory_no_active_planting_selected':
+          'Dhaabbii hojiirratti hin filatamne',
       'disease_prevention': 'Ittisa dhukkuba',
       'disease_prevention_subtitle':
           'Mallattoon osoo hin babal\'atin dura qorannoo dursaa itti fayyadami.',
@@ -1275,7 +1321,8 @@ class L {
           'Itti aanu: Tilmaamota fi galmeewwan walitti hidhatan akka haaroman mirkaneessi.',
       'action_next_planting_updated':
           'Itti aanu: Haala dirree fi dhukkuba odeeffannoo haaromfame waliin walsimsiisi.',
-      'action_next_plot_added': 'Itti aanu: Lafa kana irratti dhaabbii dabal-i.',
+      'action_next_plot_added':
+          'Itti aanu: Lafa kana irratti dhaabbii dabal-i.',
       'action_next_plot_deleted':
           'Itti aanu: Dhaabbii fi galmeewwan walitti hidhatan waliin siinkii mirkaneessi.',
       'action_next_plot_updated':
@@ -1334,9 +1381,12 @@ class L {
       'disease_history_pending_subtitle':
           'Gabaasawwan kunneen gara sarvarii hin ergamne ykn qorannoo eegaa jiru.',
       'disease_history_pending_title': 'Skaanonni naannoo jiran ({count})',
-      'disease_pending_scan_delete_confirm': 'Skaana kana meeshaa irraa kuufame haquu barbaaddaa?',
-      'disease_pending_scan_removed': 'Skaanni eegamaa ture meeshaa kana irraa haqameera.',
-      'disease_pending_scan_remove_failed': 'Skaana eegamaa ture haquun hin milkoofne.',
+      'disease_pending_scan_delete_confirm':
+          'Skaana kana meeshaa irraa kuufame haquu barbaaddaa?',
+      'disease_pending_scan_removed':
+          'Skaanni eegamaa ture meeshaa kana irraa haqameera.',
+      'disease_pending_scan_remove_failed':
+          'Skaana eegamaa ture haquun hin milkoofne.',
       'disease_history_prevent_disease': 'Dhukkuba ittisi',
       'disease_history_showing_saved_history':
           'Seenaa dhukkuba kuufame agarsiisaa jira.',
@@ -1370,7 +1420,8 @@ class L {
           'AI ilbiisaa banuu dura kuufama moodeela IP102 dabali. Scan dhukkubaa akkuma jirutti hafa.',
       'insect_model_alignment': 'Walsimsiisa moodeela IP102',
       'insect_model_required': 'Kuufamni moodeela IP102 barbaachisa',
-      'insect_model_metadata': 'Moodeela: {model}\nGosoota: {classes}\nHojii: {task}',
+      'insect_model_metadata':
+          'Moodeela: {model}\nGosoota: {classes}\nHojii: {task}',
       'insect_model_expected_bundle':
           'Moodeelli adda baasa ilbiisaa amma hin xumuramne. Hanga qophaa\'utti sakatta\'a dhukkuba midhaanii fayyadami, murtii immoo ogeessa qonnaatiin mirkaneessi.',
       'insect_scope_pests': 'Miidhaa ilbiisaa',
@@ -1396,7 +1447,8 @@ class L {
           'Kun qajeelfama offline ti; ogeessa babal’ina qonnaa naannoo keetii waliin mirkaneessi.',
       'chemical_inputs': 'Galteewwan keemikaalaa',
       'no_offline_guidance_title': 'Qajeelfamni offline hin jiru',
-      'no_offline_guidance_body': 'Qajeelfamni yaalaa erga ogeessi gamaaggamee booda ni argama.',
+      'no_offline_guidance_body':
+          'Qajeelfamni yaalaa erga ogeessi gamaaggamee booda ni argama.',
       'captured_photo': 'Suuraa kaafame',
       'soil_analysis': 'Xiinxala biyyee',
       'active_crop_value': 'Midhaan hojiirra jiru: {value}',
@@ -1445,7 +1497,8 @@ class L {
       'scan_crop_not_registered_in_farm':
           'Qonnaan kun qonnaa filatame keessatti hin galmaa\'in.',
       'scan_crop_required': 'crop_id barbaachisa.',
-      'scan_failed_load_farm_plots': 'Lafawwan qonnaa filatame fe\'uun hin milkoofne.',
+      'scan_failed_load_farm_plots':
+          'Lafawwan qonnaa filatame fe\'uun hin milkoofne.',
       'scan_farm_required': 'farm_id barbaachisa.',
       'scan_loading_farm_crops': 'Qonnaawwan qonnaa fe\'aa jira...',
       'scan_no_registered_scope_crops':
@@ -1458,7 +1511,8 @@ class L {
       'scan_offline_preliminary_badge': 'Bu\'aa offline jalqabaa',
       'scan_offline_ready': 'Offline qophaa\'e',
       'scan_offline_selected_crop_badge': 'Qonnaa {value}',
-      'scan_offline_using_saved_crop_list': 'Tarree qonnaa kuufame fayyadamaa jira',
+      'scan_offline_using_saved_crop_list':
+          'Tarree qonnaa kuufame fayyadamaa jira',
       'scan_offline_version_badge': 'Vershiinii {value}',
       'scan_plot_required': 'plot_id barbaachisa.',
       'scan_select_farm_first': 'Jalqaba qonnaa filadhu',
@@ -1492,7 +1546,8 @@ class L {
       'soil_view_evidence': 'Ragaa ilaali',
       'soilHealthData': 'Daataa fayyaa biyyee',
       'soilHealthMonitoring': 'Hordoffii fayyaa biyyee',
-      'soilHealthMonitoringSubtitle': 'Haala biyyee hordofi; gorsa fayyaa biyyee argadhu.',
+      'soilHealthMonitoringSubtitle':
+          'Haala biyyee hordofi; gorsa fayyaa biyyee argadhu.',
       'soilHealthSummary': 'Cuunfaa fayyaa biyyee',
       'soilMoisture': 'Jiidhina biyyee',
       'soilTexture': 'Bifa biyyee',
@@ -1532,7 +1587,8 @@ class L {
           'Galmeewwan tokko tokko erguu hin milkoofne; boodarra irra deebi\'a.',
       'sync_detail_limited_connectivity':
           'Qunnamtiin dadhabaa dha. Jijjiiramni tokko tokko naannoo irratti kuufama.',
-      'sync_detail_loading_local_summary': 'Cuunfaa siinkii naannoo fe\'aa jira.',
+      'sync_detail_loading_local_summary':
+          'Cuunfaa siinkii naannoo fe\'aa jira.',
       'sync_detail_offline_mode':
           'Haala offline hojiirra jira. Jijjiiramni naannoo irratti ni kuufama.',
       'sync_detail_online_sign_in_required':
@@ -1614,16 +1670,20 @@ class L {
       'weather_monitoring_risk_dry': 'Haala gogaan qonnaa miidhuu danda\'a.',
       'weather_monitoring_risk_heat': 'Balaa hoo\'aa dabalaa jira.',
       'weather_monitoring_risk_wet': 'Haala jiidhina dhukkuba dabala.',
-      'weather_monitoring_stable': 'Haalli dirree yeroo ammaa tasgabbaa\'aa fakkaata.',
+      'weather_monitoring_stable':
+          'Haalli dirree yeroo ammaa tasgabbaa\'aa fakkaata.',
       'weather_monitoring_title': 'Hordoffii qilleensaa',
       'weather_no_server_records_subtitle':
           'Ammaaf galmeewwan qilleensaa sarvarii irratti hin jiran.',
-      'weather_no_server_records_title': 'Galmeewwan qilleensaa sarvarii hin jiran',
+      'weather_no_server_records_title':
+          'Galmeewwan qilleensaa sarvarii hin jiran',
       'weather_recent_records_title': 'Galmeewwan qilleensaa haaraa',
       'weather_records_label': 'Galmeewwan',
-      'weather_refresh_failed': 'Galmeewwan qilleensaa haaromsuu hin milkoofne: {error}',
+      'weather_refresh_failed':
+          'Galmeewwan qilleensaa haaromsuu hin milkoofne: {error}',
       'weather_saved_updated_at': 'Qilleensi kuufame haaromfame {time}',
-      'weather_showing_saved_data': 'Daataa qilleensaa kuufame agarsiisaa jira. {error}',
+      'weather_showing_saved_data':
+          'Daataa qilleensaa kuufame agarsiisaa jira. {error}',
       'weather_soil_moisture': 'Jiidhina lafa',
       'weather_source_unknown': 'madda kuufame',
       'weather_summary_title': 'Cuunfaa qilleensaa qonnaa',
@@ -1647,7 +1707,8 @@ class L {
       'yield_prediction_predicted_yield': 'Omisha tilmaamame',
       'yield_prediction_result': 'Bu\'aa tilmaamaa',
       'yield_prediction_saved_at': 'Tilmaamni kuufame haaromfame {time}',
-      'yield_prediction_server_required': 'Tilmaama haaraa gochuuf sarvarii barbaachisa.',
+      'yield_prediction_server_required':
+          'Tilmaama haaraa gochuuf sarvarii barbaachisa.',
       'yield_prediction_server_required_banner':
           'Sarvarii hin argamne. Tilmaama kuufame qofa ilaali.',
       'yield_prediction_server_required_cached':
@@ -1744,12 +1805,14 @@ class L {
       'guidelines_sub': 'ልምድታት ዘመናዊ ግብርና',
       'admin_contact': 'ሓበሬታ ኣስተዳዳሪ',
       'admin_contact_sub': 'ጉጅለ ድጋፍ ኣካባቢ',
-      'admin_contact_body': 'ናይ ከባቢ ደገፍ ወይ ናይ ስርዓት ሓገዝ ክትደልዩ ከለኹም ነዚ መራኸቢ ተጠቐሙ።',
+      'admin_contact_body':
+          'ናይ ከባቢ ደገፍ ወይ ናይ ስርዓት ሓገዝ ክትደልዩ ከለኹም ነዚ መራኸቢ ተጠቐሙ።',
       'name': 'ስም',
       'later': 'ድሒሩ',
       'continue_label': 'ቀጽል',
       'permissions_first_use_title': 'ፍቓዳት መተግበሪ ኣዳሉ',
-      'permissions_first_use_body': 'እዚ መተግበሪ ኣብ መሬት ብትኽክል ክሰርሕ ፍቓድ ካሜራን ቦታን የድልዮ።',
+      'permissions_first_use_body':
+          'እዚ መተግበሪ ኣብ መሬት ብትኽክል ክሰርሕ ፍቓድ ካሜራን ቦታን የድልዮ።',
       'permissions_camera_title': 'ካሜራ',
       'permissions_camera_body': 'ንምርመራ ሕማም ስእሊ ቆጽሊ ንምልዓል የድሊ።',
       'permissions_location_title': 'ቦታ',
@@ -1900,7 +1963,8 @@ class L {
       'disease_review_status_label': 'Decision',
       'disease_review_mark_confirmed': 'Mark confirmed',
       'disease_review_mark_rejected': 'Mark rejected',
-      'disease_review_reason_hint': 'Example: expert_confirmed or insufficient_evidence',
+      'disease_review_reason_hint':
+          'Example: expert_confirmed or insufficient_evidence',
       'disease_review_comment_hint': 'Add what you observed and why.',
       'disease_review_evidence_optional': 'Attach an evidence photo if needed.',
       'disease_review_add_camera': 'Use camera',
@@ -1916,8 +1980,7 @@ class L {
       'disease_name': 'Disease name',
       'description': 'Description',
       'scan_choose_context_for_crop': 'ን{crop} ሕርሻን ቦታን ምረጽ',
-      'scan_context_picker_hint':
-          'ቅድሚ ምስካን ናይዚ ሰብሊ ትኽክለኛ ሕርሻን ቦታን ምረጽ።',
+      'scan_context_picker_hint': 'ቅድሚ ምስካን ናይዚ ሰብሊ ትኽክለኛ ሕርሻን ቦታን ምረጽ።',
       'scan_contexts_count': '{count} ምርጫ ሕርሻ/ቦታ',
       'scan_growth_stage': 'ደረጃ ዕብየት',
       'scan_symptom_days_optional': 'ምልክት ዝተራእየሉ መዓልታት (ኣማራጺ)',
@@ -1955,8 +2018,7 @@ class L {
           'Saved on this device. It will wait here until you reconnect.',
       'profile_refresh_tooltip': 'ፕሮፋይል ኣድስ',
       'profile_showing_saved_details': 'ተቀመጠ መረጃ እየታየ እዩ። {error}',
-      'profile_refresh_failed_saved':
-          'ምድሳእ ኣይተሳካን። ተቀመጠ መረጃ እየታየ እዩ።\n{error}',
+      'profile_refresh_failed_saved': 'ምድሳእ ኣይተሳካን። ተቀመጠ መረጃ እየታየ እዩ።\n{error}',
       'profile_saved_updated_at': 'ተቀመጠ ፕሮፋይል ተዘምኗል {time}',
       'profile_full_name': 'ሙሉ ስም',
       'profile_role_label': 'ግደ',
@@ -1968,11 +2030,9 @@ class L {
       'profile_role_farmer': 'ሓርሻኛ',
       'dashboard_today_title': 'ሎሚ ኣብ ሕርሻኹም',
       'dashboard_quick_actions_title': 'ፈጣን ስራሕታት',
-      'dashboard_quick_actions_subtitle':
-          'ኣብዚ ግዜ ኣስፈላጊ ስራሕታት ብቕልጡፍ ኣካፍል።',
+      'dashboard_quick_actions_subtitle': 'ኣብዚ ግዜ ኣስፈላጊ ስራሕታት ብቕልጡፍ ኣካፍል።',
       'dashboard_field_guidance_title': 'መምርሒ ማሳ',
-      'dashboard_field_guidance_subtitle':
-          'ብመሰረት ሁኔታ ሕርሻ ምኽሪ ተቐበሉ።',
+      'dashboard_field_guidance_subtitle': 'ብመሰረት ሁኔታ ሕርሻ ምኽሪ ተቐበሉ።',
       'dashboard_open_scanner_subtitle': 'ስካነር ክፈት።',
       'dashboard_manage_farm_subtitle': 'ሕርሻን ማሳን ኣስተዳድር።',
       'dashboard_open_guidance_subtitle': 'መምርሒን ምኽርን ክፈት።',
@@ -1999,15 +2059,12 @@ class L {
       'dashboard_sync_backlog_label': 'ተከም ሲንክ',
       'dashboard_records_available_one': '1 መዝገብ ዝግጁ',
       'dashboard_records_available_many': '{count} መዝገቦች ዝግጁ',
-      'dashboard_attention_conflict':
-          'ኣንዳንድ መዝገቦች ግጭት ኣለዎም። ሲንክ ቅድሚ ርኣዩ።',
-      'dashboard_attention_offline_mode':
-          'ኦፍላይን ሁኔታ ንቁ እዩ። ለውጦች በኣካባቢ ይቆያሉ።',
+      'dashboard_attention_conflict': 'ኣንዳንድ መዝገቦች ግጭት ኣለዎም። ሲንክ ቅድሚ ርኣዩ።',
+      'dashboard_attention_offline_mode': 'ኦፍላይን ሁኔታ ንቁ እዩ። ለውጦች በኣካባቢ ይቆያሉ።',
       'dashboard_attention_online_sign_in_required':
           'ሰርቨር ተደራሽ እዩ። ሲንክ ንምፍጸም በመስመር ላይ እንደገና ግባ።',
       'guidance_center': 'ማዕከል መምርሒ',
-      'guidance_intro':
-          'ሁኔታ ማሳ ረኣ፣ ሕማም ቀድሞ ከልክል፣ ስራሕ ቀጣይ ወስን።',
+      'guidance_intro': 'ሁኔታ ማሳ ረኣ፣ ሕማም ቀድሞ ከልክል፣ ስራሕ ቀጣይ ወስን።',
       'guidance_add_farm_hint': 'ምኽሪ ንምቀባል መጀመሪያ ሕርሻ ደምር።',
       'guidance_focus_today': 'ሎሚ ኣብ {name} ኣትክል።',
       'guidance_no_farm_selected': 'ሕርሻ ኣይተመረጠን',
@@ -2022,10 +2079,8 @@ class L {
       'advisory_estimate_yield': 'ምርት ገምት',
       'advisory_no_active_planting_selected': 'ንቁ ተከላ ኣይተመረጠን',
       'disease_prevention': 'መከላኸሊ ሕማም',
-      'disease_prevention_subtitle':
-          'ምልክታት ከምይብል ይቀድሙ መርመራ ተጠቀሙ።',
-      'disease_prevention_intro':
-          'ማሳ፣ ዝራእቲ እና ሁኔታ ምረፅ እና ሓደጋ ተንትን።',
+      'disease_prevention_subtitle': 'ምልክታት ከምይብል ይቀድሙ መርመራ ተጠቀሙ።',
+      'disease_prevention_intro': 'ማሳ፣ ዝራእቲ እና ሁኔታ ምረፅ እና ሓደጋ ተንትን።',
       'disease_prevention_loading': 'እየተጫነ ኣሎ...',
       'disease_prevention_loading_plots': 'ማሳታት እየተጫነ ኣሎ...',
       'disease_prevention_select_plot': 'ማሳ ምረፅ',
@@ -2034,42 +2089,30 @@ class L {
       'disease_prevention_analyze_field_risk': 'ሓደጋ ማሳ ተንትን',
       'disease_prevention_analysis_completed':
           'ትንተና ተዛዚመ። ኣዲስ ማስጠንቀቂያ {count} ተፈጥረ።',
-      'disease_prevention_analysis_failed':
-          'ትንተና ኣይተሳካን። {error}',
+      'disease_prevention_analysis_failed': 'ትንተና ኣይተሳካን። {error}',
       'disease_prevention_analysis_server_required':
           'ሓድሽ ትንተና ንምክካውን ሰርቨር ያስፈልጋል፤ የተቀመጠ ምክር ኦፍላይን ይገኛል።',
-      'disease_prevention_saved_crop_list':
-          'የተቀመጠ የሰብል ዝርዝር እየታየ እዩ። {error}',
-      'disease_prevention_saved_guidance':
-          'የተቀመጠ የመከላከያ መመሪያ እየታየ እዩ። {error}',
-      'disease_prevention_saved_guidance_at':
-          'የተቀመጠ መመሪያ ተዘምኗል {time}',
+      'disease_prevention_saved_crop_list': 'የተቀመጠ የሰብል ዝርዝር እየታየ እዩ። {error}',
+      'disease_prevention_saved_guidance': 'የተቀመጠ የመከላከያ መመሪያ እየታየ እዩ። {error}',
+      'disease_prevention_saved_guidance_at': 'የተቀመጠ መመሪያ ተዘምኗል {time}',
       'action_next_alert_acknowledged':
           'ቀጻሊ፦ ምርግጋፅ ወድእ እሞ እቲ ማስጠንቀቂያ ክሳብ ዝፍታሕ ተከታተሎ።',
-      'action_next_alert_resolved':
-          'ቀጻሊ፦ ተፈቲሑ ኣሎ። መደበኛ ክትትል ቀጽል።',
+      'action_next_alert_resolved': 'ቀጻሊ፦ ተፈቲሑ ኣሎ። መደበኛ ክትትል ቀጽል።',
       'action_next_farm_added': 'ቀጻሊ፦ ነዚ ሕርሻ ክፍልታት ማሳ ወስኽ።',
-      'action_next_farm_deleted':
-          'ቀጻሊ፦ ምስ ተኣሳሰሩ መዝገባት ሲንክ ከም ዝግበር ኣረጋግጽ።',
+      'action_next_farm_deleted': 'ቀጻሊ፦ ምስ ተኣሳሰሩ መዝገባት ሲንክ ከም ዝግበር ኣረጋግጽ።',
       'action_next_farm_updated':
           'ቀጻሊ፦ ማሳታትን ተኽሎታትን ዝተሓደሰ ሓበሬታ ሕርሻ ከም ዝጥቀሙ ኣረጋግጽ።',
-      'action_next_planting_added':
-          'ቀጻሊ፦ ኩነታት ሰብል ተከታተል እሞ ንስካን ተጠቐም።',
+      'action_next_planting_added': 'ቀጻሊ፦ ኩነታት ሰብል ተከታተል እሞ ንስካን ተጠቐም።',
       'action_next_planting_deleted':
           'ቀጻሊ፦ ዝተኣሳሰሩ ትንበያታትን መዝገባትን ከም ዝሕደሱ ኣረጋግጽ።',
       'action_next_planting_updated':
           'ቀጻሊ፦ ኣውድ ማሳን በሽታን ምስቲ ሓድሽ ኩነታት ከም ዝሰማማዕ ኣረጋግጽ።',
       'action_next_plot_added': 'ቀጻሊ፦ ኣብዚ ማሳ ተኽሊ ወስኽ።',
-      'action_next_plot_deleted':
-          'ቀጻሊ፦ ምስ ዝተኣሳሰሩ ተኽሎታትን መዝገባትን ሲንክ ምዃኑ ፈትሽ።',
-      'action_next_plot_updated':
-          'ቀጻሊ፦ ኣውድ ማሳ ኣብ ስካንን መዝገብ መሬትን ኣረጋግጽ።',
-      'action_next_scan_queued':
-          'ቀጻሊ፦ ርክብ ምስ ተረኸበ ነዚ ስካን ናብ ሰርቨር ልኣኽ።',
-      'action_next_soil_added':
-          'ቀጻሊ፦ መምርሒ መሬት ረኣ እሞ እንተደሊ ደገፍ ሕተት።',
-      'action_next_soil_deleted':
-          'ቀጻሊ፦ ዝተኣሳሰሩ ሪፖርታትን ሲንክን ኣረጋግጽ።',
+      'action_next_plot_deleted': 'ቀጻሊ፦ ምስ ዝተኣሳሰሩ ተኽሎታትን መዝገባትን ሲንክ ምዃኑ ፈትሽ።',
+      'action_next_plot_updated': 'ቀጻሊ፦ ኣውድ ማሳ ኣብ ስካንን መዝገብ መሬትን ኣረጋግጽ።',
+      'action_next_scan_queued': 'ቀጻሊ፦ ርክብ ምስ ተረኸበ ነዚ ስካን ናብ ሰርቨር ልኣኽ።',
+      'action_next_soil_added': 'ቀጻሊ፦ መምርሒ መሬት ረኣ እሞ እንተደሊ ደገፍ ሕተት።',
+      'action_next_soil_deleted': 'ቀጻሊ፦ ዝተኣሳሰሩ ሪፖርታትን ሲንክን ኣረጋግጽ።',
       'action_next_soil_updated':
           'ቀጻሊ፦ መሰረት ናይ ሓደሽቲ ናይ መሬት ዋጋታት ብምግባር ክትትል ኣቅድ።',
       'active': 'ንቁ',
@@ -2093,23 +2136,19 @@ class L {
       'crop_health_latest_observation': 'መወዳእታ ምልከታ',
       'crop_health_low_count': 'ርግእ {count}',
       'crop_health_medium_count': 'ተከታተል {count}',
-      'crop_health_monitoring_subtitle':
-          'ኩነታት ሰብል ተከታተል እሞ ክስተታት ብእዋኑ ፍለጥ።',
+      'crop_health_monitoring_subtitle': 'ኩነታት ሰብል ተከታተል እሞ ክስተታት ብእዋኑ ፍለጥ።',
       'crop_health_monitoring_title': 'ትኹረት ክትትል',
       'crop_health_open_disease_history': 'ታሪኽ በሽታ ክፈት',
       'crop_health_overview_title': 'ጠቕላላ ሓለዋ ማሳ',
       'crop_health_records_count': '{count} ምልከታት',
-      'crop_health_showing_saved_history':
-          'ዝተቐመጠ ታሪኽ ጤና ሰብል እዩ ዝረአ ዘሎ።',
-      'crop_health_timeline_subtitle':
-          'ለውጦታት ኩነታት ሰብል ብግዜ ተከታተል።',
+      'crop_health_showing_saved_history': 'ዝተቐመጠ ታሪኽ ጤና ሰብል እዩ ዝረአ ዘሎ።',
+      'crop_health_timeline_subtitle': 'ለውጦታት ኩነታት ሰብል ብግዜ ተከታተል።',
       'crop_health_timeline_title': 'ዝርዝር ግዜ ክትትል',
       'delete': 'ሰርዝ',
       'delete_farm': 'ሕርሻ ሰርዝ',
       'delete_farm_confirm': '"{farm}" ሰርዝ? እዚ ሕርሻ ንቁ ከይከውን ይገብሮ።',
       'delete_planting': 'ተኽሊ ሰርዝ',
-      'delete_planting_confirm':
-          'ነዚ ተኽሊ ሰርዝ? እዚ መዝገብ ንቁ ከይከውን ይገብሮ።',
+      'delete_planting_confirm': 'ነዚ ተኽሊ ሰርዝ? እዚ መዝገብ ንቁ ከይከውን ይገብሮ።',
       'delete_plot': 'ማሳ ሰርዝ',
       'delete_plot_confirm': '"{plot}" ሰርዝ? እዚ ማሳ ንቁ ከይከውን ይገብሮ።',
       'disease_history_entry_subtitle': 'ሪፖርት {status} • {time}',
@@ -2204,8 +2243,7 @@ class L {
       'invalidNumber': 'ትኽክለኛ ቁጽሪ ኣእቱ',
       'latitude': 'ኬክሮስ',
       'longitude': 'ነውሒ',
-      'my_farm_error_crop_out_of_scope':
-          'እዚ ሰብል ኣብ ዝተደገፈ ወሰን ሕርሻ ኣይኮነን።',
+      'my_farm_error_crop_out_of_scope': 'እዚ ሰብል ኣብ ዝተደገፈ ወሰን ሕርሻ ኣይኮነን።',
       'nitrogenLevel': 'ደረጃ ናይትሮጅን',
       'noSoilHealthData': 'ሓበሬታ ጤና መሬት የለን',
       'noWeatherData': 'ሓበሬታ ኣየር የለን',
@@ -2230,8 +2268,7 @@ class L {
       'scan_failed_load_farm_plots': 'ንዝተመረጸ ሕርሻ ማሳታት ምጽዓን ኣይተሳካን።',
       'scan_farm_required': 'farm_id የድሊ።',
       'scan_loading_farm_crops': 'ሰብሎታት ሕርሻ እየተጫኑ ኣለዉ...',
-      'scan_no_registered_scope_crops':
-          'ኣብዚ ዝተመረጸ ኣውድ ዝተመዝገቡ ሰብሎታት የለዉን።',
+      'scan_no_registered_scope_crops': 'ኣብዚ ዝተመረጸ ኣውድ ዝተመዝገቡ ሰብሎታት የለዉን።',
       'scan_no_registered_scope_crops_short': 'ዝተመዝገቡ ሰብሎታት የለዉን',
       'scan_offline_checking': 'ፓኬጅ ኦፍላይን ሞዴል እየተመርመረ ኣሎ...',
       'scan_offline_model_badge': 'ሞዴል {value}',
@@ -2274,8 +2311,7 @@ class L {
       'soil_view_evidence': 'ማስረጃ ረኣ',
       'soilHealthData': 'ሓበሬታ ጤና መሬት',
       'soilHealthMonitoring': 'ክትትል ጤና መሬት',
-      'soilHealthMonitoringSubtitle':
-          'ዋጋታት መሬት ተከታተል እሞ ምኽርታት ኣስተኻኽል።',
+      'soilHealthMonitoringSubtitle': 'ዋጋታት መሬት ተከታተል እሞ ምኽርታት ኣስተኻኽል።',
       'soilHealthSummary': 'ማጠቃለያ ጤና መሬት',
       'soilMoisture': 'እርጥበት መሬት',
       'soilTexture': 'ቅርጺ መሬት',
@@ -2304,15 +2340,13 @@ class L {
           'ሽም ሕርሻ፣ ክልል ወይ ኮርዲኔት ኣብ ክልተ ወገን ተቐይሮም ክኾኑ ይኽእሉ።',
       'sync_conflict_review_hint_plantings':
           'ዕለት ተኽሊ፣ ሁኔታ ወይ ኣውድ ሰብል ተፈላልዩ ክረኽብ ይኽእል።',
-      'sync_conflict_review_hint_plots':
-          'ሽም ማሳ፣ ስፋት ወይ ዓይነት መሬት ግጭት ክህሉ ይኽእል።',
+      'sync_conflict_review_hint_plots': 'ሽም ማሳ፣ ስፋት ወይ ዓይነት መሬት ግጭት ክህሉ ይኽእል።',
       'sync_conflict_review_hint_soil_health':
           'ዋጋታት መሬት፣ ሁኔታ ግምገማ ወይ መረዳእታ ማስረጃ ግጭት ክህሉ ይኽእል።',
       'sync_conflict_updated_at': 'ተሓዲሱ {time}',
       'sync_detail_conflict_review':
           'ገለ መዝገባት ናይ ከባቢን ናይ ሰርቨርን ለውጢ ስለዘለዎም ብኢድ ግምገማ ይድለ።',
-      'sync_detail_failed_retry':
-          'ገለ ኣቕሓት ምልኣኽ ኣይተሳካን። ስርዓቱ ዳግማይ ክፍትን እዩ።',
+      'sync_detail_failed_retry': 'ገለ ኣቕሓት ምልኣኽ ኣይተሳካን። ስርዓቱ ዳግማይ ክፍትን እዩ።',
       'sync_detail_limited_connectivity':
           'ርክብ ውሑድ እዩ። ገለ ተግባራት ኣብ ከባቢ ይቕመጡ ይኾኑ።',
       'sync_detail_loading_local_summary': 'ማጠቃለያ ሲንክ ከባቢ እየተጫነ ኣሎ።',
@@ -2322,8 +2356,7 @@ class L {
           'ሰርቨር ይርከብ ኣሎ፣ ግን ንሲንክ ናብ ኦንላይን ኣካውንት ዳግማይ ምእታው የድሊ።',
       'sync_detail_pending_offline':
           'ብዙሕ ተግባራት ኣብ ከባቢ ተቐሚጦም ኣለዉ እሞ ርክብ ምስ ተረኸበ ክልኣኹ እዮም።',
-      'sync_detail_pending_online':
-          'ገለ ለውጦታት ሕጂ ናብ ሰርቨር ክልኣኹ ተዳልዮም ኣለዉ።',
+      'sync_detail_pending_online': 'ገለ ለውጦታት ሕጂ ናብ ሰርቨር ክልኣኹ ተዳልዮም ኣለዉ።',
       'sync_detail_ready_online':
           'ሓበሬታ ከባቢ ጽቡቕ ኩነታት ኣለዎ እሞ ንመደበኛ ኦንላይን ኣጠቓቕማ ዝግጁ እዩ።',
       'sync_diagnostics_title': 'ምርመራ ሲንክ',
@@ -2333,14 +2366,10 @@ class L {
       'sync_entity_plots': 'ማሳታት',
       'sync_entity_soil_health': 'ጤና መሬት',
       'sync_entity_subtitle': 'ኣብ ነፍሲ ወከፍ ዓይነት ኣቕሓ ዘሎ ሁኔታ ረኣ።',
-      'sync_guidance_conflict':
-          'ግጭት፦ ስሪት ከባቢን ሰርቨርን ኣይሰማማዕን እሞ ግምገማ ይድለ።',
-      'sync_guidance_deleted':
-          'ስረዛ፦ ናይ ከባቢ ስረዛ ናብ ሰርቨር ሲንክ ንምግባር ኣብ ሪጋ ኣሎ።',
-      'sync_guidance_failed':
-          'ወዲቑ፦ ፈተናታት ምልኣኽ ኣይተሳኩን እሞ ጸኒሑ እንደገና ክፍተኑ እዮም።',
-      'sync_guidance_pending':
-          'ብመጽበይቲ፦ ናይ ከባቢ ለውጦታት ናብ API ንምልኣኽ ይጽበዩ ኣለዉ።',
+      'sync_guidance_conflict': 'ግጭት፦ ስሪት ከባቢን ሰርቨርን ኣይሰማማዕን እሞ ግምገማ ይድለ።',
+      'sync_guidance_deleted': 'ስረዛ፦ ናይ ከባቢ ስረዛ ናብ ሰርቨር ሲንክ ንምግባር ኣብ ሪጋ ኣሎ።',
+      'sync_guidance_failed': 'ወዲቑ፦ ፈተናታት ምልኣኽ ኣይተሳኩን እሞ ጸኒሑ እንደገና ክፍተኑ እዮም።',
+      'sync_guidance_pending': 'ብመጽበይቲ፦ ናይ ከባቢ ለውጦታት ናብ API ንምልኣኽ ይጽበዩ ኣለዉ።',
       'sync_headline_internet_only': 'ኢንተርኔት ጥራይ',
       'sync_headline_needs_review': 'ሲንክ ግምገማ ይድለ',
       'sync_headline_offline': 'ኦፍላይን',
@@ -2359,10 +2388,8 @@ class L {
       'sync_operational_guidance_title': 'መምርሒ ኣሰራርሓ',
       'sync_overview_conflicts': 'ግጭታት ሲንክ ግምገማ ይድለዮም',
       'sync_overview_detail_clean': 'ኣብ ሕጂ እዋን ናብ ባክኤንድ ዝጽበ የለን ኦፍላይን ስራሕ።',
-      'sync_overview_detail_conflicts':
-          'ገለ መዝገባት ብቕድሚ ሲንክ ብኢድ ክምርመሩ ኣለዎም።',
-      'sync_overview_detail_failed':
-          'ገለ ስራሕታት ሲንክ ወዲቖም ኣለዉ እሞ ዳግማይ ክፍተኑ እዮም።',
+      'sync_overview_detail_conflicts': 'ገለ መዝገባት ብቕድሚ ሲንክ ብኢድ ክምርመሩ ኣለዎም።',
+      'sync_overview_detail_failed': 'ገለ ስራሕታት ሲንክ ወዲቖም ኣለዉ እሞ ዳግማይ ክፍተኑ እዮም።',
       'sync_overview_detail_offline_mode':
           'ኦፍላይን ሁኔታ ንቁ እዩ እሞ ለውጦታት ኣብ ከባቢ ይቕመጡ።',
       'sync_overview_detail_online_sign_in_required':
@@ -2385,21 +2412,17 @@ class L {
       'weather_avg_humidity': 'ማእከላይ እርጥበት',
       'weather_avg_temp': 'ማእከላይ ሙቐት',
       'weather_avg_wind': 'ማእከላይ ንፋስ',
-      'weather_monitoring_action_dry':
-          'ማሳ ንበጽሕ እንተደሊ ንውሓስን ኣጠጣን መርሓ ግብሪ ፈትሽ።',
+      'weather_monitoring_action_dry': 'ማሳ ንበጽሕ እንተደሊ ንውሓስን ኣጠጣን መርሓ ግብሪ ፈትሽ።',
       'weather_monitoring_action_heat':
           'ኣብ ሙቐት ኣድላዪ ዝኾነ ጽላል፣ ኣጠጣ ወይ ግዜ ስራሕ ኣስተኻኽል።',
-      'weather_monitoring_action_stable':
-          'ሁኔታ ርግእ እዩ። መደበኛ ክትትል ቀጽል።',
-      'weather_monitoring_action_wet':
-          'እርጥበት ብዙሕ እዩ። ምልክታት በሽታ ብቐረባ ተከታተል።',
+      'weather_monitoring_action_stable': 'ሁኔታ ርግእ እዩ። መደበኛ ክትትል ቀጽል።',
+      'weather_monitoring_action_wet': 'እርጥበት ብዙሕ እዩ። ምልክታት በሽታ ብቐረባ ተከታተል።',
       'weather_monitoring_risk_dry': 'ደረቕ ኩነታት ሰብል ከጭንቕ ይኽእል።',
       'weather_monitoring_risk_heat': 'ሓደጋ ጭንቀት ሙቐት እናወሰኸ እዩ።',
       'weather_monitoring_risk_wet': 'እርጥብ ኩነታት ግፊት በሽታ ከዕብይ ይኽእል።',
       'weather_monitoring_stable': 'ኩነታት ማሳ ሕጂ ርግእ ይመስል።',
       'weather_monitoring_title': 'ክትትል ኣየር',
-      'weather_no_server_records_subtitle':
-          'ኣብ ሰርቨር ዝተሲንከ መዝገባት ኣየር ገና የለዉን።',
+      'weather_no_server_records_subtitle': 'ኣብ ሰርቨር ዝተሲንከ መዝገባት ኣየር ገና የለዉን።',
       'weather_no_server_records_title': 'መዝገባት ኣየር ሰርቨር ገና የለዉን',
       'weather_recent_records_title': 'ናይ ቀረባ መዝገባት ኣየር',
       'weather_records_label': 'መዝገባት',
@@ -2413,8 +2436,7 @@ class L {
       'weather_unknown_time': 'ዘይፍለጥ ግዜ',
       'weatherData': 'ሓበሬታ ኣየር',
       'weatherMonitoring': 'ክትትል ኣየር',
-      'weatherMonitoringSubtitle':
-          'ናይ ከባቢ ኩነታት ተከታተል እሞ ውሳነ ሕርሻ ኣሻሽል',
+      'weatherMonitoringSubtitle': 'ናይ ከባቢ ኩነታት ተከታተል እሞ ውሳነ ሕርሻ ኣሻሽል',
       'weatherSummary': 'ማጠቃለያ ኣየር',
       'windSpeed': 'ፍጥነት ንፋስ',
       'yield_outlook': 'ትንበያ ምርት',
@@ -2429,26 +2451,21 @@ class L {
       'yield_prediction_predicted_yield': 'ዝተተነበየ ምርት',
       'yield_prediction_result': 'ውጽኢት ትንበያ',
       'yield_prediction_saved_at': 'ዝተቐመጠ ትንበያ ተሓዲሱ {time}',
-      'yield_prediction_server_required':
-          'ነዚ ትንበያ ሓድሽ ንምስራሕ ሰርቨር የድሊ።',
+      'yield_prediction_server_required': 'ነዚ ትንበያ ሓድሽ ንምስራሕ ሰርቨር የድሊ።',
       'yield_prediction_server_required_banner':
           'ሰርቨር ኣይተረኽበን። ዝተቐመጠ ትንበያ ጥራይ ይረአ ኣሎ።',
       'yield_prediction_server_required_cached':
           'ሰርቨር ኣይተረኽበን። ዝተቐመጠ ትንበያ ተጠቐም።',
       'yield_prediction_status': 'ሁኔታ፦ {value}',
-      'yield_prediction_sync_first':
-          'ቅድሚ ትንበያ ምፍጣር ሕርሻን ተኽሎታትን መጀመርታ ሲንክ ግበር።',
+      'yield_prediction_sync_first': 'ቅድሚ ትንበያ ምፍጣር ሕርሻን ተኽሎታትን መጀመርታ ሲንክ ግበር።',
       'yield_prediction_title': 'ትንበያ ምርት',
       'yield_prediction_updating': 'ትንበያ እየተሓደሰ ኣሎ...',
       'yield_prediction_upper_bound': 'ላዕለዋይ ዶብ',
-      'alerts_offline_saved':
-          'ኢንተርኔት የለን። ተቀመጠ ማስጠንቀቂያ እየታየ እዩ።',
+      'alerts_offline_saved': 'ኢንተርኔት የለን። ተቀመጠ ማስጠንቀቂያ እየታየ እዩ።',
       'alerts_offline_none': 'ኢንተርኔት የለን።',
-      'alerts_api_unreachable_saved':
-          'API ኣይደረሰን። ተቀመጠ ማስጠንቀቂያ እየታየ እዩ።',
+      'alerts_api_unreachable_saved': 'API ኣይደረሰን። ተቀመጠ ማስጠንቀቂያ እየታየ እዩ።',
       'alerts_api_unreachable': 'ኢንተርኔት ኣለ፣ ግን API ኣይደረሰን።',
-      'alerts_server_required':
-          'ዚ ተግባር ሰርቨር ያስፈልጋል። ኦፍላይን ይመልከቱ እና ከዚያ ይድገሙ።',
+      'alerts_server_required': 'ዚ ተግባር ሰርቨር ያስፈልጋል። ኦፍላይን ይመልከቱ እና ከዚያ ይድገሙ።',
       'alerts_action_acknowledged_success': 'ማስጠንቀቂያ ተቀባይነት ተሰጠው።',
       'alerts_action_resolved_success': 'ማስጠንቀቂያ ተፈታ።',
       'alerts_severity_label': 'ደረጃ',
@@ -2527,17 +2544,22 @@ class L {
       'guidelines_sub': 'Best practices for smart farming',
       'admin_contact': 'Admin Contact',
       'admin_contact_sub': 'Reach your local support team',
-      'admin_contact_body': 'Use this contact when you need local support or system help.',
+      'admin_contact_body':
+          'Use this contact when you need local support or system help.',
       'name': 'Name',
       'later': 'Later',
       'continue_label': 'Continue',
       'permissions_first_use_title': 'Set up app permissions',
-      'permissions_first_use_body': 'The app needs camera and location permissions to work properly in the field.',
+      'permissions_first_use_body':
+          'The app needs camera and location permissions to work properly in the field.',
       'permissions_camera_title': 'Camera',
-      'permissions_camera_body': 'Required to capture leaf images for disease scanning.',
+      'permissions_camera_body':
+          'Required to capture leaf images for disease scanning.',
       'permissions_location_title': 'Location',
-      'permissions_location_body': 'Helps personalize farm location, weather, and field guidance.',
-      'permissions_first_use_note': 'You can change these permissions later in device settings.',
+      'permissions_location_body':
+          'Helps personalize farm location, weather, and field guidance.',
+      'permissions_first_use_note':
+          'You can change these permissions later in device settings.',
       'language': 'Language',
       'about': 'About',
       'about_sub': 'Learn about Smart Farming',
@@ -2739,7 +2761,8 @@ class L {
       'disease_review_status_label': 'Decision',
       'disease_review_mark_confirmed': 'Mark confirmed',
       'disease_review_mark_rejected': 'Mark rejected',
-      'disease_review_reason_hint': 'Example: expert_confirmed or insufficient_evidence',
+      'disease_review_reason_hint':
+          'Example: expert_confirmed or insufficient_evidence',
       'disease_review_comment_hint': 'Add what you observed and why.',
       'disease_review_evidence_optional': 'Attach an evidence photo if needed.',
       'disease_review_add_camera': 'Use camera',
@@ -2762,8 +2785,10 @@ class L {
       'scan_symptom_days_optional': 'Symptom days (optional)',
       'scan_field_notes_optional': 'Field notes (optional)',
       'scan_protocol_complete': 'Capture protocol complete. Ready to submit.',
-      'scan_capture_remaining_angles': 'Capture {count} more leaf angle before submitting.',
-      'scan_structured_capture_count': 'Structured capture: {collected}/{required}',
+      'scan_capture_remaining_angles':
+          'Capture {count} more leaf angle before submitting.',
+      'scan_structured_capture_count':
+          'Structured capture: {collected}/{required}',
       'scan_planting_number': 'Planting #{id}',
       'scan_continue_last_crop': 'Continue last crop',
       'scan_recommended_crop': 'Recommended crop',
@@ -3099,6 +3124,7 @@ class L {
       'weather_records_label': 'Records',
       'weather_unknown_time': 'Unknown time',
       'weather_source_unknown': 'saved source',
+      'weather_sources': 'Weather sources',
       'weather_monitoring_title': 'Weather monitoring',
       'weather_monitoring_stable': 'Field conditions look stable right now.',
       'weather_monitoring_action_stable':
@@ -3107,12 +3133,10 @@ class L {
           'Wet conditions can raise disease pressure.',
       'weather_monitoring_action_wet':
           'Watch leaves closely, improve airflow, and avoid extra wetness where possible.',
-      'weather_monitoring_risk_heat':
-          'Heat stress risk is increasing.',
+      'weather_monitoring_risk_heat': 'Heat stress risk is increasing.',
       'weather_monitoring_action_heat':
           'Check wilting, protect young plants, and review watering timing.',
-      'weather_monitoring_risk_dry':
-          'Dry conditions may stress the crop.',
+      'weather_monitoring_risk_dry': 'Dry conditions may stress the crop.',
       'weather_monitoring_action_dry':
           'Check soil moisture, mulch where possible, and adjust irrigation carefully.',
       'crop_health_showing_saved_history': 'Showing saved crop health history.',
@@ -3122,7 +3146,8 @@ class L {
       'disease_history_pending_subtitle':
           'These scans are saved on this device and waiting for sync or server verification.',
       'disease_history_pending_badge': 'Saved on device',
-      'disease_pending_scan_delete_confirm': 'Remove this locally saved pending scan from the device?',
+      'disease_pending_scan_delete_confirm':
+          'Remove this locally saved pending scan from the device?',
       'disease_pending_scan_removed': 'Pending scan removed from this device.',
       'disease_pending_scan_remove_failed': 'Failed to remove pending scan.',
       'disease_history_synced_empty': 'No synced disease reports yet.',
@@ -3220,7 +3245,8 @@ class L {
           'Add an IP102 model bundle before enabling insect AI. Disease scan remains unchanged.',
       'insect_model_alignment': 'IP102 model alignment',
       'insect_model_required': 'IP102 model bundle required',
-      'insect_model_metadata': 'Model: {model}\nClasses: {classes}\nTask: {task}',
+      'insect_model_metadata':
+          'Model: {model}\nClasses: {classes}\nTask: {task}',
       'insect_model_expected_bundle':
           'The insect detection model is not ready yet. Use crop disease scan for now and confirm pest decisions with expert review.',
       'insect_scope_pests': 'Insect pests',
@@ -3238,7 +3264,8 @@ class L {
       'disease_notice_rejected_title': 'Not confirmed as disease',
       'disease_notice_rejected_default_body':
           'The scan could not be confirmed as a disease case. This may be due to image quality or the issue not being a known disease. If symptoms persist, take a new scan with a clearer photo.',
-      'disease_notice_no_treatment_title': 'Treatment guidance not yet available',
+      'disease_notice_no_treatment_title':
+          'Treatment guidance not yet available',
       'disease_notice_no_treatment_body':
           'Treatment details will appear here once an expert has reviewed and confirmed the diagnosis.',
       'treatment_plan': 'Treatment plan',
@@ -3246,7 +3273,8 @@ class L {
           'Offline guidance. Verify with your local extension officer.',
       'chemical_inputs': 'Chemical inputs',
       'no_offline_guidance_title': 'No offline guidance available',
-      'no_offline_guidance_body': 'Treatment guidance will be available after expert review.',
+      'no_offline_guidance_body':
+          'Treatment guidance will be available after expert review.',
       'captured_photo': 'Captured photo',
       'soil_analysis': 'Soil analysis',
       'active_crop_value': 'Active crop: {value}',
